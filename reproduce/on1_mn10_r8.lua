@@ -10,13 +10,14 @@ require('optim')
 require('oc')
 
 local opt = {}
-opt.ex_data_root = 'preprocessed/r64'
-opt.ex_data_ext = 'oc'
-opt.out_root = string.format('results/r64/%s',os.time())
 
 opt.vx_size = 8
 opt.n_classes = 10
 opt.batch_size = 32
+
+opt.ex_data_root = string.format('preprocessed/r%s',opt.vx_size)
+opt.ex_data_ext = 'oc'
+opt.out_root = string.format('results/r64/%s',os.time())
 
 opt.weightDecay = 0.0001
 opt.learningRate = 1e-3
