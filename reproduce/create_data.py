@@ -26,7 +26,7 @@ def create_data_with_model(vx_res = 64,mn10_path = 'mn10.zip', pad=2, n_rots = 1
   in_root = mn10_path
   if not os.path.isdir(in_root):
     print('unzipping ModelNet10')
-    mn10 = zipfile.ZipFile('mn10.zip', 'r')
+    mn10 = zipfile.ZipFile(mn10_path, 'r')
     mn10.extractall(in_root)
     mn10.close()
 
