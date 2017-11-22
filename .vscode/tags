@@ -1,0 +1,188 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+Axes3D	../py\old\plot3d.py	/^from mpl_toolkits.mplot3d import Axes3D$/;"	kind:namespace	line:28
+CREATE_INIT	../py\old\pygeometry_cpu.pyx	/^CREATE_INIT = True # workaround, so cython builds a init function$/;"	kind:variable	line:30
+CREATE_INIT	../py\pyoctnet.pyx	/^CREATE_INIT = True # workaround, so cython builds a init function$/;"	kind:variable	line:34
+Extension	../py\old\setup_gpu.py	/^from distutils.extension import Extension$/;"	kind:namespace	line:28
+Extension	../py\setup.py	/^from distutils.extension import Extension$/;"	kind:namespace	line:28
+FloatArrayWrapper	../py\pyoctnet.pyx	/^cdef class FloatArrayWrapper:$/;"	kind:class	line:41
+Octree	../py\pyoctnet.pyx	/^cdef class Octree:$/;"	kind:class	line:273
+PyObject	../py\pyoctnet.pyx	/^from cpython cimport PyObject, Py_INCREF$/;"	kind:namespace	line:32
+Py_INCREF	../py\pyoctnet.pyx	/^from cpython cimport PyObject, Py_INCREF$/;"	kind:namespace	line:32
+__array__	../py\pyoctnet.pyx	/^  def __array__(self):$/;"	kind:member	line:63
+__dealloc__	../py\pyoctnet.pyx	/^  def __dealloc__(self):$/;"	kind:member	line:331
+__dealloc__	../py\pyoctnet.pyx	/^  def __dealloc__(self):$/;"	kind:member	line:72
+axis_equal_3d	../py\old\plot3d.py	/^def axis_equal_3d(ax):$/;"	kind:function	line:31
+bool	../py\old\pygeometry_cpu.pyx	/^from libcpp cimport bool$/;"	kind:namespace	line:28
+bool	../py\pyoctnet.pyx	/^from libcpp cimport bool$/;"	kind:namespace	line:31
+build_ext	../py\old\setup_gpu.py	/^from Cython.Distutils import build_ext$/;"	kind:namespace	line:29
+build_ext	../py\setup.py	/^from Cython.Distutils import build_ext$/;"	kind:namespace	line:29
+cdhw_to_octree	../py\pyoctnet.pyx	/^  def cdhw_to_octree(self, float[:,:,:,:,::1] dense):$/;"	kind:member	line:554
+cmdclass	../py\setup.py	/^  cmdclass= {'build_ext': build_ext},$/;"	kind:variable	line:42
+conv_avg	../py\pyoctnet.pyx	/^  def conv_avg(self, float[:,:,:,:,::1] weights, float[::1] bias, Octree out):$/;"	kind:member	line:614
+copy	../py\pyoctnet.pyx	/^  def copy(self):$/;"	kind:member	line:522
+create_data.py	../example\00_create_data\create_data.py	1;"	kind:file	line:1
+create_data.py	../example\01_classification_modelnet\create_data.py	1;"	kind:file	line:1
+create_dense_from_pc	../py\pyoctnet.pyx	/^  def create_dense_from_pc(cls, float[:,::1] xyz, float[:,::1] features, ot_size_t depth, ot_size_t height, ot_size_t width, int n_threads=1):$/;"	kind:member	line:802
+create_empty	../py\pyoctnet.pyx	/^  def create_empty(cls):$/;"	kind:member	line:457
+create_from_bin	../py\pyoctnet.pyx	/^  def create_from_bin(cls, char* path):$/;"	kind:member	line:469
+create_from_bin_deprecated	../py\pyoctnet.pyx	/^  def create_from_bin_deprecated(cls, char* path):$/;"	kind:member	line:483
+create_from_dense	../py\pyoctnet.pyx	/^  def create_from_dense(cls, float[:,:,:,::1] dense, bool fit=False, int fit_multiply=1, bool pack=False, int n_threads=1):$/;"	kind:member	line:654
+create_from_dense2	../py\pyoctnet.pyx	/^  def create_from_dense2(cls, float[:,:,::1] occupancy, float[:,:,:,::1] features, bool fit=False, int fit_multiply=1, bool pack=False, int n_threads=1):$/;"	kind:member	line:672
+create_from_mesh	../py\pyoctnet.pyx	/^  def create_from_mesh(cls, float[:,::1] verts, int[:,::1] faces, bool rescale, ot_size_t depth, ot_size_t height, ot_size_t width, bool fit=False, int fit_multiply=1, bool pack=False, int pad=0, int n_threads=1):$/;"	kind:member	line:695
+create_from_obj	../py\pyoctnet.pyx	/^  def create_from_obj(cls, char* path, ot_size_t depth, ot_size_t height, ot_size_t width, float[:,::1] R, bool fit=False, int fit_multiply=1, bool pack=False, int pad=0, int n_threads=1):$/;"	kind:member	line:739
+create_from_off	../py\pyoctnet.pyx	/^  def create_from_off(cls, char* path, ot_size_t depth, ot_size_t height, ot_size_t width, float[:,::1] R, bool fit=False, int fit_multiply=1, bool pack=False, int pad=0, int n_threads=1):$/;"	kind:member	line:718
+create_from_pc	../py\pyoctnet.pyx	/^  def create_from_pc(cls, float[:,::1] xyz, float[:,::1] features, ot_size_t depth, ot_size_t height, ot_size_t width, bool normalize, bool normalize_inplace=True, bool fit=False, int fit_multiply=1, bool pack=False, int pad=0, int n_threads=1):$/;"	kind:member	line:791
+create_from_pc_simple	../py\pyoctnet.pyx	/^  def create_from_pc_simple(cls, float[:,::1] xyz, ot_size_t feature_size, ot_size_t depth, ot_size_t height, ot_size_t width, bool normalize=False, bool normalize_inplace=False, bool fit=False, int fit_multiply=1, bool pack=False, int pad=0, int n_threads=1):$/;"	kind:member	line:765
+cython	../py\old\pygeometry_cpu.pyx	/^cimport cython$/;"	kind:namespace	line:26
+cython	../py\pyoctnet.pyx	/^cimport cython$/;"	kind:namespace	line:26
+cythonize	../py\old\setup_gpu.py	/^from Cython.Build import cythonize$/;"	kind:namespace	line:27
+cythonize	../py\setup.py	/^from Cython.Build import cythonize$/;"	kind:namespace	line:27
+data_idx	../py\pyoctnet.pyx	/^  def data_idx(self, int grid_idx, int bit_idx):$/;"	kind:member	line:320
+dense	../example\00_create_data\create_data.py	/^dense = np.zeros((vx_res,vx_res,vx_res), dtype=np.float32)$/;"	kind:variable	line:27
+determine_gt_split	../py\pyoctnet.pyx	/^  def determine_gt_split(self, float[:,:,:,::1] gt, Octree out):$/;"	kind:member	line:580
+equals	../py\pyoctnet.pyx	/^  def equals(self, Octree other):$/;"	kind:member	line:449
+ext_modules	../py\setup.py	/^  ext_modules=[$/;"	kind:variable	line:43
+extra_compile_args	../py\setup.py	/^      extra_compile_args=extra_compile_args,$/;"	kind:variable	line:70
+extra_compile_args	../py\setup.py	/^extra_compile_args = ['-msse', '-msse2', '-msse3', '-msse4.2']$/;"	kind:variable	line:33
+extra_link_args	../py\setup.py	/^      extra_link_args=extra_link_args$/;"	kind:variable	line:71
+extra_link_args	../py\setup.py	/^extra_link_args = []$/;"	kind:variable	line:34
+extract_feature	../py\pyoctnet.pyx	/^  def extract_feature(self, int feature_from, int feature_to):  $/;"	kind:member	line:636
+f	../example\01_classification_modelnet\create_data.py	/^    f = open(path, 'w')$/;"	kind:variable	line:73
+f	../example\01_classification_modelnet\create_data.py	/^  f = open(path, 'r')$/;"	kind:variable	line:59
+feature_size	../py\pyoctnet.pyx	/^  def feature_size(self):$/;"	kind:member	line:353
+features	../example\00_create_data\create_data.py	/^features = np.ones_like(xyz)$/;"	kind:variable	line:49
+flatten_list	../py\old\misc.py	/^def flatten_list(l):$/;"	kind:function	line:26
+free	../py\pyoctnet.pyx	/^from libc.stdlib cimport free, malloc$/;"	kind:namespace	line:30
+get_grid	../py\pyoctnet.pyx	/^  cdef octree* get_grid(self):$/;"	kind:member	line:290
+get_grid_data	../py\pyoctnet.pyx	/^  def get_grid_data(self, grid_idx=None, bit_idx=None):$/;"	kind:member	line:301
+glob	../example\00_create_data\create_data.py	/^from glob import glob$/;"	kind:namespace	line:7
+glob	../example\01_classification_modelnet\create_data.py	/^from glob import glob$/;"	kind:namespace	line:7
+grid_depth	../py\pyoctnet.pyx	/^  def grid_depth(self):$/;"	kind:member	line:344
+grid_height	../py\pyoctnet.pyx	/^  def grid_height(self):$/;"	kind:member	line:347
+grid_idx	../py\pyoctnet.pyx	/^  def grid_idx(self, int gn, int gd, int gh, int gw):$/;"	kind:member	line:380
+grid_pool_max	../py\pyoctnet.pyx	/^  def grid_pool_max(self, Octree out):$/;"	kind:member	line:604
+grid_unpool	../py\pyoctnet.pyx	/^  def grid_unpool(self, Octree out):$/;"	kind:member	line:629
+grid_width	../py\pyoctnet.pyx	/^  def grid_width(self):$/;"	kind:member	line:350
+in_root	../example\01_classification_modelnet\create_data.py	/^in_root = 'mn10'$/;"	kind:variable	line:35
+include_dirs	../py\setup.py	/^      include_dirs=[np.get_include(),$/;"	kind:variable	line:65
+inters_ray_voxel	../py\old\pygeometry_cpu.pyx	/^def inters_ray_voxel(float[::1] C, float[::1] ray, float[::1] vx, float[::1] vx_w):$/;"	kind:function	line:48
+language	../py\setup.py	/^      language='c++',$/;"	kind:variable	line:64
+leaf_iterator	../py\pyoctnet.pyx	/^def leaf_iterator(grid, n=0, leafs_only=True):$/;"	kind:function	line:861
+leaf_iterator2	../py\pyoctnet.pyx	/^def leaf_iterator2(grid, n=0, leafs_only=True):$/;"	kind:function	line:912
+lines	../example\01_classification_modelnet\create_data.py	/^  lines = f.readlines()$/;"	kind:variable	line:60
+malloc	../py\pyoctnet.pyx	/^from libc.stdlib cimport free, malloc$/;"	kind:namespace	line:30
+matplotlib	../py\old\plot3d.py	/^import matplotlib.pyplot as plt$/;"	kind:namespace	line:27
+mem_capacity	../py\pyoctnet.pyx	/^  def mem_capacity(self):$/;"	kind:member	line:435
+mem_using	../py\pyoctnet.pyx	/^  def mem_using(self):$/;"	kind:member	line:442
+misc.py	../py\old\misc.py	1;"	kind:file	line:1
+mn10	../example\01_classification_modelnet\create_data.py	/^  mn10 = urllib.URLopener()$/;"	kind:variable	line:32
+mn10	../example\01_classification_modelnet\create_data.py	/^  mn10 = zipfile.ZipFile('mn10.zip', 'r')$/;"	kind:variable	line:38
+multiprocessing	../example\00_create_data\create_data.py	/^import multiprocessing$/;"	kind:namespace	line:9
+multiprocessing	../example\01_classification_modelnet\create_data.py	/^import multiprocessing$/;"	kind:namespace	line:9
+n	../py\pyoctnet.pyx	/^  def n(self):$/;"	kind:member	line:341
+n_faces	../example\01_classification_modelnet\create_data.py	/^    n_faces = int(splits[1])$/;"	kind:variable	line:70
+n_leafs	../py\pyoctnet.pyx	/^  def n_leafs(self):$/;"	kind:member	line:365
+n_other	../example\01_classification_modelnet\create_data.py	/^    n_other = int(splits[2])$/;"	kind:variable	line:71
+n_processes	../example\01_classification_modelnet\create_data.py	/^n_processes = 10$/;"	kind:variable	line:25
+n_rots	../example\01_classification_modelnet\create_data.py	/^n_rots = 1$/;"	kind:variable	line:23
+n_threads	../example\00_create_data\create_data.py	/^n_threads = 10$/;"	kind:variable	line:23
+n_threads	../example\01_classification_modelnet\create_data.py	/^n_threads = 1$/;"	kind:variable	line:26
+n_verts	../example\01_classification_modelnet\create_data.py	/^    n_verts = int(splits[0])$/;"	kind:variable	line:69
+name	../py\setup.py	/^  name="pyoctnet",$/;"	kind:variable	line:41
+np	../example\00_create_data\create_data.py	/^import numpy as np$/;"	kind:namespace	line:4
+np	../example\00_create_data\vis.py	/^import numpy as np$/;"	kind:namespace	line:1
+np	../example\01_classification_modelnet\create_data.py	/^import numpy as np$/;"	kind:namespace	line:4
+np	../py\old\plot3d.py	/^import numpy as np$/;"	kind:namespace	line:26
+np	../py\old\pygeometry_cpu.pyx	/^import numpy as np$/;"	kind:namespace	line:27
+np	../py\pyoctnet.pyx	/^cimport numpy as np$/;"	kind:namespace	line:28
+np	../py\pyoctnet.pyx	/^import numpy as np$/;"	kind:namespace	line:27
+np	../py\setup.py	/^import numpy as np$/;"	kind:namespace	line:30
+npy_shape_to_int_array	../py\pyoctnet.pyx	/^cdef int* npy_shape_to_int_array(shape):$/;"	kind:function	line:187
+num_blocks	../py\pyoctnet.pyx	/^  def num_blocks(self):$/;"	kind:member	line:369
+oc_from_dense1	../example\00_create_data\create_data.py	/^oc_from_dense1 = pyoctnet.Octree.create_from_dense(dense, val_range, n_threads=n_threads)$/;"	kind:variable	line:33
+oc_from_dense2	../example\00_create_data\create_data.py	/^oc_from_dense2 = pyoctnet.Octree.create_from_dense2(dense, dense[np.newaxis,...].copy(), n_threads=n_threads)$/;"	kind:variable	line:34
+oc_from_pcl1	../example\00_create_data\create_data.py	/^oc_from_pcl1 = pyoctnet.Octree.create_from_pc(xyz, features, vx_res,vx_res,vx_res, normalize=True, n_threads=n_threads)$/;"	kind:variable	line:50
+oc_from_pcl2	../example\00_create_data\create_data.py	/^oc_from_pcl2 = pyoctnet.Octree.create_from_pc(xyz_scaled, features, vx_res,vx_res,vx_res, normalize=False, n_threads=n_threads)$/;"	kind:variable	line:52
+occupancy_to_surface	../py\pyoctnet.pyx	/^  def occupancy_to_surface(self, Octree out=None):$/;"	kind:member	line:825
+occupancy_to_surface	../py\pyoctnet.pyx	/^def occupancy_to_surface(float[:,:,::1] dense):$/;"	kind:function	line:239
+off_paths	../example\01_classification_modelnet\create_data.py	/^off_paths = []$/;"	kind:variable	line:50
+os	../example\00_create_data\create_data.py	/^import os$/;"	kind:namespace	line:6
+os	../example\01_classification_modelnet\create_data.py	/^import os$/;"	kind:namespace	line:6
+out_root	../example\01_classification_modelnet\create_data.py	/^out_root= '.\/preprocessed'$/;"	kind:variable	line:22
+pad	../example\01_classification_modelnet\create_data.py	/^pad = 2$/;"	kind:variable	line:21
+platform	../py\setup.py	/^import platform$/;"	kind:namespace	line:31
+plot3d.py	../py\old\plot3d.py	1;"	kind:file	line:1
+plot_block	../py\old\plot3d.py	/^  def plot_block(block, x, y, z, depth):$/;"	kind:function	line:60
+plot_box	../py\old\plot3d.py	/^def plot_box(ax, c, w, style='k--'):$/;"	kind:function	line:41
+plot_octree_structure	../py\old\plot3d.py	/^def plot_octree_structure(ax, grid, grid_depth, grid_height, grid_width, GD=8):$/;"	kind:function	line:59
+plt	../py\old\plot3d.py	/^import matplotlib.pyplot as plt$/;"	kind:namespace	line:27
+pool	../example\01_classification_modelnet\create_data.py	/^  pool = multiprocessing.Pool(processes=n_processes)$/;"	kind:variable	line:114
+print_tree	../py\pyoctnet.pyx	/^  def print_tree(self):$/;"	kind:member	line:337
+pygeometry_cpu.pyx	../py\old\pygeometry_cpu.pyx	1;"	kind:file	line:1
+pyoctnet	../example\00_create_data\create_data.py	/^import pyoctnet$/;"	kind:namespace	line:16
+pyoctnet	../example\01_classification_modelnet\create_data.py	/^import pyoctnet$/;"	kind:namespace	line:14
+pyoctnet.pyx	../py\pyoctnet.pyx	1;"	kind:file	line:1
+random	../example\00_create_data\create_data.py	/^import random$/;"	kind:namespace	line:8
+random	../example\01_classification_modelnet\create_data.py	/^import random$/;"	kind:namespace	line:8
+ray_casting	../py\old\pygeometry_cpu.pyx	/^def ray_casting(float[:,:,:,::1] vxs, vx_offset, vx_width, C, ray):$/;"	kind:function	line:58
+ray_casting_depth_map_avg	../py\old\pygeometry_cpu.pyx	/^def ray_casting_depth_map_avg(float[:,:,::1] vxs, vx_offset, vx_width, float[::1] C, float[:, ::1] Pi, float[:, ::1] im):$/;"	kind:function	line:89
+ray_casting_depth_map_max	../py\old\pygeometry_cpu.pyx	/^def ray_casting_depth_map_max(float[:,:,::1] vxs, vx_offset, vx_width, float[::1] C, float[:, ::1] Pi, float[:, ::1] im):$/;"	kind:function	line:82
+read_dense	../py\pyoctnet.pyx	/^def read_dense(char* path, float[:,:,:,:,::1] data):$/;"	kind:function	line:198
+read_dense_deprecated	../py\pyoctnet.pyx	/^def read_dense_deprecated(char* path, float[:,:,:,:,::1] data):$/;"	kind:function	line:219
+read_dense_header_deprecated	../py\pyoctnet.pyx	/^def read_dense_header_deprecated(char* path):$/;"	kind:function	line:230
+read_oc_header	../py\pyoctnet.pyx	/^def read_oc_header(char* path):$/;"	kind:function	line:250
+resize	../py\pyoctnet.pyx	/^  def resize(self, int n, int grid_depth, int grid_height, int grid_width, int feature_size, int n_leafs):$/;"	kind:member	line:501
+rot_out_dir	../example\01_classification_modelnet\create_data.py	/^  rot_out_dir = os.path.join(out_root, 'rot%03d' % np.round(rot))$/;"	kind:variable	line:116
+scanline_fill	../py\pyoctnet.pyx	/^  def scanline_fill(self, float fill_value):$/;"	kind:member	line:820
+set_data	../py\pyoctnet.pyx	/^  cdef set_data(self, float* data_ptr, int size, int owns):$/;"	kind:member	line:55
+set_grid	../py\pyoctnet.pyx	/^  cdef set_grid(self, octree* grid):$/;"	kind:member	line:283
+setup	../py\old\setup_gpu.py	/^from distutils.core import setup$/;"	kind:namespace	line:26
+setup	../py\setup.py	/^from distutils.core import setup$/;"	kind:namespace	line:26
+setup.py	../py\setup.py	1;"	kind:file	line:1
+setup_gpu.py	../py\old\setup_gpu.py	1;"	kind:file	line:1
+split_dense_rec_surf_fres	../py\pyoctnet.pyx	/^  def split_dense_rec_surf_fres(self, float[:,:,:,:,::1] feat, float[:,:,:,:,::1] rec, float rec_thr_from, float rec_thr_to, int band):$/;"	kind:member	line:595
+splits	../example\01_classification_modelnet\create_data.py	/^    splits = lines[0][3:].strip().split(' ')$/;"	kind:variable	line:68
+src_width	../example\00_create_data\create_data.py	/^src_width = (xyz_max - xyz_min).max()$/;"	kind:variable	line:45
+start_t	../example\01_classification_modelnet\create_data.py	/^start_t = time.time()$/;"	kind:variable	line:112
+sys	../example\00_create_data\create_data.py	/^import sys$/;"	kind:namespace	line:3
+sys	../example\01_classification_modelnet\create_data.py	/^import sys$/;"	kind:namespace	line:3
+time	../example\00_create_data\create_data.py	/^import time$/;"	kind:namespace	line:5
+time	../example\01_classification_modelnet\create_data.py	/^import time$/;"	kind:namespace	line:5
+to_cdhw	../py\pyoctnet.pyx	/^  def to_cdhw(self):$/;"	kind:member	line:543
+to_dhwc	../py\pyoctnet.pyx	/^  def to_dhwc(self):$/;"	kind:member	line:532
+tree_child_bit_idx	../py\pyoctnet.pyx	/^  def tree_child_bit_idx(self, int bit_idx):$/;"	kind:member	line:389
+tree_isset_bit	../py\pyoctnet.pyx	/^  def tree_isset_bit(self, int grid_idx, int bit_idx):$/;"	kind:member	line:408
+tree_n_leafs	../py\pyoctnet.pyx	/^  def tree_n_leafs(self, int grid_idx):$/;"	kind:member	line:417
+tree_n_splits	../py\pyoctnet.pyx	/^  def tree_n_splits(self, int grid_idx):$/;"	kind:member	line:426
+tree_parent_bit_idx	../py\pyoctnet.pyx	/^  def tree_parent_bit_idx(self, int bit_idx):$/;"	kind:member	line:398
+upd_n_leafs	../py\pyoctnet.pyx	/^  def upd_n_leafs(self):$/;"	kind:member	line:508
+upd_prefix_leafs	../py\pyoctnet.pyx	/^  def upd_prefix_leafs(self):$/;"	kind:member	line:515
+urllib	../example\00_create_data\create_data.py	/^import urllib$/;"	kind:namespace	line:10
+urllib	../example\01_classification_modelnet\create_data.py	/^import urllib$/;"	kind:namespace	line:10
+val_range	../example\00_create_data\create_data.py	/^val_range = np.array([(0.9, 1.1)], dtype=np.float32)$/;"	kind:variable	line:32
+vis	../example\00_create_data\create_data.py	/^import vis$/;"	kind:namespace	line:13
+vis.py	../example\00_create_data\vis.py	1;"	kind:file	line:1
+volume_to_pts	../py\old\pygeometry_cpu.pyx	/^def volume_to_pts(vol, vol_offset=(0,0,0), vx_width=(1,1,1), thr=0):$/;"	kind:function	line:97
+vx_depth	../py\pyoctnet.pyx	/^  def vx_depth(self):$/;"	kind:member	line:356
+vx_height	../py\pyoctnet.pyx	/^  def vx_height(self):$/;"	kind:member	line:359
+vx_res	../example\00_create_data\create_data.py	/^vx_res = 64$/;"	kind:variable	line:22
+vx_res	../example\01_classification_modelnet\create_data.py	/^vx_res = 64$/;"	kind:variable	line:20
+vx_width	../py\pyoctnet.pyx	/^  def vx_width(self):$/;"	kind:member	line:362
+warp_octree	../py\pyoctnet.pyx	/^cdef warp_octree(octree* grid):$/;"	kind:function	line:842
+worker	../example\01_classification_modelnet\create_data.py	/^def worker(rot_idx, rot, off_idx, off_path):$/;"	kind:function	line:83
+write_bin	../py\pyoctnet.pyx	/^  def write_bin(self, char* path):$/;"	kind:member	line:565
+write_dense	../py\pyoctnet.pyx	/^def write_dense(char* path, float[:,:,:,:,::1] data):$/;"	kind:function	line:208
+write_ply_boxes	../example\00_create_data\vis.py	/^def write_ply_boxes(out_path, bxs, binary=False):$/;"	kind:function	line:29
+write_ply_pcl	../example\00_create_data\vis.py	/^def write_ply_pcl(out_path, xyz, color=[128,128,128], color_array=None):$/;"	kind:function	line:3
+write_ply_voxels	../example\00_create_data\vis.py	/^def write_ply_voxels(out_path, grid, color=[128,128,128], color_fcn=None, explode=1, binary=False):$/;"	kind:function	line:118
+write_to_cdhw	../py\pyoctnet.pyx	/^  def write_to_cdhw(self, char* path):$/;"	kind:member	line:573
+xyz	../example\00_create_data\create_data.py	/^xyz = np.random.normal(0, 1, (100, 3)).astype(np.float32)$/;"	kind:variable	line:42
+xyz_ctr	../example\00_create_data\create_data.py	/^xyz_ctr = (xyz_max + xyz_min) \/ 2$/;"	kind:variable	line:46
+xyz_scaled	../example\00_create_data\create_data.py	/^xyz_scaled = (xyz - xyz_ctr) \/ src_width * vx_res + vx_res\/2$/;"	kind:variable	line:47
+zipfile	../example\00_create_data\create_data.py	/^import zipfile$/;"	kind:namespace	line:11
+zipfile	../example\01_classification_modelnet\create_data.py	/^import zipfile$/;"	kind:namespace	line:11
