@@ -11,3 +11,4 @@ doc/generated_doc/
 example/**/*.pyc
 example/**/*.ply
 
+*.pyc
