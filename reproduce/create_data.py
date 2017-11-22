@@ -12,7 +12,9 @@ sys.path.append('../py/')
 
 import pyoctnet
 
-def create_date_with_model(vx_res = 64, out_root = './preprocessed',mn10_path = 'mn10.zip', pad=2, n_rots = 1, n_processes = 10, n_threads = 1, seed_num = 42):
+def create_data_with_model(vx_res = 64,mn10_path = 'mn10.zip', pad=2, n_rots = 1, n_processes = 10, n_threads = 1, seed_num = 42):
+
+  out_root = './preprocessed/r' + str(vx_res)
 
   random.seed(seed_num)
   np.random.seed(seed_num)
