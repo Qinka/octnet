@@ -23,7 +23,7 @@ def create_data_with_model(vx_res = 64,mn10_path = 'mn10.zip', pad=2, n_rots = 1
   if not os.path.exists(mn10_path):
     print('pleas downloading ModelNet10 from "http://vision.princeton.edu/projects/2014/3DShapeNets/ModelNet10.zip"')
 
-  in_root = mn10_path
+  in_root = '.ignore'
   if not os.path.isdir(in_root):
     print('unzipping ModelNet10')
     mn10 = zipfile.ZipFile(mn10_path, 'r')

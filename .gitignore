@@ -12,3 +12,4 @@ example/**/*.pyc
 example/**/*.ply
 
 *.pyc
+.ignore
