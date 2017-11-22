@@ -12,4 +12,7 @@ example/**/*.pyc
 example/**/*.ply
 
 *.pyc
+*.ply
 .ignore
+reproduce/preprocessed
+reproduce/results
