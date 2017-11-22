@@ -77,9 +77,9 @@ def create_data_with_model(vx_res = 64,mn10_path = 'mn10.zip', pad=2, n_rots = 1
   for off_idx, off_path in enumerate(off_paths):
     print('%d pool.apply_async' % off_idx)
     if n_processes > 1:
-      pool.apply_async(worker, args=(rot_idx, rot, off_idx, off_path,n_rots,len(off_paths),))
+      pool.apply_async(worker, args=(rot_idx, rot, off_idx, off_path,n_rots,len(off_paths),out_root,))
     else:
-      worker(rot_idx, rot, off_idx, off_path,n_rots,len(off_paths))
+      worker(rot_idx, rot, off_idx, off_path,n_rots,len(off_paths),out_root)
 
   if n_processes > 1:
     pool.close()
@@ -89,7 +89,7 @@ def create_data_with_model(vx_res = 64,mn10_path = 'mn10.zip', pad=2, n_rots = 1
 
 
 # create grid-octree from off mesh
-def worker(rot_idx, rot, off_idx, off_path,n_rots,opsl):
+def worker(rot_idx, rot, off_idx, off_path,n_rots,opsl,out_root):
   print('%d/%d - %d/%d - %s' % (rot_idx+1, n_rots, off_idx+1, opsl, off_path))
 
   phi = rot / 180.0 * np.pi
