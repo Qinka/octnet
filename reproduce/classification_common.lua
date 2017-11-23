@@ -1,5 +1,5 @@
-local common = require('common.lua')
-local dataloader = require('dataloader.lua')
+local common = require('common')
+local dataloader = require('dataloader')
 
 function common.fname_to_labels(ps, name2label, err_on_new_label)
   if not name2label then
