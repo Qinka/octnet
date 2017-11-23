@@ -63,4 +63,4 @@ function on1_mn10_r64.train(batch_size)
   common.classification_worker(opt)
 end
 
-return on1_mn10_r128
+return on1_mn10_r64
