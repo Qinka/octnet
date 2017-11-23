@@ -54,4 +54,4 @@ function on1_mn10_r8.train(batch_size)
   common.classification_worker(opt)
 end
 
-return on1_mn10_r8
+return on2_mn10_r8
