@@ -9,7 +9,7 @@ require('oc')
 
 local on2_mn10_r8 = {}
 
-function on1_mn10_r8.train(batch_size)
+function on2_mn10_r8.train(batch_size)
   local opt = {}
 
   opt.vx_size = 8
