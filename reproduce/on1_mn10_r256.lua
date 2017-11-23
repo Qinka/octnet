@@ -50,7 +50,7 @@ function on1_mn10_r256.train(batch_size)
     :add( oc.OctreeReLU(true) )
     :add( oc.OctreeGridPool2x2x2('max') )
 
-    :add( oc.OctreeConvolutionMM(40,48 n_grids) )
+    :add( oc.OctreeConvolutionMM(40,48, n_grids) )
     :add( oc.OctreeReLU(true) )
 
     :add( oc.OctreeToCDHW() )
