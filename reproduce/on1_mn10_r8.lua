@@ -47,8 +47,11 @@ function on1_mn10_r8.train(batch_size)
   opt.net:cuda()
   opt.criterion = nn.CrossEntropyCriterion()
   opt.criterion:cuda()
-
+  
   common.classification_worker(opt)
+  
+  opt = nil
+  collectgarbage()
 end
 
 return on1_mn10_r8

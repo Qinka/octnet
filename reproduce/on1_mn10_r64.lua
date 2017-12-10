@@ -61,6 +61,9 @@ function on1_mn10_r64.train(batch_size)
   opt.criterion:cuda()
 
   common.classification_worker(opt)
+  
+  opt = nil
+  collectgarbage()
 end
 
 return on1_mn10_r64
