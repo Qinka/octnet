@@ -18,7 +18,7 @@ function on1_mn10_r8.train(batch_size)
 
   opt.ex_data_root = string.format('preprocessed/r%s',opt.vx_size)
   opt.ex_data_ext = 'oc'
-  opt.out_root = string.format('results/r%s/b%s/%s',opt.vx_size,opt.batch_size,os.time())
+  opt.out_root = string.format('results/on1/r%s/b%s/%s',opt.vx_size,opt.batch_size,os.time())
 
   opt.weightDecay = 0.0001
   opt.learningRate = 1e-3
