@@ -2,7 +2,7 @@
 
 local start = 3;
 
-if start >=0 then
+if start <=0 then
   local on1_mn10_r8   = dofile('on1_mn10_r8.lua')
   on1_mn10_r8.train(4)
   on1_mn10_r8.train(8)
@@ -16,7 +16,7 @@ if start >=0 then
   collectgarbage()
 end
 
-if start >= 1 then
+if start <= 1 then
   local on1_mn10_r16  = dofile('on1_mn10_r16.lua')
   on1_mn10_r16.train(4)
   on1_mn10_r16.train(8)
@@ -30,7 +30,7 @@ if start >= 1 then
   collectgarbage()
 end
 
-if start >= 2 then
+if start <= 2 then
   local on1_mn10_r32  = dofile('on1_mn10_r32.lua')
   on1_mn10_r32.train(4)
   on1_mn10_r32.train(8)
@@ -43,7 +43,7 @@ if start >= 2 then
   collectgarbage()
 end
 
-if start >= 3 then
+if start <= 3 then
   local on1_mn10_r64  = dofile('on1_mn10_r64.lua')
   on1_mn10_r64.train(4)
   on1_mn10_r64.train(8)
@@ -54,7 +54,7 @@ if start >= 3 then
   collectgarbage()
 end
 
-if start >= 4 then
+if start <= 4 then
   local on1_mn10_r128 = dofile('on1_mn10_r128.lua')
   on1_mn10_r128.train(4)
   on1_mn10_r128.train(8)
@@ -64,14 +64,14 @@ if start >= 4 then
   collectgarbage()
 end
 
-if start >= 5 then
+if start <= 5 then
   local on1_mn10_r256 = dofile('on1_mn10_r256.lua')
   on1_mn10_r256.train(4)
   on1_mn10_r256 = nil
   collectgarbage()
 end
 
-if start >= 6 then
+if start <= 6 then
   local on2_mn10_r8   = dofile('on2_mn10_r8.lua')
   on2_mn10_r8.train(4)
   on2_mn10_r8.train(8)
@@ -85,7 +85,7 @@ if start >= 6 then
   collectgarbage()
 end
 
-if start >= 7 then
+if start <= 7 then
   local on2_mn10_r16  = dofile('on2_mn10_r16.lua')
   on2_mn10_r16.train(4)
   on2_mn10_r16.train(8)
@@ -99,7 +99,7 @@ if start >= 7 then
   collectgarbage()
 end
 
-if start >= 8 then
+if start <= 8 then
   local on2_mn10_r32  = dofile('on2_mn10_r32.lua')
   on2_mn10_r32.train(4)
   on2_mn10_r32.train(8)
@@ -112,7 +112,7 @@ if start >= 8 then
   collectgarbage()
 end
 
-if start >= 9 then
+if start <= 9 then
   local on2_mn10_r64  = dofile('on2_mn10_r64.lua')
   on2_mn10_r64.train(4)
   on2_mn10_r64.train(8)
@@ -123,7 +123,7 @@ if start >= 9 then
   collectgarbage()
 end
 
-if start >= 10 then
+if start <= 10 then
   local on2_mn10_r128 = dofile('on2_mn10_r128.lua')
   on2_mn10_r128.train(4)
   on2_mn10_r128.train(8)
@@ -133,7 +133,7 @@ if start >= 10 then
   collectgarbage()
 end
 
-if start >= 11 then
+if start <= 11 then
   local on2_mn10_r256 = dofile('on2_mn10_r256.lua')
   on2_mn10_r256.train(4)
   on2_mn10_r256 = nil
@@ -141,7 +141,7 @@ if start >= 11 then
 end
 
 
-if start >= 12 then
+if start <= 12 then
   local on3_mn10_r8   = dofile('on3_mn10_r8.lua')
   on3_mn10_r8.train(4)
   on3_mn10_r8.train(8)
@@ -155,7 +155,7 @@ if start >= 12 then
   collectgarbage()
 end
 
-if start >= 13 then
+if start <= 13 then
   local on3_mn10_r16  = dofile('on3_mn10_r16.lua')
   on3_mn10_r16.train(4)
   on3_mn10_r16.train(8)
@@ -169,7 +169,7 @@ if start >= 13 then
   collectgarbage()
 end
 
-if start >= 14 then
+if start <= 14 then
   local on3_mn10_r32  = dofile('on3_mn10_r32.lua')
   on3_mn10_r32.train(4)
   on3_mn10_r32.train(8)
@@ -182,7 +182,7 @@ if start >= 14 then
   collectgarbage()
 end
 
-if start >= 15 then
+if start <= 15 then
   local on3_mn10_r64  = dofile('on3_mn10_r64.lua')
   on3_mn10_r64.train(4)
   on3_mn10_r64.train(8)
@@ -193,7 +193,7 @@ if start >= 15 then
   collectgarbage()
 end
 
-if start >= 16 then
+if start <= 16 then
   local on3_mn10_r128 = dofile('on3_mn10_r128.lua')
   on3_mn10_r128.train(4)
   on3_mn10_r128.train(8)
@@ -203,7 +203,7 @@ if start >= 16 then
   collectgarbage()
 end
 
-if start >= 17 then
+if start <= 17 then
   local on3_mn10_r256 = dofile('on3_mn10_r256.lua')
   on3_mn10_r256.train(4)
   on3_mn10_r256 = nil
