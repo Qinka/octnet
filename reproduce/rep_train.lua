@@ -319,7 +319,7 @@ if start <= 1280161 then
   on1_mn10_r128.train(16)
 end
 if start <= 1280321 then
-  on1_mn10_r128.train(32)
+  -- on1_mn10_r128.train(32)
 end
 on1_mn10_r128 = nil
 collectgarbage()
@@ -335,7 +335,7 @@ if start <= 1280162 then
   on2_mn10_r128.train(16)
 end
 if start <= 1280322 then
-  on2_mn10_r128.train(32)
+  -- on2_mn10_r128.train(32)
 end
 on2_mn10_r128 = nil
 collectgarbage()
@@ -351,7 +351,7 @@ if start <= 1280163 then
   on3_mn10_r128.train(16)
 end
 if start <= 1280323 then
-  on3_mn10_r128.train(32)
+  -- on3_mn10_r128.train(32)
 end
 on3_mn10_r128 = nil
 collectgarbage()
