@@ -42,7 +42,7 @@ on1_mn10_r128.train(128)
 
 on1_mn10_r256.train(4)
 on1_mn10_r256.train(32)
-on1_mn10_r256.train(128)
+--on1_mn10_r256.train(128)
 
 on2_mn10_r8.train(4)
 on2_mn10_r8.train(32)
@@ -66,7 +66,7 @@ on2_mn10_r128.train(128)
 
 on2_mn10_r256.train(4)
 on2_mn10_r256.train(32)
-on2_mn10_r256.train(128)
+--on2_mn10_r256.train(128)
 
 on3_mn10_r8.train(4)
 on3_mn10_r8.train(32)
@@ -90,7 +90,7 @@ on3_mn10_r128.train(128)
 
 on3_mn10_r256.train(4)
 on3_mn10_r256.train(32)
-on3_mn10_r256.train(128)
+--on3_mn10_r256.train(128)
 
 
 
