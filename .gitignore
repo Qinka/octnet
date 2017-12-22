@@ -16,3 +16,4 @@ example/**/*.ply
 .ignore
 reproduce/preprocessed
 reproduce/results
+*.so

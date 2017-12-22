@@ -48,7 +48,7 @@ make -j$JOBS
 
 # build py
 cd $DIR/py
-python2 setup.py build_ext --inplace
+python3 setup.py build_ext --inplace
 
 # build torch
 mkdir -p $DIR/th/cpu/build
