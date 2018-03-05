@@ -23,33 +23,42 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef OCTREE_SPLIT_GPU_H
-#define OCTREE_SPLIT_GPU_H
+#pragma once
+#ifndef OCTREE_UNPOOL_GPU_H
+#define OCTREE_UNPOOL_GPU_H
 
 #include "octnet/core/core.h"
 
-extern "C" {
+/// Performs a nearest-neighbour unpooling operation. 
+/// The number of shallow octrees is increased 8-times, but after this operation
+/// there are no more leaf cells on the finest resolution. 
+/// @param in
+/// @param out
+OCTREE_API
+void octree_gridunpool2x2x2_gpu(const octree* in, octree* out);
 
-void octree_split_by_prob_gpu(const octree* in, const octree* prob, const ot_data_t thr, bool check, octree* out);
-void octree_split_full_gpu(const octree* in, octree* out);
-void octree_split_reconstruction_surface_gpu(const octree* in, const octree* rec, ot_data_t rec_thr_from, ot_data_trec_thr_to, octree* out);
+/// Computes the gradient of the nearest neighbour unpooling operation.
+/// @param in
+/// @param grad_out
+/// @param grad_in
+OCTREE_API
+void octree_gridunpool2x2x2_bwd_gpu(const octree* in, const octree* grad_out, octree* grad_in);
 
-void octree_split_bwd_gpu(const octree* in, const octree* grad_out, octree* grad_in);
+/// Performs a nearest-neighbour unpooling operation. 
+/// However, the structure of the unpooled grid-octree is the same as the one
+/// from in_struct. Useful for U-shaped networks.
+/// @param in 
+/// @param in_struct guidance
+/// @param out
+OCTREE_API
+void octree_gridunpoolguided2x2x2_gpu(const octree* in, const octree* in_struct, octree* out);
 
-
-void octree_split_dense_reconstruction_surface_gpu(const ot_data_t* features, const ot_data_t* reconstruction, int dense_depth, int dense_height, int dense_width, int feature_size, ot_data_t rec_thr_from, ot_data_t rec_thr_to, int structure_type, octree* out);
-void octree_split_dense_reconstruction_surface_bwd_gpu(const octree* grad_out, ot_data_t* grad_in);
-
-
-
-
-void octree_split_dense_reconstruction_surface_fres_gpu(const ot_data_t* features, const ot_data_t* reconstruction, int n, int dense_depth, int dense_height, int dense_width, int feature_size, ot_data_t rec_thr_from, ot_data_t rec_thr_to, int band, octree* out);
-void octree_split_dense_reconstruction_surface_fres_bwd_gpu(const octree* grad_out, ot_data_t* grad_in);
-
-
-
-void octree_split_tsdf_gpu(const ot_data_t* features, const ot_data_t* reconstruction, const octree* guide, int n, int dense_depth, int dense_height, int dense_width, int feature_size, int band, octree* out);
-
-}
+/// Computes the gradient of the guided nearest neighbour unpooling operation.
+/// @param in
+/// @param in_struct guidance
+/// @param grad_out
+/// @param grad_in
+OCTREE_API
+void octree_gridunpoolguided2x2x2_bwd_gpu(const octree* in, const octree* in_struct, const octree* grad_out, octree* grad_in);
 
 #endif 

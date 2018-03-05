@@ -23,55 +23,39 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef OCTREE_MATH_GPU_H
-#define OCTREE_MATH_GPU_H
+#pragma once
+#ifndef OCTREE_SPLIT_GPU_H
+#define OCTREE_SPLIT_GPU_H
 
 #include "octnet/core/core.h"
 
-extern "C" {
+OCTREE_API
+void octree_split_by_prob_gpu(const octree* in, const octree* prob, const ot_data_t thr, bool check, octree* out);
+OCTREE_API
+void octree_split_full_gpu(const octree* in, octree* out);
+OCTREE_API
+void octree_split_reconstruction_surface_gpu(const octree* in, const octree* rec, ot_data_t rec_thr_from, ot_data_trec_thr_to, octree* out);
 
-/// Computes fac1 * in1 + fac2 * in2.
-/// in1 and in2 are expected to have the same tree structure.
-/// @param in1
-/// @param fac1
-/// @param in2
-/// @param fac2
-/// @param check if true, test if tree structure of in1 and in2 are compatible.
-/// @param out
-void octree_add_gpu(const octree* in1, ot_data_t fac1, const octree* in2, ot_data_t fac2, bool check, octree* out);
+OCTREE_API
+void octree_split_bwd_gpu(const octree* in, const octree* grad_out, octree* grad_in);
 
-/// Adds a scalar value to all octree cells.
-/// @param grid
-/// @param scalar
-void octree_scalar_add_gpu(octree* grid, const ot_data_t scalar);
 
-/// Multiplies a scalar value to all octree cells.
-/// @param grid
-/// @param scalar
-void octree_scalar_mul_gpu(octree* grid, const ot_data_t scalar);
+OCTREE_API
+void octree_split_dense_reconstruction_surface_gpu(const ot_data_t* features, const ot_data_t* reconstruction, int dense_depth, int dense_height, int dense_width, int feature_size, ot_data_t rec_thr_from, ot_data_t rec_thr_to, int structure_type, octree* out);
 
-/// Computes the sign of the octree cells in-place
-/// @param grid
-void octree_sign_gpu(octree* grid);
+OCTREE_API
+void octree_split_dense_reconstruction_surface_bwd_gpu(const octree* grad_out, ot_data_t* grad_in);
 
-/// Computes the abs of the octree cells in-place
-/// @param grid
-void octree_abs_gpu(octree* grid);
+OCTREE_API
+void octree_split_dense_reconstruction_surface_fres_gpu(const ot_data_t* features, const ot_data_t* reconstruction, int n, int dense_depth, int dense_height, int dense_width, int feature_size, ot_data_t rec_thr_from, ot_data_t rec_thr_to, int band, octree* out);
 
-/// Computes the log of the octree cells in-place
-/// @param grid
-void octree_log_gpu(octree* grid);
+OCTREE_API
+void octree_split_dense_reconstruction_surface_fres_bwd_gpu(const octree* grad_out, ot_data_t* grad_in);
 
-/// Computes the minimum cell value in the grid-octree.
-/// @param grid_in
-/// @param minimum cell value.
-ot_data_t octree_min_gpu(const octree* grid_in);
 
-/// Computes the maximum cell value in the grid-octree.
-/// @param grid_in
-/// @param maximum cell value.
-ot_data_t octree_max_gpu(const octree* grid_in);
 
-}
+OCTREE_API
+void octree_split_tsdf_gpu(const ot_data_t* features, const ot_data_t* reconstruction, const octree* guide, int n, int dense_depth, int dense_height, int dense_width, int feature_size, int band, octree* out);
+
 
 #endif 

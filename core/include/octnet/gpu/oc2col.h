@@ -23,24 +23,19 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef OCTREE_COL2OC_GPU
-#define OCTREE_COL2OC_GPU
+#pragma once
+#ifndef OCTREE_OC2COL_GPU
+#define OCTREE_OC2COL_GPU
 
 #include "octnet/core/core.h"
 
-/// Converts the matrix representation to an octree.
-/// @param col_buffer matrix.
-/// @param in 
+/// Converts an octree into a matrix representation for a 3x3x3 convolution.
+/// @param in
+/// @param col_buffer matrix representation
+/// @param col_buffer_capacity size of the col_buffer matrix
 /// @param leafs_offset leafs offset in the octree (if octree is filled partially).
 /// @param n_leafs number of leafs to copy (if octree is filled partially).
-void col2oc_gpu(const ot_data_t* col_buffer, octree* in, int leafs_offset, int n_leafs);
-
-
-/// Converts the matrix representation to an octree using atomic operations. 
-/// @param col_buffer matrix.
-/// @param in 
-/// @param leafs_offset leafs offset in the octree (if octree is filled partially).
-/// @param n_leafs number of leafs to copy (if octree is filled partially).
-void col2oc_atomic_gpu(const ot_data_t* col_buffer, octree* in, int leafs_offset, int n_leafs);
+OCTREE_API
+void oc2col_gpu(const octree* in, ot_data_t* col_buffer, ot_size_t col_buffer_capacity, int leafs_offset, int n_leafs);
 
 #endif 

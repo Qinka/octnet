@@ -18,3 +18,5 @@ reproduce/preprocessed
 reproduce/results
 *.so
 build.d
+
+.vscode

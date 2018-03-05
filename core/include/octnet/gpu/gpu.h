@@ -23,6 +23,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#pragma once
 #ifndef OCTREE_GPU_H
 #define OCTREE_GPU_H
 
@@ -60,16 +61,15 @@ template <typename T>
 void octree_leaf_idx_to_grid_idx_gpu(const octree* in, const int stride, const int inds_length, T* inds);
 
 
-
-extern "C" {
-
 /// Allocates memory for a new octree struct and initializes all values to 0.
 /// @note use octree_resize_gpu to allocate memory for arrays.
 /// @return pointer to new octree struct.
+OCTREE_API
 octree* octree_new_gpu();
 
 /// Frees all the memory associated with the given grid-octree struct.
 /// @param grid_h
+OCTREE_API
 void octree_free_gpu(octree* grid_d);
 
 /// Resizes the arrays of the given grid-octree structure dst to fit the given
@@ -83,6 +83,7 @@ void octree_free_gpu(octree* grid_d);
 /// @param feature_size
 /// @param n_leafs
 /// @param dst
+OCTREE_API
 void octree_resize_gpu(int n, int grid_depth, int grid_height, int grid_width, int feature_size, int n_leafs, octree* dst);
 
 /// Resizes the arrays of the given grid-octree structure dst to fit the shape
@@ -91,12 +92,14 @@ void octree_resize_gpu(int n, int grid_depth, int grid_height, int grid_width, i
 /// scalar values.
 /// @param src
 /// @param dst
+OCTREE_API
 void octree_resize_as_gpu(const octree* src, octree* dst);
 
 /// Copy the shape and the data from src to dst. The function calls 
 /// @see octree_resize_as_gpu. Both structures are supposed to be on the device.
 /// @param src
 /// @param dst
+OCTREE_API
 void octree_copy_gpu(const octree* src, octree* dst);
 
 /// Copy the shape and the data from grid_h to grid_d. The function calls 
@@ -104,6 +107,7 @@ void octree_copy_gpu(const octree* src, octree* dst);
 /// on the device, respectively. 
 /// @param grid_h
 /// @param grid_d
+OCTREE_API
 void octree_to_gpu(const octree* grid_h, octree* grid_d);
 
 /// Copy the shape and the data from grid_d to grid_h. The function calls 
@@ -111,27 +115,32 @@ void octree_to_gpu(const octree* grid_h, octree* grid_d);
 /// on the host, respectively.
 /// @param grid_h
 /// @param grid_d
+OCTREE_API
 void octree_to_cpu(const octree* grid_d, octree* grid_h);
 
 
 /// Clears the bit strings of all shallow octrees in the given grid-octree 
 /// structure grid_h. Therefore, the array is all 0s.
 /// @param grid_d
+OCTREE_API
 void octree_clr_trees_gpu(octree* grid_d);
 
 /// This function updates the scalar n_leafs of the given grid-octree structure
 /// grid_d based on the shallow octree bit strings in trees.
 /// @param grid_d
+OCTREE_API
 void octree_upd_n_leafs_gpu(octree* grid_d);
 
 /// This function updates the array prefix_leafs of the given grid-octree 
 /// structure grid_d based on the shallow octree bit strings in trees.
 /// @param grid_d
+OCTREE_API
 void octree_upd_prefix_leafs_gpu(octree* grid_d);
 
 /// Sets all values in the data array of grid_d to the given fill_value.
 /// @param grid_d
 /// @param fill_value
+OCTREE_API
 void octree_fill_data_gpu(octree* grid_d, ot_data_t fill_value);
 
 
@@ -139,18 +148,21 @@ void octree_fill_data_gpu(octree* grid_d, ot_data_t fill_value);
 /// @note This function assumes that dst_d has the right size already.
 /// @param src_h
 /// @param dst_d
+OCTREE_API
 void octree_cpy_trees_cpu_gpu(const octree* src_h, octree* dst_d);
 
 /// Copy the prefix_leafs from the host structure src_h to the device structure dst_d.
 /// @note This function assumes that dst_d has the right size already.
 /// @param src_h
 /// @param dst_d
+OCTREE_API
 void octree_cpy_prefix_leafs_cpu_gpu(const octree* src_h, octree* dst_d);
 
 /// Copy the data from the host structure src_h to the device structure dst_d.
 /// @note This function assumes that dst_d has the right size already.
 /// @param src_h
 /// @param dst_d
+OCTREE_API
 void octree_cpy_data_cpu_gpu(const octree* src_h, octree* dst_d);
 
 
@@ -158,36 +170,42 @@ void octree_cpy_data_cpu_gpu(const octree* src_h, octree* dst_d);
 /// @note This function assumes that dst_h has the right size already.
 /// @param src_d
 /// @param dst_h
+OCTREE_API
 void octree_cpy_trees_gpu_cpu(const octree* src_d, octree* dst_h);
 
 /// Copy the prefix_leafs from the device structure src_d to the host structure dst_h.
 /// @note This function assumes that dst_d has the right size already.
 /// @param src_d
 /// @param dst_h
+OCTREE_API
 void octree_cpy_prefix_leafs_gpu_cpu(const octree* src_d, octree* dst_h);
 
 /// Copy the data from the device structure src_d to the host structure dst_h.
 /// @note This function assumes that dst_h has the right size already.
 /// @param src_d
 /// @param dst_h
+OCTREE_API
 void octree_cpy_data_gpu_cpu(const octree* src_d, octree* dst_h);
 
 /// Copy the trees from the device structure src_d to the device structure dst_d.
 /// @note This function assumes that dst_d has the right size already.
 /// @param src_d
 /// @param dst_d
+OCTREE_API
 void octree_cpy_trees_gpu_gpu(const octree* src_d, octree* dst_d);
 
 /// Copy the prefix_leafs from the device structure src_d to the device structure dst_d.
 /// @note This function assumes that dst_d has the right size already.
 /// @param src_d
 /// @param dst_d
+OCTREE_API
 void octree_cpy_prefix_leafs_gpu_gpu(const octree* src_d, octree* dst_d);
 
 /// Copy the data from the device structure src_d to the device structure dst_d.
 /// @note This function assumes that dst_d has the right size already.
 /// @param src_d
 /// @param dst_d
+OCTREE_API
 void octree_cpy_data_gpu_gpu(const octree* src_d, octree* dst_d);
 
 
@@ -196,6 +214,7 @@ void octree_cpy_data_gpu_gpu(const octree* src_d, octree* dst_d);
 /// but the leafs of sup can be split nodes in sub
 /// @param sup
 /// @param sub
+OCTREE_API
 void octree_cpy_sup_to_sub_gpu(const octree* sup, octree* sub);
 
 /// Copy data from one grid-octree sub to another sup, where sub is a subtree
@@ -203,6 +222,7 @@ void octree_cpy_sup_to_sub_gpu(const octree* sup, octree* sub);
 /// can be split nodes in sub. Applies sum pooling where necessary.
 /// @param sub
 /// @param sup
+OCTREE_API
 void octree_cpy_sub_to_sup_sum_gpu(const octree* sub, octree* sup);
 
 
@@ -211,18 +231,21 @@ void octree_cpy_sub_to_sup_sum_gpu(const octree* sub, octree* sup);
 /// @param in2
 /// @return true, if the bit strings of all shallow octrees in in1 and in2 are
 ///         equal. 
+OCTREE_API
 bool octree_equal_trees_gpu(const octree* in1, const octree* in2);
 
 /// Compares the data arrays of in1 and in2.
 /// @param in1
 /// @param in2
 /// @return true, if data arrays in in1 and in2 are equal. 
+OCTREE_API
 bool octree_equal_data_gpu(const octree* in1, const octree* in2);
 
 /// Compares the prefix_leafs arrays of in1 and in2.
 /// @param in1
 /// @param in2
 /// @return true, if prefix_leafs arrays in in1 and in2 are equal. 
+OCTREE_API
 bool octree_equal_prefix_leafs_gpu(const octree* in1, const octree* in2);
 
 /// Compares the two given grid-octree structures in1 and in2 if they are equal.
@@ -230,10 +253,9 @@ bool octree_equal_prefix_leafs_gpu(const octree* in1, const octree* in2);
 /// @param in1 
 /// @param in2
 /// @return true, if in1 and in2 are identical.
+OCTREE_API
 bool octree_equal_gpu(const octree* in1, const octree* in2);
 
-
-} // extern "C"
 
 
 

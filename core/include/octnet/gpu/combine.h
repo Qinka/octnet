@@ -23,12 +23,11 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#pragma once
 #ifndef OCTREE_COMBINE_GPU_H
 #define OCTREE_COMBINE_GPU_H
 
 #include "octnet/core/core.h"
-
-extern "C" {
 
 /// Concatenates two grid-octrees with the same structure to one grid-octree
 /// along the feature dimension.
@@ -37,6 +36,7 @@ extern "C" {
 /// @param check if True the tree structures of in1 and in2 are tested
 ///              for equivalence.
 /// @param out
+OCTREE_API
 void octree_concat_gpu(const octree* grid_in1, const octree* grid_in2, bool check, octree* grid_out);
 
 /// Computes the gradient to the concatenation operation octree_concat_gpu.
@@ -47,6 +47,7 @@ void octree_concat_gpu(const octree* grid_in1, const octree* grid_in2, bool chec
 ///                    otherwise, only the gradient for grad_in1 is computed.
 /// @param grad_in1
 /// @param grad_in2
+OCTREE_API
 void octree_concat_bwd_gpu(const octree* in1, const octree* in2, const octree* grad_out, bool do_grad_in2, octree* grad_in1, octree* grad_in2);
 
 
@@ -58,6 +59,7 @@ void octree_concat_bwd_gpu(const octree* in1, const octree* in2, const octree* g
 /// @param check if True the tree structures of in1 and in2 are tested
 ///              for equivalence.
 /// @param out
+OCTREE_API
 void octree_concat_ds_gpu(const octree* in1, const octree* in2, octree* out);
 
 /// Computes the gradient to the concatenation operation octree_concat_ds_gpu.
@@ -68,6 +70,7 @@ void octree_concat_ds_gpu(const octree* in1, const octree* in2, octree* out);
 ///                    otherwise, only the gradient for grad_in1 is computed.
 /// @param grad_in1
 /// @param grad_in2
+OCTREE_API
 void octree_concat_ds_bwd_gpu(const octree* in1, const octree* in2, const octree* grad_out, bool do_grad_in2, octree* grad_in1, octree* grad_in2);
 
 
@@ -77,6 +80,7 @@ void octree_concat_ds_bwd_gpu(const octree* in1, const octree* in2, const octree
 /// @param in2
 /// @param feature_size2 number of feature channels in in2
 /// @param out
+OCTREE_API
 void octree_concat_dense_gpu(const octree* in1, const ot_data_t* in2, ot_size_t feature_size2, octree* out);
 
 /// Computes the gradient to the concatenation operation octree_concat_dense_gpu.
@@ -88,8 +92,8 @@ void octree_concat_dense_gpu(const octree* in1, const ot_data_t* in2, ot_size_t 
 ///                    otherwise, only the gradient for grad_in1 is computed.
 /// @param grad_in1
 /// @param grad_in2
+OCTREE_API
 void octree_concat_dense_bwd_gpu(const octree* in1, const ot_data_t* in2, ot_size_t feature_size2, const octree* grad_out, bool do_grad_in2, octree* grad_in1, ot_data_t* grad_in2);
 
-} // extern "C"
 
 #endif 

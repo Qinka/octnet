@@ -23,13 +23,12 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#pragma once
 #ifndef OCTREE_DENSE_GPU_H
 #define OCTREE_DENSE_GPU_H
 
 #include "octnet/core/core.h"
 #include "octnet/core/dense.h"
-
-extern "C" {
 
 //------------------------------------------------------------------------------
 // Octree to Dense
@@ -41,6 +40,7 @@ extern "C" {
 /// @param dense_height
 /// @param dense_width
 /// @param out
+OCTREE_API
 void octree_to_dhwc_gpu(const octree* grid_d, const int dense_depth, const int dense_height, const int dense_width, ot_data_t* data);
 
 /// Converts grid-octree representation to dense with DHWC format where all
@@ -50,6 +50,7 @@ void octree_to_dhwc_gpu(const octree* grid_d, const int dense_depth, const int d
 /// @param dense_height
 /// @param dense_width
 /// @param out
+OCTREE_API
 void octree_to_dhwc_avg_gpu(const octree* grid_d, const int dense_depth, const int dense_height, const int dense_width, ot_data_t* data);
 
 /// Computes the gradient of octree_ot_dhwc_gpu.
@@ -59,6 +60,7 @@ void octree_to_dhwc_avg_gpu(const octree* grid_d, const int dense_depth, const i
 /// @param dense_width
 /// @param grad_out 
 /// @param grad_in
+OCTREE_API
 void octree_to_dhwc_bwd_gpu(const octree* grid_d, const int dense_depth, const int dense_height, const int dense_width, const ot_data_t* grad_data, octree* grad_grid_d);
 
 
@@ -68,6 +70,7 @@ void octree_to_dhwc_bwd_gpu(const octree* grid_d, const int dense_depth, const i
 /// @param dense_height
 /// @param dense_width
 /// @param out
+OCTREE_API
 void octree_to_cdhw_gpu(const octree* grid_d, const int dense_depth, const int dense_height, const int dense_width, ot_data_t* data);
 
 /// Converts grid-octree representation to dense with CDHW format where all
@@ -77,6 +80,7 @@ void octree_to_cdhw_gpu(const octree* grid_d, const int dense_depth, const int d
 /// @param dense_height
 /// @param dense_width
 /// @param out
+OCTREE_API
 void octree_to_cdhw_avg_gpu(const octree* grid_d, const int dense_depth, const int dense_height, const int dense_width, ot_data_t* data);
 
 /// Computes the gradient of octree_ot_cdhw_gpu.
@@ -86,6 +90,7 @@ void octree_to_cdhw_avg_gpu(const octree* grid_d, const int dense_depth, const i
 /// @param dense_width
 /// @param grad_out 
 /// @param grad_in
+OCTREE_API
 void octree_to_cdhw_bwd_gpu(const octree* grid_d, const int dense_depth, const int dense_height, const int dense_width, const ot_data_t* grad_data, octree* grad_grid_d);
 
 
@@ -103,6 +108,7 @@ void octree_to_cdhw_bwd_gpu(const octree* grid_d, const int dense_depth, const i
 /// @param in
 /// @param dense_feature_size
 /// @param out
+OCTREE_API
 void dhwc_to_octree_sum_gpu(const octree* grid_d_in, const int dense_depth, const int dense_height, const int dense_width, const ot_data_t* data, int feature_size, octree* grid_d);
 
 /// Converts a tensor in DHWC format to a grid-octree, where the tree structure
@@ -115,6 +121,7 @@ void dhwc_to_octree_sum_gpu(const octree* grid_d_in, const int dense_depth, cons
 /// @param in
 /// @param dense_feature_size
 /// @param out
+OCTREE_API
 void dhwc_to_octree_avg_gpu(const octree* grid_d_in, const int dense_depth, const int dense_height, const int dense_width, const ot_data_t* data, int feature_size, octree* grid_d);
 
 /// Converts a tensor in DHWC format to a grid-octree, where the tree structure
@@ -127,6 +134,7 @@ void dhwc_to_octree_avg_gpu(const octree* grid_d_in, const int dense_depth, cons
 /// @param in
 /// @param dense_feature_size
 /// @param out
+OCTREE_API
 void dhwc_to_octree_max_gpu(const octree* grid_d_in, const int dense_depth, const int dense_height, const int dense_width, const ot_data_t* data, int feature_size, octree* grid_d);
 
 /// Computes the gradient wrt. to dhwc_to_octree_sum_gpu.
@@ -135,6 +143,7 @@ void dhwc_to_octree_max_gpu(const octree* grid_d_in, const int dense_depth, cons
 /// @param dense_height
 /// @param dense_width
 /// @param grad_in
+OCTREE_API
 void dhwc_to_octree_sum_bwd_gpu(const octree* grad_out_grid_d, const int dense_depth, const int dense_height, const int dense_width, ot_data_t* grad_in_data);
 
 /// Computes the gradient wrt. to dhwc_to_octree_avg_gpu.
@@ -143,6 +152,7 @@ void dhwc_to_octree_sum_bwd_gpu(const octree* grad_out_grid_d, const int dense_d
 /// @param dense_height
 /// @param dense_width
 /// @param grad_in
+OCTREE_API
 void dhwc_to_octree_avg_bwd_gpu(const octree* grad_out_grid_d, const int dense_depth, const int dense_height, const int dense_width, ot_data_t* grad_in_data);
 
 /// Converts a tensor in CDHW format to a grid-octree, where the tree structure
@@ -155,6 +165,7 @@ void dhwc_to_octree_avg_bwd_gpu(const octree* grad_out_grid_d, const int dense_d
 /// @param in
 /// @param dense_feature_size
 /// @param out
+OCTREE_API
 void cdhw_to_octree_sum_gpu(const octree* grid_d_in, const int dense_depth, const int dense_height, const int dense_width, const ot_data_t* data, int feature_size, octree* grid_d);
 
 /// Converts a tensor in CDHW format to a grid-octree, where the tree structure
@@ -167,6 +178,7 @@ void cdhw_to_octree_sum_gpu(const octree* grid_d_in, const int dense_depth, cons
 /// @param in
 /// @param dense_feature_size
 /// @param out
+OCTREE_API
 void cdhw_to_octree_avg_gpu(const octree* grid_d_in, const int dense_depth, const int dense_height, const int dense_width, const ot_data_t* data, int feature_size, octree* grid_d);
 
 /// Converts a tensor in CDHW format to a grid-octree, where the tree structure
@@ -179,6 +191,7 @@ void cdhw_to_octree_avg_gpu(const octree* grid_d_in, const int dense_depth, cons
 /// @param in
 /// @param dense_feature_size
 /// @param out
+OCTREE_API
 void cdhw_to_octree_max_gpu(const octree* grid_d_in, const int dense_depth, const int dense_height, const int dense_width, const ot_data_t* data, int feature_size, octree* grid_d);
 
 /// Computes the gradient wrt. to cdhw_to_octree_sum_cpu.
@@ -187,6 +200,7 @@ void cdhw_to_octree_max_gpu(const octree* grid_d_in, const int dense_depth, cons
 /// @param dense_height
 /// @param dense_width
 /// @param grad_in
+OCTREE_API
 void cdhw_to_octree_sum_bwd_gpu(const octree* grad_out_grid_d, const int dense_depth, const int dense_height, const int dense_width, ot_data_t* grad_in_data);
 
 /// Computes the gradient wrt. to cdhw_to_octree_avg_cpu.
@@ -195,13 +209,10 @@ void cdhw_to_octree_sum_bwd_gpu(const octree* grad_out_grid_d, const int dense_d
 /// @param dense_height
 /// @param dense_width
 /// @param grad_in
+OCTREE_API
 void cdhw_to_octree_avg_bwd_gpu(const octree* grad_out_grid_d, const int dense_depth, const int dense_height, const int dense_width, ot_data_t* grad_in_data);
-
-} // extern "C"
-
 
 template <int dense_format, bool avg_vol>
 __global__ void kernel_octree_to_dense(ot_data_t* out_data, int n_voxels, const int dense_depth, const int dense_height, const int dense_width, const octree grid_d);
-
 
 #endif

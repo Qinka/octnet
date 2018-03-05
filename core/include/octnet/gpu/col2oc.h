@@ -23,41 +23,27 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef OCTREE_UNPOOL_GPU_H
-#define OCTREE_UNPOOL_GPU_H
+#pragma once
+#ifndef OCTREE_COL2OC_GPU
+#define OCTREE_COL2OC_GPU
 
 #include "octnet/core/core.h"
 
-extern "C" {
-
-/// Performs a nearest-neighbour unpooling operation. 
-/// The number of shallow octrees is increased 8-times, but after this operation
-/// there are no more leaf cells on the finest resolution. 
-/// @param in
-/// @param out
-void octree_gridunpool2x2x2_gpu(const octree* in, octree* out);
-
-/// Computes the gradient of the nearest neighbour unpooling operation.
-/// @param in
-/// @param grad_out
-/// @param grad_in
-void octree_gridunpool2x2x2_bwd_gpu(const octree* in, const octree* grad_out, octree* grad_in);
-
-/// Performs a nearest-neighbour unpooling operation. 
-/// However, the structure of the unpooled grid-octree is the same as the one
-/// from in_struct. Useful for U-shaped networks.
+/// Converts the matrix representation to an octree.
+/// @param col_buffer matrix.
 /// @param in 
-/// @param in_struct guidance
-/// @param out
-void octree_gridunpoolguided2x2x2_gpu(const octree* in, const octree* in_struct, octree* out);
+/// @param leafs_offset leafs offset in the octree (if octree is filled partially).
+/// @param n_leafs number of leafs to copy (if octree is filled partially).
+OCTREE_API
+void col2oc_gpu(const ot_data_t* col_buffer, octree* in, int leafs_offset, int n_leafs);
 
-/// Computes the gradient of the guided nearest neighbour unpooling operation.
-/// @param in
-/// @param in_struct guidance
-/// @param grad_out
-/// @param grad_in
-void octree_gridunpoolguided2x2x2_bwd_gpu(const octree* in, const octree* in_struct, const octree* grad_out, octree* grad_in);
 
-}
+/// Converts the matrix representation to an octree using atomic operations. 
+/// @param col_buffer matrix.
+/// @param in 
+/// @param leafs_offset leafs offset in the octree (if octree is filled partially).
+/// @param n_leafs number of leafs to copy (if octree is filled partially).
+OCTREE_API
+void col2oc_atomic_gpu(const ot_data_t* col_buffer, octree* in, int leafs_offset, int n_leafs);
 
 #endif 

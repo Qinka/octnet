@@ -23,18 +23,18 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#pragma once
 #ifndef OCTREE_RELU_GPU_H
 #define OCTREE_RELU_GPU_H
 
 #include "octnet/core/core.h"
-
-extern "C" {
 
 /// Computes the point-wise non-linearity y = max(0,x).
 /// @param in  
 /// @param inplace indicates if non-linearity should be computed in place,
 ///                in points to the same memory as out
 /// @param out 
+OCTREE_API
 void octree_relu_gpu(const octree* grid_in, bool inplace, octree* grid_out);
 
 /// Computes the point-wise gradient of y = max(0,x)
@@ -43,6 +43,7 @@ void octree_relu_gpu(const octree* grid_in, bool inplace, octree* grid_out);
 /// @param inplace indicates if non-linearity should be computed in place,
 ///                in points to the same memory as out
 /// @param grad_in
+OCTREE_API
 void octree_relu_bwd_gpu(const octree* grid_in, const octree* grad_out, bool inplace, octree* grad_in);
 
 
@@ -51,6 +52,7 @@ void octree_relu_bwd_gpu(const octree* grid_in, const octree* grad_out, bool inp
 /// @param inplace indicates if non-linearity should be computed in place,
 ///                in points to the same memory as out
 /// @param out 
+OCTREE_API
 void octree_sigmoid_gpu(const octree* in, bool inplace, octree* out);
 
 /// Computes the point-wise gradient ofy = 1 / (1 + exp(-x)) 
@@ -59,19 +61,21 @@ void octree_sigmoid_gpu(const octree* in, bool inplace, octree* out);
 /// @param inplace indicates if non-linearity should be computed in place,
 ///                in points to the same memory as out
 /// @param grad_in
+OCTREE_API
 void octree_sigmoid_bwd_gpu(const octree* in, const octree* out, const octree* grad_out, bool inplace, octree* grad_in);
 
 /// Computes the log-softmax y = log(exp(x) / sum_c exp(x_c)) over the feature channels
 /// @param in
 /// @param out
+OCTREE_API
 void octree_logsoftmax_gpu(const octree* in, octree* out);
 
 /// Computes the gradient of log-softmax y = log(exp(x) / sum_c exp(x_c)) over 
 /// the feature channels
 /// @param in
 /// @param out
+OCTREE_API
 void octree_logsoftmax_bwd_gpu(const octree* in, const octree* out, const octree* grad_out, octree* grad_in);
-} //extern "C"
 
 
 #endif 

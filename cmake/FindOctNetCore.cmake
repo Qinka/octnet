@@ -38,10 +38,16 @@ find_path(OctNetCore_INCLUDE_DIR
   PATHS ../core/include ../../core/include
 )
 
+if(MSVC)
+  set(BUILD_DIR ../core/build.d/Debug ../core/build.d/Release ../../core/build.d/Debug ../../core/build.d/Release)
+else(MSVC)
+  set(BUILD_DIR ../core/build.d ../../core/build.d)
+endif(MSVC)
+
 # Finally the library itself
 find_library(OctNetCore_LIBRARY
   NAMES octnet_core
-  PATHS ../core/build ../../core/build
+  PATHS ${BUILD_DIR}
 )
 
 # Set the include dir variables and the libraries and let libfind_process do the rest.
