@@ -23,6 +23,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#pragma once
 #ifndef OCTREE_TEST_OBJECTS
 #define OCTREE_TEST_OBJECTS
 
@@ -50,15 +51,15 @@ octree* create_test_octree_rand(int gn, int gd, int gh, int gw, int fs, float sp
   octree_resize_cpu(gn, gd, gh, gw, fs, 0, grid);
   
   octree_clr_trees_cpu(grid);
-  for(int grid_idx = 0; grid_idx < octree_num_blocks(grid); ++grid_idx) {
+  for(auto grid_idx = 0; grid_idx < octree_num_blocks(grid); ++grid_idx) {
     ot_tree_t* tree = octree_get_tree(grid, grid_idx);
     if(randf() <= sp0) {
       tree_set_bit(tree, 0);
-      for(int bit_idx_l1 = 1; bit_idx_l1 <= 8; ++bit_idx_l1) {
+      for(auto bit_idx_l1 = 1; bit_idx_l1 <= 8; ++bit_idx_l1) {
         if(randf() <= sp1) {
           tree_set_bit(tree, bit_idx_l1);
           int bit_idx_l2 = tree_child_bit_idx(bit_idx_l1);
-          for(int idx_l2 = 0; idx_l2 < 8; ++idx_l2) {
+          for(auto idx_l2 = 0; idx_l2 < 8; ++idx_l2) {
             if(randf() <= sp2) {
               tree_set_bit(tree, bit_idx_l2);
             }
@@ -73,7 +74,7 @@ octree* create_test_octree_rand(int gn, int gd, int gh, int gw, int fs, float sp
   octree_resize_as_cpu(grid, grid);
   octree_upd_prefix_leafs_cpu(grid);
 
-  for(int idx = 0; idx < grid->n_leafs * grid->feature_size; ++idx) {
+  for(auto idx = 0; idx < grid->n_leafs * grid->feature_size; ++idx) {
     grid->data[idx] = randf() * (max_val - min_val) + min_val;
   }
   

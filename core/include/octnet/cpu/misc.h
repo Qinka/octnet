@@ -23,18 +23,16 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#pragma once
 #ifndef OCTREE_MISC_CPU_H
 #define OCTREE_MISC_CPU_H
 
 #include "octnet/core/core.h"
 
-extern "C" {
-
+OCTREE_API
 void octree_mask_by_label_cpu(const octree* labels, int mask_label, bool check, octree* values);
 
+OCTREE_API
 void octree_determine_gt_split_cpu(const octree* struc, const ot_data_t* gt, octree* out);
-
-
-}
 
 #endif 

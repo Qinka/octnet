@@ -34,7 +34,7 @@
 #endif
 
 
-extern "C"
+
 ot_data_t octree_mse_loss_cpu(const octree* input, const octree* target, bool size_average, bool check) {
   if(check && (input->feature_size != target->feature_size || !octree_equal_trees_cpu(input, target))) {
     printf("[ERROR] mse_loss - tree structure of inputs do not match\n");
@@ -47,7 +47,7 @@ ot_data_t octree_mse_loss_cpu(const octree* input, const octree* target, bool si
   ot_data_t output = 0;
 
   #pragma omp parallel for
-  for(int grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
+  for(auto grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
     const ot_tree_t* tree = octree_get_tree(input, grid_idx);
     // const ot_data_t* data_in = input->data_ptrs[grid_idx];
     const ot_data_t* data_in = octree_get_data(input, grid_idx);
@@ -57,38 +57,38 @@ ot_data_t octree_mse_loss_cpu(const octree* input, const octree* target, bool si
     ot_data_t grid_out = 0;
 
     if(!tree_isset_bit(tree, 0)) {
-      for(int f = 0; f < feature_size; ++f) {
+      for(auto f = 0; f < feature_size; ++f) {
         ot_data_t z = data_in[f] - data_ta[f];
         grid_out += 8*8*8 * z*z;
       }
     }
     else {
 
-      for(int bit_idx_l1 = 1; bit_idx_l1 < 9; ++bit_idx_l1) {
+      for(auto bit_idx_l1 = 1; bit_idx_l1 < 9; ++bit_idx_l1) {
         if(!tree_isset_bit(tree, bit_idx_l1)) {
           int data_idx = tree_data_idx(tree, bit_idx_l1, feature_size);
-          for(int f = 0; f < feature_size; ++f) {
+          for(auto f = 0; f < feature_size; ++f) {
             ot_data_t z = data_in[data_idx + f] - data_ta[data_idx + f];
             grid_out += 4*4*4 * z*z;
           }
         }
         else {
 
-          for(int add_bit_idx_l2 = 0; add_bit_idx_l2 < 8; ++add_bit_idx_l2) {
+          for(auto add_bit_idx_l2 = 0; add_bit_idx_l2 < 8; ++add_bit_idx_l2) {
             int bit_idx_l2 = tree_child_bit_idx(bit_idx_l1) + add_bit_idx_l2;
             if(!tree_isset_bit(tree, bit_idx_l2)) {
               int data_idx = tree_data_idx(tree, bit_idx_l2, feature_size);
-              for(int f = 0; f < feature_size; ++f) {
+              for(auto f = 0; f < feature_size; ++f) {
                 ot_data_t z = data_in[data_idx + f] - data_ta[data_idx + f];
                 grid_out += 2*2*2 * z*z;
               }
             }
             else {
 
-              for(int add_bit_idx_l3 = 0; add_bit_idx_l3 < 8; ++add_bit_idx_l3) {
+              for(auto add_bit_idx_l3 = 0; add_bit_idx_l3 < 8; ++add_bit_idx_l3) {
                 int bit_idx_l3 = tree_child_bit_idx(bit_idx_l2) + add_bit_idx_l3;
                 int data_idx = tree_data_idx(tree, bit_idx_l3, feature_size);
-                for(int f = 0; f < feature_size; ++f) {
+                for(auto f = 0; f < feature_size; ++f) {
                   ot_data_t z = data_in[data_idx + f] - data_ta[data_idx + f];
                   grid_out += z*z;
                 }
@@ -113,7 +113,7 @@ ot_data_t octree_mse_loss_cpu(const octree* input, const octree* target, bool si
 
 
 
-extern "C"
+
 void octree_mse_loss_bwd_cpu(const octree* input, const octree* target, bool size_average, bool check, octree* grad) {
   if(check && (input->feature_size != target->feature_size || !octree_equal_trees_cpu(input, target))) {
     printf("[ERROR] mse_loss_bwd - tree structure of inputs do not match\n");
@@ -134,7 +134,7 @@ void octree_mse_loss_bwd_cpu(const octree* input, const octree* target, bool siz
   }
 
   #pragma omp parallel for
-  for(int grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
+  for(auto grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
     const ot_tree_t* tree = octree_get_tree(input, grid_idx);
     // const ot_data_t* data_in = input->data_ptrs[grid_idx];
     const ot_data_t* data_in = octree_get_data(input, grid_idx);
@@ -144,38 +144,38 @@ void octree_mse_loss_bwd_cpu(const octree* input, const octree* target, bool siz
     ot_data_t* data_grad = octree_get_data(grad, grid_idx);
 
     if(!tree_isset_bit(tree, 0)) {
-      for(int f = 0; f < feature_size; ++f) {
+      for(auto f = 0; f < feature_size; ++f) {
         ot_data_t z = data_in[f] - data_ta[f];
         data_grad[f] = 8*8*8 * norm * z;
       }
     }
     else {
 
-      for(int bit_idx_l1 = 1; bit_idx_l1 < 9; ++bit_idx_l1) {
+      for(auto bit_idx_l1 = 1; bit_idx_l1 < 9; ++bit_idx_l1) {
         if(!tree_isset_bit(tree, bit_idx_l1)) {
           int data_idx = tree_data_idx(tree, bit_idx_l1, feature_size);
-          for(int f = 0; f < feature_size; ++f) {
+          for(auto f = 0; f < feature_size; ++f) {
             ot_data_t z = data_in[data_idx + f] - data_ta[data_idx + f];
             data_grad[data_idx + f] = 4*4*4 * norm * z;
           }
         }
         else {
 
-          for(int add_bit_idx_l2 = 0; add_bit_idx_l2 < 8; ++add_bit_idx_l2) {
+          for(auto add_bit_idx_l2 = 0; add_bit_idx_l2 < 8; ++add_bit_idx_l2) {
             int bit_idx_l2 = tree_child_bit_idx(bit_idx_l1) + add_bit_idx_l2;
             if(!tree_isset_bit(tree, bit_idx_l2)) {
               int data_idx = tree_data_idx(tree, bit_idx_l2, feature_size);
-              for(int f = 0; f < feature_size; ++f) {
+              for(auto f = 0; f < feature_size; ++f) {
                 ot_data_t z = data_in[data_idx + f] - data_ta[data_idx + f];
                 data_grad[data_idx + f] = 2*2*2 * norm * z;
               }
             }
             else {
 
-              for(int add_bit_idx_l3 = 0; add_bit_idx_l3 < 8; ++add_bit_idx_l3) {
+              for(auto add_bit_idx_l3 = 0; add_bit_idx_l3 < 8; ++add_bit_idx_l3) {
                 int bit_idx_l3 = tree_child_bit_idx(bit_idx_l2) + add_bit_idx_l3;
                 int data_idx = tree_data_idx(tree, bit_idx_l3, feature_size);
-                for(int f = 0; f < feature_size; ++f) {
+                for(auto f = 0; f < feature_size; ++f) {
                   ot_data_t z = data_in[data_idx + f] - data_ta[data_idx + f];
                   data_grad[data_idx + f] = norm * z;
                 }
@@ -200,7 +200,7 @@ inline void octree_nll_loss_vx(const ot_data_t* input, const ot_data_t* target, 
   total_weight[0] += weight;
 }
 
-extern "C"
+
 void octree_nll_loss_cpu(const octree* input, const octree* target, const ot_data_t* weights, int class_base, bool size_average, bool check, ot_data_t* output, ot_data_t* total_weight) {
   if(check && (1 != target->feature_size || !octree_equal_trees_cpu(input, target))) {
     printf("[ERROR] nll_loss - tree structure of inputs do not match\n");
@@ -214,7 +214,7 @@ void octree_nll_loss_cpu(const octree* input, const octree* target, const ot_dat
   total_weight[0] = 0;
 
   #pragma omp parallel for
-  for(int grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
+  for(auto grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
     const ot_tree_t* tree = octree_get_tree(input, grid_idx);
     const ot_data_t* data_in = octree_get_data(input, grid_idx);
     const ot_data_t* data_ta = octree_get_data(target, grid_idx);
@@ -227,14 +227,14 @@ void octree_nll_loss_cpu(const octree* input, const octree* target, const ot_dat
     }
     else {
 
-      for(int bit_idx_l1 = 1; bit_idx_l1 < 9; ++bit_idx_l1) {
+      for(auto bit_idx_l1 = 1; bit_idx_l1 < 9; ++bit_idx_l1) {
         if(!tree_isset_bit(tree, bit_idx_l1)) {
           int data_idx = tree_data_idx(tree, bit_idx_l1, 1);
           octree_nll_loss_vx(data_in, data_ta, weights, feature_size, class_base, data_idx, 4, &grid_out, &grid_weight);
         }
         else {
 
-          for(int add_bit_idx_l2 = 0; add_bit_idx_l2 < 8; ++add_bit_idx_l2) {
+          for(auto add_bit_idx_l2 = 0; add_bit_idx_l2 < 8; ++add_bit_idx_l2) {
             int bit_idx_l2 = tree_child_bit_idx(bit_idx_l1) + add_bit_idx_l2;
             if(!tree_isset_bit(tree, bit_idx_l2)) {
               int data_idx = tree_data_idx(tree, bit_idx_l2, 1);
@@ -242,7 +242,7 @@ void octree_nll_loss_cpu(const octree* input, const octree* target, const ot_dat
             }
             else {
 
-              for(int add_bit_idx_l3 = 0; add_bit_idx_l3 < 8; ++add_bit_idx_l3) {
+              for(auto add_bit_idx_l3 = 0; add_bit_idx_l3 < 8; ++add_bit_idx_l3) {
                 int bit_idx_l3 = tree_child_bit_idx(bit_idx_l2) + add_bit_idx_l3;
                 int data_idx = tree_data_idx(tree, bit_idx_l3, 1);
                 octree_nll_loss_vx(data_in, data_ta, weights, feature_size, class_base, data_idx, 1, &grid_out, &grid_weight);
@@ -267,7 +267,7 @@ void octree_nll_loss_cpu(const octree* input, const octree* target, const ot_dat
 }
 
 
-extern "C"
+
 void octree_nll_loss_bwd_cpu(const octree* input, const octree* target, const ot_data_t* weights, const ot_data_t total_weight, int class_base, bool size_average, bool check, octree* grad) {
   if(check && (1 != target->feature_size || !octree_equal_trees_cpu(input, target))) {
     printf("[ERROR] nll_loss_bwd - tree structure of inputs do not match\n");
@@ -290,7 +290,7 @@ void octree_nll_loss_bwd_cpu(const octree* input, const octree* target, const ot
   }
 
   #pragma omp parallel for
-  for(int grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
+  for(auto grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
     const ot_tree_t* tree = octree_get_tree(input, grid_idx);
     // const ot_data_t* data_in = input->data_ptrs[grid_idx];
     // const ot_data_t* data_in = octree_get_data(input, grid_idx);
@@ -308,7 +308,7 @@ void octree_nll_loss_bwd_cpu(const octree* input, const octree* target, const ot
     }
     else {
 
-      for(int bit_idx_l1 = 1; bit_idx_l1 < 9; ++bit_idx_l1) {
+      for(auto bit_idx_l1 = 1; bit_idx_l1 < 9; ++bit_idx_l1) {
         if(!tree_isset_bit(tree, bit_idx_l1)) {
           int data_idx = tree_data_idx(tree, bit_idx_l1, 1);
 
@@ -318,7 +318,7 @@ void octree_nll_loss_bwd_cpu(const octree* input, const octree* target, const ot
         }
         else {
 
-          for(int add_bit_idx_l2 = 0; add_bit_idx_l2 < 8; ++add_bit_idx_l2) {
+          for(auto add_bit_idx_l2 = 0; add_bit_idx_l2 < 8; ++add_bit_idx_l2) {
             int bit_idx_l2 = tree_child_bit_idx(bit_idx_l1) + add_bit_idx_l2;
             if(!tree_isset_bit(tree, bit_idx_l2)) {
               int data_idx = tree_data_idx(tree, bit_idx_l2, 1);
@@ -329,7 +329,7 @@ void octree_nll_loss_bwd_cpu(const octree* input, const octree* target, const ot
             }
             else {
 
-              for(int add_bit_idx_l3 = 0; add_bit_idx_l3 < 8; ++add_bit_idx_l3) {
+              for(auto add_bit_idx_l3 = 0; add_bit_idx_l3 < 8; ++add_bit_idx_l3) {
                 int bit_idx_l3 = tree_child_bit_idx(bit_idx_l2) + add_bit_idx_l3;
                 int data_idx = tree_data_idx(tree, bit_idx_l3, 1);
 
@@ -352,7 +352,7 @@ void octree_nll_loss_bwd_cpu(const octree* input, const octree* target, const ot
 
 #define EPS 1e-12
 
-extern "C"
+
 void octree_bce_loss_cpu(const octree* input, const octree* target, bool size_average, bool check, ot_data_t* output, ot_data_t* total_weight) {
   if(!octree_equal_shape(input, target) || (check && !octree_equal_trees_cpu(input, target))) {
     printf("[ERROR] bce_loss - tree structure of inputs do not match\n");
@@ -365,7 +365,7 @@ void octree_bce_loss_cpu(const octree* input, const octree* target, bool size_av
   *output = 0;
 
   #pragma omp parallel for
-  for(int leaf_idx = 0; leaf_idx < input->n_leafs; ++leaf_idx) {
+  for(auto leaf_idx = 0; leaf_idx < input->n_leafs; ++leaf_idx) {
     int grid_idx = leaf_idx_to_grid_idx(input, leaf_idx);
     const ot_tree_t* tree = octree_get_tree(input, grid_idx);
 
@@ -378,7 +378,7 @@ void octree_bce_loss_cpu(const octree* input, const octree* target, bool size_av
     int width = width_from_depth(depth);
     
     ot_data_t grid_out = 0;
-    for(int f = 0; f < feature_size; ++f) {
+    for(auto f = 0; f < feature_size; ++f) {
       ot_data_t x = input->data[leaf_idx * input->feature_size + f]; 
       ot_data_t y = target->data[leaf_idx * input->feature_size + f];
       grid_out += width*width*width * (log(x + EPS) * y + log(1. - x + EPS) * (1. - y));
@@ -399,7 +399,7 @@ void octree_bce_loss_cpu(const octree* input, const octree* target, bool size_av
 
 
 
-extern "C"
+
 void octree_bce_loss_bwd_cpu(const octree* input, const octree* target, bool size_average, bool check, octree* grad) {
   if(!octree_equal_shape(input, target) || (check && !octree_equal_trees_cpu(input, target))) {
     printf("[ERROR] bce_loss_bwd - tree structure of inputs do not match\n");
@@ -420,7 +420,7 @@ void octree_bce_loss_bwd_cpu(const octree* input, const octree* target, bool siz
   }
   
   #pragma omp parallel for
-  for(int leaf_idx = 0; leaf_idx < input->n_leafs; ++leaf_idx) {
+  for(auto leaf_idx = 0; leaf_idx < input->n_leafs; ++leaf_idx) {
     int grid_idx = leaf_idx_to_grid_idx(input, leaf_idx);
     const ot_tree_t* tree = octree_get_tree(input, grid_idx);
 
@@ -432,7 +432,7 @@ void octree_bce_loss_bwd_cpu(const octree* input, const octree* target, bool siz
     int depth = octree_ind_to_dense_ind(input, grid_idx, bit_idx, &n, &d,&h,&w);
     int width = width_from_depth(depth);
     
-    for(int f = 0; f < feature_size; ++f) {
+    for(auto f = 0; f < feature_size; ++f) {
       ot_data_t x = input->data[leaf_idx * input->feature_size + f]; 
       ot_data_t y = target->data[leaf_idx * input->feature_size + f];
       grad->data[leaf_idx * grad->feature_size + f] = - width*width*width * norm * (y - x) / ((1. - x + EPS) * (x + EPS));
@@ -442,7 +442,7 @@ void octree_bce_loss_bwd_cpu(const octree* input, const octree* target, bool siz
 
 
 
-extern "C"
+
 void octree_bce_dense_loss_cpu(const octree* input, const ot_data_t* target, bool size_average, ot_data_t* output, ot_data_t* total_weight) {
   const int n_blocks = octree_num_blocks(input);
 
@@ -454,7 +454,7 @@ void octree_bce_dense_loss_cpu(const octree* input, const ot_data_t* target, boo
   *output = 0;
 
   #pragma omp parallel for
-  for(int leaf_idx = 0; leaf_idx < input->n_leafs; ++leaf_idx) {
+  for(auto leaf_idx = 0; leaf_idx < input->n_leafs; ++leaf_idx) {
     int grid_idx = leaf_idx_to_grid_idx(input, leaf_idx);
     const ot_tree_t* tree = octree_get_tree(input, grid_idx);
 
@@ -467,10 +467,10 @@ void octree_bce_dense_loss_cpu(const octree* input, const ot_data_t* target, boo
     int width = width_from_depth(depth);
 
     ot_data_t grid_out = 0;
-    for(int d = ds; d < (ds+width); ++d) {
-      for(int h = hs; h < (hs+width); ++h) {
-        for(int w = ws; w < (ws+width); ++w) {
-          for(int f = 0; f < feature_size; ++f) {
+    for(auto d = ds; d < (ds+width); ++d) {
+      for(auto h = hs; h < (hs+width); ++h) {
+        for(auto w = ws; w < (ws+width); ++w) {
+          for(auto f = 0; f < feature_size; ++f) {
             ot_data_t x = input->data[leaf_idx * input->feature_size + f];
             ot_data_t y = target[(((n * feature_size + f) * dense_depth + d) * dense_height + h) * dense_width + w];
             grid_out += (log(x + EPS) * y + log(1. - x + EPS) * (1. - y));
@@ -493,7 +493,7 @@ void octree_bce_dense_loss_cpu(const octree* input, const ot_data_t* target, boo
 }
 
 
-extern "C"
+
 void octree_bce_dense_loss_bwd_cpu(const octree* input, const ot_data_t* target, bool size_average, octree* grad) {
   octree_cpy_scalars(input, grad);
   octree_resize_as_cpu(input, grad);
@@ -513,7 +513,7 @@ void octree_bce_dense_loss_bwd_cpu(const octree* input, const ot_data_t* target,
   }
 
   #pragma omp parallel for
-  for(int leaf_idx = 0; leaf_idx < input->n_leafs; ++leaf_idx) {
+  for(auto leaf_idx = 0; leaf_idx < input->n_leafs; ++leaf_idx) {
     int grid_idx = leaf_idx_to_grid_idx(input, leaf_idx);
     const ot_tree_t* tree = octree_get_tree(input, grid_idx);
 
@@ -525,14 +525,14 @@ void octree_bce_dense_loss_bwd_cpu(const octree* input, const ot_data_t* target,
     int depth = octree_ind_to_dense_ind(input, grid_idx, bit_idx, &n, &ds,&hs,&ws);
     int width = width_from_depth(depth);
 
-    for(int f = 0; f < feature_size; ++f) {
+    for(auto f = 0; f < feature_size; ++f) {
       grad->data[leaf_idx * grad->feature_size + f] = 0;
     }
     
-    for(int d = ds; d < (ds+width); ++d) {
-      for(int h = hs; h < (hs+width); ++h) {
-        for(int w = ws; w < (ws+width); ++w) {
-          for(int f = 0; f < feature_size; ++f) {
+    for(auto d = ds; d < (ds+width); ++d) {
+      for(auto h = hs; h < (hs+width); ++h) {
+        for(auto w = ws; w < (ws+width); ++w) {
+          for(auto f = 0; f < feature_size; ++f) {
             ot_data_t x = input->data[leaf_idx * input->feature_size + f];
             ot_data_t y = target[(((n * feature_size + f) * dense_depth + d) * dense_height + h) * dense_width + w];
             grad->data[leaf_idx * grad->feature_size + f] -= norm * (y - x) / ((1. - x + EPS) * (x + EPS));
@@ -544,7 +544,7 @@ void octree_bce_dense_loss_bwd_cpu(const octree* input, const ot_data_t* target,
 }
 
 
-extern "C"
+
 void octree_bce_ds_loss_cpu(const octree* input, const octree* target, const octree* weights, bool size_average, ot_data_t* output, ot_data_t* total_weight) {
   if(!octree_equal_shape(input, target)) {
     printf("[ERROR] bce_ds_loss - shape of inputs do not match\n");
@@ -558,7 +558,7 @@ void octree_bce_ds_loss_cpu(const octree* input, const octree* target, const oct
   *total_weight = 0;
 
   #pragma omp parallel for
-  for(int leaf_idx = 0; leaf_idx < input->n_leafs; ++leaf_idx) {
+  for(auto leaf_idx = 0; leaf_idx < input->n_leafs; ++leaf_idx) {
     int in_grid_idx = leaf_idx_to_grid_idx(input, leaf_idx);
     const ot_tree_t* in_tree = octree_get_tree(input, in_grid_idx);
 
@@ -571,9 +571,9 @@ void octree_bce_ds_loss_cpu(const octree* input, const octree* target, const oct
     
     ot_data_t grid_out = 0;
     ot_data_t grid_weight = 0;
-    for(int d = ds; d < (ds+width); ++d) {
-      for(int h = hs; h < (hs+width); ++h) {
-        for(int w = ws; w < (ws+width); ++w) {
+    for(auto d = ds; d < (ds+width); ++d) {
+      for(auto h = hs; h < (hs+width); ++h) {
+        for(auto w = ws; w < (ws+width); ++w) {
           int gd = d / 8;
           int gh = h / 8;
           int gw = w / 8;
@@ -586,7 +586,7 @@ void octree_bce_ds_loss_cpu(const octree* input, const octree* target, const oct
           int ta_data_idx = tree_data_idx(ta_tree, ta_bit_idx, target->feature_size);
           const ot_data_t* ta_data = octree_get_data(target, ta_grid_idx);
           const ot_data_t* we_data = weights != 0 ? octree_get_data(weights, ta_grid_idx) : 0;
-          for(int f = 0; f < feature_size; ++f) {
+          for(auto f = 0; f < feature_size; ++f) {
             ot_data_t x = input->data[leaf_idx * input->feature_size + f];
             ot_data_t y = ta_data[ta_data_idx + f];
             ot_data_t w = we_data != 0 ? we_data[ta_data_idx + f] : 1;
@@ -611,7 +611,7 @@ void octree_bce_ds_loss_cpu(const octree* input, const octree* target, const oct
   }
 }
 
-extern "C"
+
 void octree_bce_ds_loss_bwd_cpu(const octree* input, const octree* target, const octree* weights, bool size_average, ot_data_t total_weight, octree* grad) {
   if(!octree_equal_shape(input, target)) {
     printf("[ERROR] bce_ds_loss_bwd - shape of inputs do not match\n");
@@ -632,7 +632,7 @@ void octree_bce_ds_loss_bwd_cpu(const octree* input, const octree* target, const
   }
   
   #pragma omp parallel for
-  for(int leaf_idx = 0; leaf_idx < input->n_leafs; ++leaf_idx) {
+  for(auto leaf_idx = 0; leaf_idx < input->n_leafs; ++leaf_idx) {
     int in_grid_idx = leaf_idx_to_grid_idx(input, leaf_idx);
     const ot_tree_t* in_tree = octree_get_tree(input, in_grid_idx);
 
@@ -643,13 +643,13 @@ void octree_bce_ds_loss_bwd_cpu(const octree* input, const octree* target, const
     int depth = octree_ind_to_dense_ind(input, in_grid_idx, in_bit_idx, &n, &ds,&hs,&ws);
     int width = width_from_depth(depth);
     
-    for(int f = 0; f < feature_size; ++f) {
+    for(auto f = 0; f < feature_size; ++f) {
       grad->data[leaf_idx * grad->feature_size + f] = 0;
     }
 
-    for(int d = ds; d < (ds+width); ++d) {
-      for(int h = hs; h < (hs+width); ++h) {
-        for(int w = ws; w < (ws+width); ++w) {
+    for(auto d = ds; d < (ds+width); ++d) {
+      for(auto h = hs; h < (hs+width); ++h) {
+        for(auto w = ws; w < (ws+width); ++w) {
           int gd = d / 8;
           int gh = h / 8;
           int gw = w / 8;
@@ -662,7 +662,7 @@ void octree_bce_ds_loss_bwd_cpu(const octree* input, const octree* target, const
           int ta_data_idx = tree_data_idx(ta_tree, ta_bit_idx, target->feature_size);
           const ot_data_t* ta_data = octree_get_data(target, ta_grid_idx);
           const ot_data_t* we_data = weights != 0 ? octree_get_data(weights, ta_grid_idx) : 0;
-          for(int f = 0; f < feature_size; ++f) {
+          for(auto f = 0; f < feature_size; ++f) {
             ot_data_t x = input->data[leaf_idx * input->feature_size + f];
             ot_data_t y = ta_data[ta_data_idx + f];
             ot_data_t w = we_data != 0 ? we_data[ta_data_idx + f] : 1;

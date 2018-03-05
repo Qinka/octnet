@@ -23,6 +23,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#pragma once
 #ifndef OCTREE_POOL_H
 #define OCTREE_POOL_H
 
@@ -37,9 +38,9 @@
 /// @param data_out 
 OCTREE_FUNCTION
 inline void octree_pool2x2x2_sum(const ot_data_t* data_in, ot_size_t feature_size, ot_data_t* data_out) {
-  for(int f = 0; f < feature_size; ++f) {
+  for(auto f = 0; f < feature_size; ++f) {
     ot_data_t sum = 0;
-    for(int idx = 0; idx < 8; ++idx) {
+    for(auto idx = 0; idx < 8; ++idx) {
       sum += data_in[idx * feature_size + f];
     }
     data_out[f] = sum;
@@ -53,9 +54,9 @@ inline void octree_pool2x2x2_sum(const ot_data_t* data_in, ot_size_t feature_siz
 /// @param data_out 
 OCTREE_FUNCTION
 inline void octree_pool2x2x2_avg(const ot_data_t* data_in, ot_size_t feature_size, ot_data_t* data_out) {
-  for(int f = 0; f < feature_size; ++f) {
+  for(auto f = 0; f < feature_size; ++f) {
     ot_data_t avg = 0;
-    for(int idx = 0; idx < 8; ++idx) {
+    for(auto idx = 0; idx < 8; ++idx) {
       avg += data_in[idx * feature_size + f];
     }
     avg /= 8.f;
@@ -70,9 +71,9 @@ inline void octree_pool2x2x2_avg(const ot_data_t* data_in, ot_size_t feature_siz
 /// @param data_out 
 OCTREE_FUNCTION
 inline void octree_pool2x2x2_max(const ot_data_t* data_in, ot_size_t feature_size, ot_data_t* data_out) {
-  for(int f = 0; f < feature_size; ++f) {
+  for(auto f = 0; f < feature_size; ++f) {
     ot_data_t max = data_in[f];
-    for(int idx = 1; idx < 8; ++idx) {
+    for(auto idx = 1; idx < 8; ++idx) {
       max = FMAX(max, data_in[idx * feature_size + f]);
     }
     data_out[f] = max;
@@ -109,8 +110,8 @@ inline void octree_pool2x2x2(const ot_data_t* data_in, ot_size_t feature_size, o
 /// @param data_grad_in computed gradient through this operation
 OCTREE_FUNCTION
 inline void octree_pool2x2x2_avg_bwd(const ot_data_t* data_in, const ot_data_t* data_grad_out, ot_size_t feature_size, ot_data_t* data_grad_in) {
-  for(int f = 0; f < feature_size; ++f) {
-    for(int idx = 0; idx < 8; ++idx) {
+  for(auto f = 0; f < feature_size; ++f) {
+    for(auto idx = 0; idx < 8; ++idx) {
       data_grad_in[idx * feature_size + f] = data_grad_out[f] / 8.f;
     }
   }
@@ -124,11 +125,11 @@ inline void octree_pool2x2x2_avg_bwd(const ot_data_t* data_in, const ot_data_t* 
 /// @param data_grad_in computed gradient through this operation
 OCTREE_FUNCTION
 inline void octree_pool2x2x2_max_bwd(const ot_data_t* data_in, const ot_data_t* data_grad_out, ot_size_t feature_size, ot_data_t* data_grad_in) {
-  for(int f = 0; f < feature_size; ++f) {
+  for(auto f = 0; f < feature_size; ++f) {
     ot_data_t max_val = data_in[f];
     int max_idx = 0;
     data_grad_in[f] = 0;
-    for(int idx = 1; idx < 8; ++idx) {
+    for(auto idx = 1; idx < 8; ++idx) {
       data_grad_in[idx * feature_size + f] = 0;
 
       ot_data_t val = data_in[idx * feature_size + f];

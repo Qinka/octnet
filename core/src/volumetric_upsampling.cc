@@ -36,7 +36,7 @@ void volumetric_nn_upsampling_cdhw_cpu(const ot_data_t* in, int n, int in_depth,
   int out_width = upsampling_factor * in_width;
 
   #pragma omp parallel for
-  for(int vx_idx = 0; vx_idx < n * out_depth * out_height * out_width; ++vx_idx) {
+  for(auto vx_idx = 0; vx_idx < n * out_depth * out_height * out_width; ++vx_idx) {
     int n = vx_idx / (out_depth * out_height * out_width);
     int ow = vx_idx % out_width;
     int oh = ((vx_idx - ow) / out_width) % out_height;
@@ -45,7 +45,7 @@ void volumetric_nn_upsampling_cdhw_cpu(const ot_data_t* in, int n, int in_depth,
     int id = od / upsampling_factor;
     int ih = oh / upsampling_factor;
     int iw = ow / upsampling_factor;
-    for(int f = 0; f < feature_size; ++f) {
+    for(auto f = 0; f < feature_size; ++f) {
       int in_idx = (((n * feature_size + f) * in_depth + id) * in_height + ih) * in_width + iw;
       int out_idx = (((n * feature_size + f) * out_depth + od) * out_height + oh) * out_width + ow;
       out[out_idx] = in[in_idx];
@@ -59,18 +59,18 @@ void volumetric_nn_upsampling_cdhw_bwd_cpu(const ot_data_t* grad_out, int n, int
   int out_width = upsampling_factor * in_width;
 
   #pragma omp parallel for
-  for(int vx_idx = 0; vx_idx < n * in_depth * in_height * in_width; ++vx_idx) {
+  for(auto vx_idx = 0; vx_idx < n * in_depth * in_height * in_width; ++vx_idx) {
     int n = vx_idx / (in_depth * in_height * in_width);
     int iw = vx_idx % in_width;
     int ih = ((vx_idx - iw) / in_width) % in_height;
     int id = (((((vx_idx - iw) / in_width) - ih) / in_height) % in_depth);
 
-    for(int f = 0; f < feature_size; ++f) {
+    for(auto f = 0; f < feature_size; ++f) {
       int in_idx = (((n * feature_size + f) * in_depth + id) * in_height + ih) * in_width + iw;
       grad_in[in_idx] = 0;
-      for(int d = 0; d < upsampling_factor; ++ d) {
-        for(int h = 0; h < upsampling_factor; ++ h) {
-          for(int w = 0; w < upsampling_factor; ++ w) {
+      for(auto d = 0; d < upsampling_factor; ++ d) {
+        for(auto h = 0; h < upsampling_factor; ++ h) {
+          for(auto w = 0; w < upsampling_factor; ++ w) {
             int od = id * upsampling_factor + d;
             int oh = ih * upsampling_factor + h;
             int ow = iw * upsampling_factor + w;

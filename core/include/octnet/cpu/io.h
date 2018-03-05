@@ -23,17 +23,17 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#pragma once
 #ifndef OCTREE_IO_CPU_H
 #define OCTREE_IO_CPU_H
 
 #include "octnet/core/core.h"
 
-extern "C" {
-
 /// Reads a grid-octree from the given path.
 /// @deprecated 
 /// @param path 
 /// @param grid
+OCTREE_API
 void octree_read_deprecated_cpu(const char* path, octree* grid);
 
 /// Reads a tensor with given dimensions from path.
@@ -42,28 +42,33 @@ void octree_read_deprecated_cpu(const char* path, octree* grid);
 /// @param n_dim
 /// @param dims
 /// @param data
+OCTREE_API
 void dense_read_prealloc_deprecated_cpu(const char* path, int n_dim, const int* dims, ot_data_t* data);
 
 /// Reads the header of a tensor from the given path
 /// @deprecated
 /// @param path
 /// @param n_dim
+OCTREE_API
 int* dense_read_header_deprecated_cpu(const char* path, int* n_dim);
 
 
 /// Reads the header information of a grid-octree from a given path.
 /// @param path
 /// @param grid
+OCTREE_API
 void octree_read_header_cpu(const char* path, octree* grid);
 
 /// Reads a grid-octree from a given path.
 /// @param path
 /// @param grid
+OCTREE_API
 void octree_read_cpu(const char* path, octree* grid);
 
 /// Write a grid-octree to a given path.
 /// @param path
 /// @param grid
+OCTREE_API
 void octree_write_cpu(const char* path, const octree* grid);
 
 /// Reads a batch of grid-octree structures.
@@ -71,17 +76,20 @@ void octree_write_cpu(const char* path, const octree* grid);
 /// @param paths
 /// @param n_threads number of OpenMP threads used for I/O
 /// @param grid
+OCTREE_API
 void octree_read_batch_cpu(int n_paths, char** paths, int n_threads, octree* grid);
 
 
 /// Writes the given grid-octree as tensor in DHWC format to path.
 /// @param path
 /// @param grid
+OCTREE_API
 void octree_dhwc_write_cpu(const char* path, const octree* grid);
 
 /// Writes the given grid-octree as tensor in CDHW format to path.
 /// @param path
 /// @param grid
+OCTREE_API
 void octree_cdhw_write_cpu(const char* path, const octree* grid);
 
 /// Writes a given tensor to path.
@@ -89,11 +97,13 @@ void octree_cdhw_write_cpu(const char* path, const octree* grid);
 /// @param n_dim number of tensor dimensions.
 /// @param dims tensor dimensions.
 /// @param data tensor data
+OCTREE_API
 void dense_write_cpu(const char* path, int n_dim, const int* dims, const ot_data_t* data);
 
 /// Reads a tensor from the given path. Allocates memory as needed.
 /// @param path
 /// @return tensor data
+OCTREE_API
 ot_data_t* dense_read_cpu(const char* path);
 
 /// Reads a tensor to a preallocated array.
@@ -101,6 +111,7 @@ ot_data_t* dense_read_cpu(const char* path);
 /// @param n_dim number of tensor dimensions.
 /// @param dims tensor dimensions.
 /// @param data tensor data
+OCTREE_API
 void dense_read_prealloc_cpu(const char* path, int n_dim, const int* dims, ot_data_t* data);
 
 /// Reads a batch of tensors to a preallocated array.
@@ -110,8 +121,7 @@ void dense_read_prealloc_cpu(const char* path, int n_dim, const int* dims, ot_da
 /// @param n_dim number of tensor dimensions.
 /// @param dims tensor dimensions.
 /// @param data tensor data
+OCTREE_API
 void dense_read_prealloc_batch_cpu(int n_paths, char** paths, int n_threads, int n_dim, const int* dims, ot_data_t* data); 
-
-} //extern "C"
 
 #endif

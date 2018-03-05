@@ -33,8 +33,6 @@
 #include <omp.h>
 #endif
 
-
-extern "C"
 void octree_concat_cpu(const octree* in1, const octree* in2, bool check, octree* out) {
 
   if(check && (!octree_equal_trees_cpu(in1, in2))) {
@@ -51,11 +49,11 @@ void octree_concat_cpu(const octree* in1, const octree* in2, bool check, octree*
   octree_cpy_prefix_leafs_cpu_cpu(in1, out);
 
   #pragma omp parallel for
-  for(int vx_idx = 0; vx_idx < in1->n_leafs; ++vx_idx) {
-    // for(int f = 0; f < feature_size_in1; ++f) {
+  for(auto vx_idx = 0; vx_idx < in1->n_leafs; ++vx_idx) {
+    // for(auto f = 0; f < feature_size_in1; ++f) {
     //   out->data[vx_idx * feature_size_out + f] = in1->data[vx_idx * feature_size_in1 + f];
     // }
-    // for(int f = 0; f < feature_size_in2; ++f) {
+    // for(auto f = 0; f < feature_size_in2; ++f) {
     //   out->data[vx_idx * feature_size_out + feature_size_in1 + f] = in2->data[vx_idx * feature_size_in2 + f];
     // }
     octree_cpy_leaf(in1->data + vx_idx * feature_size_in1, feature_size_in1, out->data + vx_idx * feature_size_out);
@@ -63,8 +61,6 @@ void octree_concat_cpu(const octree* in1, const octree* in2, bool check, octree*
   }
 }
 
-
-extern "C"
 void octree_concat_bwd_cpu(const octree* in1, const octree* in2, const octree* grad_out, bool do_grad_in2, octree* grad_in1, octree* grad_in2) {
   octree_resize_as_cpu(in1, grad_in1);
   octree_cpy_trees_cpu_cpu(in1, grad_in1);
@@ -79,13 +75,13 @@ void octree_concat_bwd_cpu(const octree* in1, const octree* in2, const octree* g
   ot_size_t feature_size_out = feature_size_in1 + feature_size_in2;
 
   #pragma omp parallel for
-  for(int vx_idx = 0; vx_idx < in1->n_leafs; ++vx_idx) {
+  for(auto vx_idx = 0; vx_idx < in1->n_leafs; ++vx_idx) {
     // int fo = 0;
-    // for(int f = 0; f < feature_size_in1; ++f) {
+    // for(auto f = 0; f < feature_size_in1; ++f) {
     //   grad_in1->data[vx_idx * feature_size_in1 + f] = grad_out->data[vx_idx * feature_size_out + fo];
     //   fo++;
     // }
-    // for(int f = 0; f < feature_size_in2; ++f) {
+    // for(auto f = 0; f < feature_size_in2; ++f) {
     //   grad_in2->data[vx_idx * feature_size_in2 + f] = grad_out->data[vx_idx * feature_size_out + fo];
     //   fo++;
     // }
@@ -96,9 +92,6 @@ void octree_concat_bwd_cpu(const octree* in1, const octree* in2, const octree* g
   }
 }
 
-
-
-extern "C"
 void octree_concat_dense_cpu(const octree* in1, const ot_data_t* in2, ot_size_t feature_size2, octree* out) {
   ot_size_t feature_size1 = in1->feature_size;
   ot_size_t feature_size_out = feature_size1 + feature_size2;
@@ -113,7 +106,7 @@ void octree_concat_dense_cpu(const octree* in1, const ot_data_t* in2, ot_size_t 
 
 
   #pragma omp parallel for
-  for(int leaf_idx = 0; leaf_idx < in1->n_leafs; ++leaf_idx) {
+  for(auto leaf_idx = 0; leaf_idx < in1->n_leafs; ++leaf_idx) {
     octree_cpy_leaf(in1->data + leaf_idx * feature_size1, feature_size1, out->data + leaf_idx * feature_size_out);
 
     int grid_idx = leaf_idx_to_grid_idx(in1, leaf_idx);
@@ -127,11 +120,11 @@ void octree_concat_dense_cpu(const octree* in1, const ot_data_t* in2, ot_size_t 
     int depth = octree_ind_to_dense_ind(in1, grid_idx, bit_idx, &n, &ds,&hs,&ws);
     int width = width_from_depth(depth);
 
-    for(int f = 0; f < feature_size2; ++f) {
+    for(auto f = 0; f < feature_size2; ++f) {
       ot_data_t val = 0;
-      for(int d = ds; d < ds+width; ++d) {
-      for(int h = hs; h < hs+width; ++h) {
-      for(int w = ws; w < ws+width; ++w) {
+      for(auto d = ds; d < ds+width; ++d) {
+      for(auto h = hs; h < hs+width; ++h) {
+      for(auto w = ws; w < ws+width; ++w) {
         val += in2[(((n * feature_size2 + f) * dense_depth + d) * dense_height + h) * dense_width + w];
       }
       }
@@ -142,7 +135,6 @@ void octree_concat_dense_cpu(const octree* in1, const ot_data_t* in2, ot_size_t 
   }
 }
 
-extern "C"
 void octree_concat_dense_bwd_cpu(const octree* in1, const ot_data_t* in2, ot_size_t feature_size2, const octree* grad_out, bool do_grad_in2, octree* grad_in1, ot_data_t* grad_in2) {
   octree_resize_as_cpu(in1, grad_in1);
   octree_cpy_trees_cpu_cpu(in1, grad_in1);
@@ -156,7 +148,7 @@ void octree_concat_dense_bwd_cpu(const octree* in1, const ot_data_t* in2, ot_siz
   const int dense_width = 8 * grad_out->grid_width;
 
   #pragma omp parallel for
-  for(int leaf_idx = 0; leaf_idx < grad_out->n_leafs; ++leaf_idx) {
+  for(auto leaf_idx = 0; leaf_idx < grad_out->n_leafs; ++leaf_idx) {
     octree_cpy_leaf(grad_out->data + leaf_idx * feature_size_out, feature_size1, grad_in1->data + leaf_idx * feature_size1);
 
     if(do_grad_in2) {
@@ -171,11 +163,11 @@ void octree_concat_dense_bwd_cpu(const octree* in1, const ot_data_t* in2, ot_siz
       int depth = octree_ind_to_dense_ind(grad_out, grid_idx, bit_idx, &n, &ds,&hs,&ws);
       int width = width_from_depth(depth);
 
-      for(int f = 0; f < feature_size2; ++f) {
+      for(auto f = 0; f < feature_size2; ++f) {
         ot_data_t val = grad_out->data[leaf_idx * grad_out->feature_size + feature_size1 + f];
-        for(int d = ds; d < ds+width; ++d) {
-        for(int h = hs; h < hs+width; ++h) {
-        for(int w = ws; w < ws+width; ++w) {
+        for(auto d = ds; d < ds+width; ++d) {
+        for(auto h = hs; h < hs+width; ++h) {
+        for(auto w = ws; w < ws+width; ++w) {
           grad_in2[(((n * feature_size2 + f) * dense_depth + d) * dense_height + h) * dense_width + w] = val;
         }
         }

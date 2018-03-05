@@ -22,7 +22,7 @@
 // ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
+#pragma once
 #ifndef OCTREE_DENSE_H
 #define OCTREE_DENSE_H
 
@@ -51,12 +51,12 @@
 template <int dense_format>
 OCTREE_FUNCTION
 inline void dense_to_octree_sum_fcn(const ot_data_t* dense, int n, int dense_depth, int dense_height, int dense_width, int feature_size, int d1, int d2, int h1, int h2, int w1, int w2, ot_data_t* out) {
-  for(int f = 0; f < feature_size; ++f) { out[f] = 0; }
+  for(auto f = 0; f < feature_size; ++f) { out[f] = 0; }
 
-  for(int d = d1; d < d2; ++d) {
-    for(int h = h1; h < h2; ++h) {
-      for(int w = w1; w < w2; ++w) {
-        for(int f = 0; f < feature_size; ++f) {
+  for(auto d = d1; d < d2; ++d) {
+    for(auto h = h1; h < h2; ++h) {
+      for(auto w = w1; w < w2; ++w) {
+        for(auto f = 0; f < feature_size; ++f) {
           float val;
           if(dense_format == DENSE_FORMAT_DHWC) {
             val = dense[(((n * dense_depth + d) * dense_height + h) * dense_width + w) * feature_size + f];
@@ -92,7 +92,7 @@ OCTREE_FUNCTION
 inline void dense_to_octree_avg_fcn(const ot_data_t* dense, int n, int dense_depth, int dense_height, int dense_width, int feature_size, int d1, int d2, int h1, int h2, int w1, int w2, ot_data_t* out) {
   dense_to_octree_sum_fcn<dense_format>(dense, n, dense_depth, dense_height, dense_width, feature_size, d1,d2, h1,h2, w1,w2, out);
   float norm = (d2-d1) * (h2-h1) * (w2-w1);
-  for(int f = 0; f < feature_size; ++f) { out[f] /= norm; }
+  for(auto f = 0; f < feature_size; ++f) { out[f] /= norm; }
 }
 
 /// Pools (max) all the values of the tensor data dense into the corresponding 
@@ -114,12 +114,12 @@ inline void dense_to_octree_avg_fcn(const ot_data_t* dense, int n, int dense_dep
 template <int dense_format>
 OCTREE_FUNCTION
 inline void dense_to_octree_max_fcn(const ot_data_t* dense, int n, int dense_depth, int dense_height, int dense_width, int feature_size, int d1, int d2, int h1, int h2, int w1, int w2, ot_data_t* out) {
-  for(int f = 0; f < feature_size; ++f) { out[f] = 0; }
+  for(auto f = 0; f < feature_size; ++f) { out[f] = 0; }
 
-  for(int d = d1; d < d2; ++d) {
-    for(int h = h1; h < h2; ++h) {
-      for(int w = w1; w < w2; ++w) {
-        for(int f = 0; f < feature_size; ++f) {
+  for(auto d = d1; d < d2; ++d) {
+    for(auto h = h1; h < h2; ++h) {
+      for(auto w = w1; w < w2; ++w) {
+        for(auto f = 0; f < feature_size; ++f) {
           float val;
           if(dense_format == DENSE_FORMAT_DHWC) {
             val = dense[(((n * dense_depth + d) * dense_height + h) * dense_width + w) * feature_size + f];

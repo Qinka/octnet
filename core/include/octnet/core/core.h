@@ -23,12 +23,15 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#pragma once
 #ifndef OCTREE_H
 #define OCTREE_H
 
 #ifndef DEBUG 
 #define DEBUG 0
 #endif
+
+#include "octnet/core/api.h"
 
 #include "types.h"
 
@@ -37,7 +40,7 @@
 #include <cmath>
 
 #include <smmintrin.h>
-
+#include <nmmintrin.h>
 
 #ifdef __CUDA_ARCH__
 #define OCTREE_FUNCTION __host__ __device__
@@ -167,12 +170,12 @@ inline ot_data_t* octree_get_data(const octree* grid, const ot_size_t grid_idx) 
 /// @return void
 OCTREE_FUNCTION
 inline void octree_cpy_scalars(const octree* src, octree* dst) {
-  dst->n = src->n;
-  dst->grid_depth = src->grid_depth;
-  dst->grid_height = src->grid_height;
-  dst->grid_width = src->grid_width;
+  dst->n            = src->n;
+  dst->grid_depth   = src->grid_depth;
+  dst->grid_height  = src->grid_height;
+  dst->grid_width   = src->grid_width;
   dst->feature_size = src->feature_size;
-  dst->n_leafs = src->n_leafs;
+  dst->n_leafs      = src->n_leafs;
 }
 
 /// Tests if two octree objects have the same shape (nxdxhxw).
@@ -182,10 +185,10 @@ inline void octree_cpy_scalars(const octree* src, octree* dst) {
 /// @return true, if the shape of in1 and in2 are the same, otherwise false.
 OCTREE_FUNCTION
 inline bool octree_equal_shape(const octree* in1, const octree* in2) {
-  return in1->n == in2->n && 
-         in1->grid_depth == in2->grid_depth && 
-         in1->grid_height == in2->grid_height && 
-         in1->grid_width == in2->grid_width &&
+  return in1->n            == in2->n              && 
+         in1->grid_depth   == in2->grid_depth     && 
+         in1->grid_height  == in2->grid_height    && 
+         in1->grid_width   == in2->grid_width     &&
          in1->feature_size == in2->feature_size;
 }
 
@@ -196,8 +199,9 @@ inline bool octree_equal_shape(const octree* in1, const octree* in2) {
 /// @param data_out
 /// @return void
 OCTREE_FUNCTION
-inline void octree_cpy_leaf(const ot_data_t* data_in, const ot_size_t feature_size, ot_data_t* data_out) {
-  for(int f = 0; f < feature_size; ++f) {
+inline void octree_cpy_leaf(const ot_data_t* data_in, const ot_size_t feature_size,
+                            ot_data_t* data_out) {
+  for(auto f = 0; f < feature_size; ++f) {
     data_out[f] = data_in[f];
   }
 }
@@ -223,7 +227,7 @@ inline int octree_mem_capacity(const octree* grid) {
 /// @return the number of bytes needed for grid on the heap.
 OCTREE_FUNCTION
 inline int octree_mem_using(const octree* grid) {
-  const int n_blocks = octree_num_blocks(grid);
+  const auto n_blocks = octree_num_blocks(grid);
   return n_blocks * (N_TREE_INTS * sizeof(ot_tree_t) + sizeof(ot_data_t*)) + 
          grid->n_leafs * grid->feature_size * sizeof(ot_data_t) + 
          7 * sizeof(ot_size_t);
@@ -534,13 +538,13 @@ inline int tree_n_splits(const ot_tree_t* tree) {
 /// @return grid_idx
 OCTREE_FUNCTION
 inline int leaf_idx_to_grid_idx(const octree* grid, const int leaf_idx) {
-  const int n_blocks = octree_num_blocks(grid);
+  const auto n_blocks = octree_num_blocks(grid);
   
-  int l = 0;
-  int r = n_blocks;
+  auto l = 0;
+  auto r = n_blocks;
   while(l <= r) {
-    const int m = (l + r) / 2;
-    const int am = grid->prefix_leafs[m];
+    const auto m = (l + r) / 2;
+    const auto am = grid->prefix_leafs[m];
     if(am <= leaf_idx && (m == n_blocks-1 || leaf_idx < grid->prefix_leafs[m+1])) {
       return m;
     }
@@ -569,8 +573,8 @@ inline int data_idx_to_bit_idx(const ot_tree_t* tree, int data_idx) {
     return 0;
   }
 
-  const int n_leafs_l1 = 8 - tree_cnt1(tree, 1, 9);
-  const int n_leafs_l2 = (8 - n_leafs_l1) * 8 - tree_cnt1(tree, 9, 73);
+  const auto n_leafs_l1 = 8 - tree_cnt1(tree, 1, 9);
+  const auto n_leafs_l2 = (8 - n_leafs_l1) * 8 - tree_cnt1(tree, 9, 73);
 
   int bit_idx;
   if(data_idx < n_leafs_l1) {
@@ -590,7 +594,7 @@ inline int data_idx_to_bit_idx(const ot_tree_t* tree, int data_idx) {
 
   while(data_idx >= 0) {
     if(tree_isset_bit(tree, tree_parent_bit_idx(bit_idx))) {
-      for(int idx = 0; idx < 8; ++idx) { 
+      for(auto idx = 0; idx < 8; ++idx) { 
         if(bit_idx > 72 || !tree_isset_bit(tree, bit_idx)) {
           data_idx--;
         }

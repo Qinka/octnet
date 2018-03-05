@@ -38,7 +38,7 @@ void octree_gridpool2x2x2_data_cpu(const octree* in, octree* out) {
   int feature_size = in->feature_size;
 
   #pragma omp parallel for
-  for(int out_grid_idx = 0; out_grid_idx < n_blocks; ++out_grid_idx) {
+  for(auto out_grid_idx = 0; out_grid_idx < n_blocks; ++out_grid_idx) {
     ot_tree_t* otree = octree_get_tree(out, out_grid_idx);
     // ot_data_t* odata = out->data_ptrs[out_grid_idx];
     ot_data_t* odata = octree_get_data(out, out_grid_idx);
@@ -47,9 +47,9 @@ void octree_gridpool2x2x2_data_cpu(const octree* in, octree* out) {
     octree_split_grid_idx(out, out_grid_idx, &gn, &ogd, &ogh, &ogw); 
     
     int obit_idx_l1 = 1;
-    for(int dgd = 0; dgd < 2; ++dgd) {
-      for(int hgh = 0; hgh < 2; ++hgh) {
-        for(int wgw = 0; wgw < 2; ++wgw) {
+    for(auto dgd = 0; dgd < 2; ++dgd) {
+      for(auto hgh = 0; hgh < 2; ++hgh) {
+        for(auto wgw = 0; wgw < 2; ++wgw) {
 
           int igd = 2*ogd + dgd;
           int igh = 2*ogh + hgh;
@@ -61,12 +61,12 @@ void octree_gridpool2x2x2_data_cpu(const octree* in, octree* out) {
           
           if(tree_isset_bit(itree, 0)) {
             int obit_idx_l2 = tree_child_bit_idx(obit_idx_l1);
-            for(int ibit_idx_l1 = 1; ibit_idx_l1 < 9; ++ibit_idx_l1) {
+            for(auto ibit_idx_l1 = 1; ibit_idx_l1 < 9; ++ibit_idx_l1) {
 
               if(tree_isset_bit(itree, ibit_idx_l1)) {
 
                 int obit_idx_l3 = tree_child_bit_idx(obit_idx_l2);
-                for(int idx = 0; idx < 8; ++idx) {
+                for(auto idx = 0; idx < 8; ++idx) {
 
                   int ibit_idx_l2 = tree_child_bit_idx(ibit_idx_l1) + idx;
                   int out_data_idx = tree_data_idx(otree, obit_idx_l3, feature_size);
@@ -76,7 +76,7 @@ void octree_gridpool2x2x2_data_cpu(const octree* in, octree* out) {
                   }
                   else {
                     int in_data_idx = tree_data_idx(itree, ibit_idx_l2, feature_size);
-                    // for(int f = 0; f < feature_size; ++f) {
+                    // for(auto f = 0; f < feature_size; ++f) {
                     //   odata[out_data_idx + f] = idata[in_data_idx + f];
                     // }
                     octree_cpy_leaf(idata + in_data_idx, feature_size, odata + out_data_idx);
@@ -89,7 +89,7 @@ void octree_gridpool2x2x2_data_cpu(const octree* in, octree* out) {
               else {
                 int out_data_idx = tree_data_idx(otree, obit_idx_l2, feature_size);
                 int in_data_idx = tree_data_idx(itree, ibit_idx_l1, feature_size);
-                // for(int f = 0; f < feature_size; ++f) {
+                // for(auto f = 0; f < feature_size; ++f) {
                 //   odata[out_data_idx + f] = idata[in_data_idx + f];
                 // }
                 octree_cpy_leaf(idata + in_data_idx, feature_size, odata + out_data_idx);
@@ -100,7 +100,7 @@ void octree_gridpool2x2x2_data_cpu(const octree* in, octree* out) {
           }
           else {
             int out_data_idx = tree_data_idx(otree, obit_idx_l1, feature_size);
-            // for(int f = 0; f < feature_size; ++f) {
+            // for(auto f = 0; f < feature_size; ++f) {
             //   odata[out_data_idx + f] = idata[f];
             // }
             octree_cpy_leaf(idata, feature_size, odata + out_data_idx);
@@ -140,7 +140,7 @@ void octree_gridpool2x2x2_cpu(const octree* in, octree* out) {
   octree_clr_trees_cpu(out);
 
   #pragma omp parallel for
-  for(int out_grid_idx = 0; out_grid_idx < n_blocks; ++out_grid_idx) {
+  for(auto out_grid_idx = 0; out_grid_idx < n_blocks; ++out_grid_idx) {
     ot_tree_t* otree = octree_get_tree(out, out_grid_idx);
 
     int gn, ogd, ogh, ogw;
@@ -150,9 +150,9 @@ void octree_gridpool2x2x2_cpu(const octree* in, octree* out) {
     tree_set_bit(otree, 0); 
 
     int obit_idx_l1 = 1;
-    for(int dgd = 0; dgd < 2; ++dgd) {
-      for(int hgh = 0; hgh < 2; ++hgh) {
-        for(int wgw = 0; wgw < 2; ++wgw) {
+    for(auto dgd = 0; dgd < 2; ++dgd) {
+      for(auto hgh = 0; hgh < 2; ++hgh) {
+        for(auto wgw = 0; wgw < 2; ++wgw) {
           int igd = 2*ogd + dgd;
           int igh = 2*ogh + hgh;
           int igw = 2*ogw + wgw;
@@ -164,7 +164,7 @@ void octree_gridpool2x2x2_cpu(const octree* in, octree* out) {
             tree_set_bit(otree, obit_idx_l1);
 
             int obit_idx_l2 = tree_child_bit_idx(obit_idx_l1);
-            for(int ibit_idx_l1 = 1; ibit_idx_l1 < 9; ++ibit_idx_l1) {
+            for(auto ibit_idx_l1 = 1; ibit_idx_l1 < 9; ++ibit_idx_l1) {
               //check if l1 bits are set in in blocks
               if(tree_isset_bit(itree, ibit_idx_l1)) {
                 tree_set_bit(otree, obit_idx_l2);
@@ -199,7 +199,7 @@ void octree_gridpool2x2x2_bwd_cpu(const octree* in, const octree* grad_out, octr
   int feature_size = in->feature_size;
 
   #pragma omp parallel for
-  for(int out_grid_idx = 0; out_grid_idx < n_blocks; ++out_grid_idx) {
+  for(auto out_grid_idx = 0; out_grid_idx < n_blocks; ++out_grid_idx) {
     ot_tree_t* otree = octree_get_tree(grad_out, out_grid_idx);
     // ot_data_t* godata = grad_out->data_ptrs[out_grid_idx];
     ot_data_t* godata = octree_get_data(grad_out, out_grid_idx);
@@ -208,9 +208,9 @@ void octree_gridpool2x2x2_bwd_cpu(const octree* in, const octree* grad_out, octr
     octree_split_grid_idx(grad_out, out_grid_idx, &gn, &ogd, &ogh, &ogw); 
     
     int obit_idx_l1 = 1;
-    for(int dgd = 0; dgd < 2; ++dgd) {
-      for(int hgh = 0; hgh < 2; ++hgh) {
-        for(int wgw = 0; wgw < 2; ++wgw) {
+    for(auto dgd = 0; dgd < 2; ++dgd) {
+      for(auto hgh = 0; hgh < 2; ++hgh) {
+        for(auto wgw = 0; wgw < 2; ++wgw) {
 
           int igd = 2*ogd + dgd;
           int igh = 2*ogh + hgh;
@@ -224,12 +224,12 @@ void octree_gridpool2x2x2_bwd_cpu(const octree* in, const octree* grad_out, octr
           
           if(tree_isset_bit(itree, 0)) {
             int obit_idx_l2 = tree_child_bit_idx(obit_idx_l1);
-            for(int ibit_idx_l1 = 1; ibit_idx_l1 < 9; ++ibit_idx_l1) {
+            for(auto ibit_idx_l1 = 1; ibit_idx_l1 < 9; ++ibit_idx_l1) {
 
               if(tree_isset_bit(itree, ibit_idx_l1)) {
 
                 int obit_idx_l3 = tree_child_bit_idx(obit_idx_l2);
-                for(int idx = 0; idx < 8; ++idx) {
+                for(auto idx = 0; idx < 8; ++idx) {
 
                   int ibit_idx_l2 = tree_child_bit_idx(ibit_idx_l1) + idx;
                   int out_data_idx = tree_data_idx(otree, obit_idx_l3, feature_size);
@@ -239,7 +239,7 @@ void octree_gridpool2x2x2_bwd_cpu(const octree* in, const octree* grad_out, octr
                   }
                   else {
                     int in_data_idx = tree_data_idx(itree, ibit_idx_l2, feature_size);
-                    // for(int f = 0; f < feature_size; ++f) {
+                    // for(auto f = 0; f < feature_size; ++f) {
                     //   gidata[in_data_idx + f] = godata[out_data_idx + f];
                     // }
                     octree_cpy_leaf(godata + out_data_idx, feature_size, gidata + in_data_idx);
@@ -252,7 +252,7 @@ void octree_gridpool2x2x2_bwd_cpu(const octree* in, const octree* grad_out, octr
               else {
                 int out_data_idx = tree_data_idx(otree, obit_idx_l2, feature_size);
                 int in_data_idx = tree_data_idx(itree, ibit_idx_l1, feature_size);
-                // for(int f = 0; f < feature_size; ++f) {
+                // for(auto f = 0; f < feature_size; ++f) {
                 //   gidata[in_data_idx + f] = godata[out_data_idx + f];
                 // }
                 octree_cpy_leaf(godata + out_data_idx, feature_size, gidata + in_data_idx);
@@ -263,7 +263,7 @@ void octree_gridpool2x2x2_bwd_cpu(const octree* in, const octree* grad_out, octr
           }
           else {
             int out_data_idx = tree_data_idx(otree, obit_idx_l1, feature_size);
-            // for(int f = 0; f < feature_size; ++f) {
+            // for(auto f = 0; f < feature_size; ++f) {
             //   gidata[f] = godata[out_data_idx + f];
             // }
             octree_cpy_leaf(godata + out_data_idx, feature_size, gidata);

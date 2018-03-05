@@ -23,6 +23,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#pragma once
 #ifndef OCTREE_CONV3X3X3_H
 #define OCTREE_CONV3X3X3_H
 
@@ -47,23 +48,22 @@
 /// @return 0 if the subscript indices are out of bounds, otherwise the data.
 OCTREE_FUNCTION
 inline ot_data_t conv3x3x3_get_padded_data(const octree* grid_in, int n, int d, int h, int w, int f) {
-  const bool in_vol = d >= 0 && h >= 0 && w >= 0 && 
+  const auto in_vol = d >= 0 && h >= 0 && w >= 0 && 
       d < 8 * grid_in->grid_depth && h < 8 * grid_in->grid_height && w < 8 * grid_in->grid_width;
 
   if(in_vol) {
-    const int grid_idx = octree_grid_idx(grid_in, n, d / 8, h / 8, w / 8);
+    const auto grid_idx = octree_grid_idx(grid_in, n, d / 8, h / 8, w / 8);
     // printf("%d,%d,%d => %d, %d\n", d, h, w, grid_idx, bit_idx);
     const ot_tree_t* tree = octree_get_tree(grid_in, grid_idx);
-    const int bit_idx = tree_bit_idx(tree, d % 8, h % 8, w % 8);
+    const auto bit_idx = tree_bit_idx(tree, d % 8, h % 8, w % 8);
     /* ot_data_t* data_in = grid_in->data_ptrs[grid_idx]; */
     ot_data_t* data_in = octree_get_data(grid_in, grid_idx);
-    const int data_idx = tree_data_idx(tree, bit_idx, grid_in->feature_size);
+    const auto data_idx = tree_data_idx(tree, bit_idx, grid_in->feature_size);
     return (data_in + data_idx)[f];
   }
   else {
     return 0;
   }
-
 }
 
 
@@ -83,11 +83,11 @@ inline ot_data_t conv3x3x3_get_padded_data(const octree* grid_in, int n, int d, 
 template <bool inv_filter>
 OCTREE_FUNCTION
 inline void conv3x3x3_point(int n, int ds, int hs, int ws, const octree* grid_in, const ot_data_t* weights, int channels_out, float factor, ot_data_t* out) {
-  const int channels_in = grid_in->feature_size;
+  const auto channels_in = grid_in->feature_size;
   
-  for(int kd = 0; kd < 3; ++kd) {
-    for(int kh = 0; kh < 3; ++kh) {
-      for(int kw = 0; kw < 3; ++kw) {
+  for(auto kd = 0; kd < 3; ++kd) {
+    for(auto kh = 0; kh < 3; ++kh) {
+      for(auto kw = 0; kw < 3; ++kw) {
         int d, h, w;
         d = ds - 1 + kd;
         h = hs - 1 + kh;
@@ -101,9 +101,9 @@ inline void conv3x3x3_point(int n, int ds, int hs, int ws, const octree* grid_in
           k_idx = (kd * 3 + kh) * 3 + kw;
         }
 
-        for(int ci = 0; ci < channels_in; ++ci) {
+        for(auto ci = 0; ci < channels_in; ++ci) {
           ot_data_t in = factor * conv3x3x3_get_padded_data(grid_in, n, d, h, w, ci);
-          for(int co = 0; co < channels_out; ++co) {
+          for(auto co = 0; co < channels_out; ++co) {
             int weights_idx;
             if(inv_filter) {
               weights_idx = (ci * channels_out + co) * 3 * 3 * 3 + k_idx;
@@ -200,7 +200,7 @@ inline void conv3x3x3_border(const int bd1, const int bd2, const int bh1,
         (2 * (bh2 - bh1) * (bw2 - bw1) +
          2 * (bd2 - bd1 - 2) * (bw2 - bw1) + 
          2 * (bd2 - bd1 - 2) * (bh2 - bh1 - 2));
-    for(int co = 0; co < channels_out; ++co) {
+    for(auto co = 0; co < channels_out; ++co) {
       out[co] += bfactor * bias[co];
     }
   }
@@ -222,14 +222,14 @@ template <bool inv_filter, bool add_bias>
 OCTREE_FUNCTION
 inline void conv3x3x3_const(const ot_data_t* in_data, const ot_data_t* weights, const ot_data_t* bias, int channels_in, int channels_out, float factor, ot_data_t* out) {
 
-  for(int kd = 0; kd < 3; ++kd) {
-    for(int kh = 0; kh < 3; ++kh) {
-      for(int kw = 0; kw < 3; ++kw) {
+  for(auto kd = 0; kd < 3; ++kd) {
+    for(auto kh = 0; kh < 3; ++kh) {
+      for(auto kw = 0; kw < 3; ++kw) {
         
         int k_idx = (kd * 3 + kh) * 3 + kw;
-        for(int ci = 0; ci < channels_in; ++ci) {
+        for(auto ci = 0; ci < channels_in; ++ci) {
           ot_data_t in = factor * in_data[ci];
-          for(int co = 0; co < channels_out; ++co) {
+          for(auto co = 0; co < channels_out; ++co) {
             int weights_idx;
             if(inv_filter) {
               weights_idx = (ci * channels_out + co) * 3 * 3 * 3 + k_idx;
@@ -246,7 +246,7 @@ inline void conv3x3x3_const(const ot_data_t* in_data, const ot_data_t* weights, 
   }
 
   if(add_bias) {
-    for(int co = 0; co < channels_out; ++co) {
+    for(auto co = 0; co < channels_out; ++co) {
       out[co] += factor * bias[co];
       // printf("  b %f * %f => %f\n", factor, bias[co], out[co]);
     }
@@ -276,9 +276,9 @@ inline void conv3x3x3_const(const ot_data_t* in_data, const ot_data_t* weights, 
 OCTREE_FUNCTION
 inline void conv3x3x3_point_wbwd(int n, int ds, int hs, int ws, const octree* grid_in, const ot_data_t* grad_out, int channels_out, ot_data_t scale, ot_data_t* grad_weights) {
   const int channels_in = grid_in->feature_size;
-  for(int kd = 0; kd < 3; ++kd) {
-    for(int kh = 0; kh < 3; ++kh) {
-      for(int kw = 0; kw < 3; ++kw) {
+  for(auto kd = 0; kd < 3; ++kd) {
+    for(auto kh = 0; kh < 3; ++kh) {
+      for(auto kw = 0; kw < 3; ++kw) {
         int d, h, w;
         d = ds - 1 + kd;
         h = hs - 1 + kh;
@@ -286,9 +286,9 @@ inline void conv3x3x3_point_wbwd(int n, int ds, int hs, int ws, const octree* gr
 
         int k_idx = (kd * 3 + kh) * 3 + kw;
 
-        for(int ci = 0; ci < channels_in; ++ci) {
+        for(auto ci = 0; ci < channels_in; ++ci) {
           ot_data_t in = conv3x3x3_get_padded_data(grid_in, n, d, h, w, ci);
-          for(int co = 0; co < channels_out; ++co) {
+          for(auto co = 0; co < channels_out; ++co) {
             int weights_idx;
             weights_idx = (co * channels_in + ci) * 3 * 3 * 3 + k_idx;
 
@@ -387,7 +387,7 @@ inline void conv3x3x3_border_wbwd(const int bd1, const int bd2, const int bh1,
       (2 * (bh2 - bh1) * (bw2 - bw1) +
        2 * (bd2 - bd1 - 2) * (bw2 - bw1) + 
        2 * (bd2 - bd1 - 2) * (bh2 - bh1 - 2));
-  for(int co = 0; co < channels_out; ++co) {
+  for(auto co = 0; co < channels_out; ++co) {
     ot_data_t val = factor * grad_out[co];
 
     #if defined(__CUDA_ARCH__)
@@ -414,14 +414,14 @@ inline void conv3x3x3_border_wbwd(const int bd1, const int bd2, const int bh1,
 /// @param grad_bias resulting gradient bias.
 OCTREE_FUNCTION
 inline void conv3x3x3_const_wbwd(const ot_data_t* in_data, const ot_data_t* grad_out, int channels_in, int channels_out, float factor, ot_data_t* grad_weights, ot_data_t* grad_bias) {    
-  for(int kd = 0; kd < 3; ++kd) {
-    for(int kh = 0; kh < 3; ++kh) {
-      for(int kw = 0; kw < 3; ++kw) {
+  for(auto kd = 0; kd < 3; ++kd) {
+    for(auto kh = 0; kh < 3; ++kh) {
+      for(auto kw = 0; kw < 3; ++kw) {
         
         int k_idx = (kd * 3 + kh) * 3 + kw;
-        for(int ci = 0; ci < channels_in; ++ci) {
+        for(auto ci = 0; ci < channels_in; ++ci) {
           ot_data_t in = factor * in_data[ci];
-          for(int co = 0; co < channels_out; ++co) {
+          for(auto co = 0; co < channels_out; ++co) {
             int weights_idx;
             weights_idx = (co * channels_in + ci) * 3 * 3 * 3 + k_idx;
 
@@ -442,7 +442,7 @@ inline void conv3x3x3_const_wbwd(const ot_data_t* in_data, const ot_data_t* grad
     }
   }
 
-  for(int co = 0; co < channels_out; ++co) {
+  for(auto co = 0; co < channels_out; ++co) {
     ot_data_t val = factor * grad_out[co];
 
     #if defined(__CUDA_ARCH__)

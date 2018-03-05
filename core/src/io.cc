@@ -52,7 +52,6 @@ void sfread(void* dst, int size, int count, FILE* fp) {
 
 
 
-extern "C"
 void octree_read_deprecated_cpu(const char* path, octree* grid_h) {
   FILE* fp = fopen(path, "rb");  
   
@@ -71,7 +70,7 @@ void octree_read_deprecated_cpu(const char* path, octree* grid_h) {
 
   ot_data_t** data_ptrs = new ot_data_t*[n_blocks];
   sfread(data_ptrs, sizeof(ot_data_t*), n_blocks, fp);
-  for(int grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
+  for(auto grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
     grid_h->prefix_leafs[grid_idx] = (data_ptrs[grid_idx] - data_ptrs[0]) / grid_h->feature_size;
   }
   delete[] data_ptrs;
@@ -79,7 +78,6 @@ void octree_read_deprecated_cpu(const char* path, octree* grid_h) {
   fclose(fp);
 }
 
-extern "C"
 void dense_read_prealloc_deprecated_cpu(const char* path, int n_dim, const int* dims, ot_data_t* data) {
   FILE* fp = fopen(path, "rb");
 
@@ -91,7 +89,7 @@ void dense_read_prealloc_deprecated_cpu(const char* path, int n_dim, const int* 
   dims = dims + 1;
    
   int size = 1;
-  for(int dim_idx = 0; dim_idx < n_dim; ++dim_idx) {
+  for(auto dim_idx = 0; dim_idx < n_dim; ++dim_idx) {
     int dim_tmp;
     sfread(&(dim_tmp), sizeof(int), 1, fp);
     if(dim_tmp != dims[dim_idx]) {
@@ -105,7 +103,6 @@ void dense_read_prealloc_deprecated_cpu(const char* path, int n_dim, const int* 
   fclose(fp);
 }
 
-extern "C"
 int* dense_read_header_deprecated_cpu(const char* path, int* n_dim) {
   n_dim[0] = 5;
   int* dims = new int[5];
@@ -131,14 +128,12 @@ void octree_read_header_(FILE* fp, octree* grid_h) {
   sfread(&(grid_h->n_leafs), sizeof(ot_size_t), 1, fp);
 }
 
-extern "C"
 void octree_read_header_cpu(const char* path, octree* grid_h) {
   FILE* fp = fopen(path, "rb");
   octree_read_header_(fp, grid_h);
   fclose(fp);
 }
 
-extern "C"
 void octree_read_cpu(const char* path, octree* grid_h) {
   FILE* fp = fopen(path, "rb");
   
@@ -152,7 +147,6 @@ void octree_read_cpu(const char* path, octree* grid_h) {
   fclose(fp);
 }
 
-extern "C"
 void octree_write_cpu(const char* path, const octree* grid_h) {
   FILE* fp = fopen(path, "wb");
 
@@ -174,7 +168,6 @@ void octree_write_cpu(const char* path, const octree* grid_h) {
 }
 
 
-extern "C"
 void octree_dhwc_write_cpu(const char* path, const octree* grid_h) {
   int n = grid_h->n;
   int depth = 8 * grid_h->grid_depth;
@@ -192,7 +185,6 @@ void octree_dhwc_write_cpu(const char* path, const octree* grid_h) {
   delete[] voxels;
 }
 
-extern "C"
 void octree_cdhw_write_cpu(const char* path, const octree* grid_h) {
   int n = grid_h->n;
   int depth = 8 * grid_h->grid_depth;
@@ -212,7 +204,6 @@ void octree_cdhw_write_cpu(const char* path, const octree* grid_h) {
 
 
 
-extern "C"
 void dense_write_cpu(const char* path, int n_dim, const int* dims, const ot_data_t* data) {
   FILE* fp = fopen(path, "wb");
 
@@ -223,7 +214,7 @@ void dense_write_cpu(const char* path, int n_dim, const int* dims, const ot_data
   fwrite(dims, sizeof(int), n_dim, fp);
 
   int size = 1;
-  for(int dim_idx = 0; dim_idx < n_dim; ++dim_idx) {
+  for(auto dim_idx = 0; dim_idx < n_dim; ++dim_idx) {
     size *= dims[dim_idx];
   }
   fwrite(data, sizeof(ot_data_t), size, fp);
@@ -231,7 +222,6 @@ void dense_write_cpu(const char* path, int n_dim, const int* dims, const ot_data
   fclose(fp);
 }
 
-extern "C"
 ot_data_t* dense_read_cpu(const char* path) {
   FILE* fp = fopen(path, "rb");
   
@@ -246,7 +236,7 @@ ot_data_t* dense_read_cpu(const char* path) {
   sfread(&(n_dim), sizeof(ot_size_t), 1, fp);
 
   int size = 1;
-  for(int dim_idx = 0; dim_idx < n_dim; ++dim_idx) {
+  for(auto dim_idx = 0; dim_idx < n_dim; ++dim_idx) {
     int dim_tmp;
     sfread(&(dim_tmp), sizeof(int), 1, fp);
     size *= dim_tmp;
@@ -259,7 +249,6 @@ ot_data_t* dense_read_cpu(const char* path) {
   return data;
 }
 
-extern "C"
 void dense_read_prealloc_cpu(const char* path, int n_dim, const int* dims, ot_data_t* data) {
   FILE* fp = fopen(path, "rb");
 
@@ -278,7 +267,7 @@ void dense_read_prealloc_cpu(const char* path, int n_dim, const int* dims, ot_da
   }
 
   int size = 1;
-  for(int dim_idx = 0; dim_idx < n_dim; ++dim_idx) {
+  for(auto dim_idx = 0; dim_idx < n_dim; ++dim_idx) {
     int dim_tmp;
     sfread(&(dim_tmp), sizeof(int), 1, fp);
     if(dim_tmp != dims[dim_idx]) {
@@ -294,7 +283,6 @@ void dense_read_prealloc_cpu(const char* path, int n_dim, const int* dims, ot_da
 
 
 
-extern "C"
 void octree_read_batch_cpu(int n_paths, char** paths, int n_threads, octree* grid_h) {
   if(n_paths <= 0) {
     printf("[ERROR] n_paths <= 0 in octree_read_batch_cpu\n");
@@ -302,14 +290,14 @@ void octree_read_batch_cpu(int n_paths, char** paths, int n_threads, octree* gri
   }
 
   // printf("received %d paths\n", n_paths);
-  // for(int path_idx = 0; path_idx < n_paths; ++path_idx) {
+  // for(auto path_idx = 0; path_idx < n_paths; ++path_idx) {
   //   printf("  path: '%s'\n", paths[path_idx]);
   // }
 
   //determine necessary memory
   ot_size_t n;
-  ot_size_t n_leafs[n_paths];
-  ot_size_t n_blocks[n_paths];
+  ot_size_t *n_leafs = new ot_size_t[n_paths];
+  ot_size_t *n_blocks = new ot_size_t[n_paths];
 
   FILE* fp = fopen(paths[0], "rb");
   int magic_number = -1;
@@ -333,7 +321,7 @@ void octree_read_batch_cpu(int n_paths, char** paths, int n_threads, octree* gri
   omp_set_num_threads(n_threads);
   #endif
   #pragma omp parallel for reduction(+:n)
-  for(int path_idx = 1; path_idx < n_paths; ++path_idx) {
+  for(auto path_idx = 1; path_idx < n_paths; ++path_idx) {
     int tmp_magic_number, tmp_n, tmp_grid_depth, tmp_grid_width, tmp_grid_height, tmp_feature_size;
 
     FILE* fp = fopen(paths[path_idx], "rb");
@@ -352,29 +340,36 @@ void octree_read_batch_cpu(int n_paths, char** paths, int n_threads, octree* gri
     
     n += tmp_n;
     n_blocks[path_idx] = tmp_n * tmp_grid_depth * tmp_grid_height * tmp_grid_width;
-  
     // printf("path %d: %d, %d,%d,%d, %d, %d\n", path_idx, n, grid_h->grid_depth,grid_h->grid_height,grid_h->grid_width, grid_h->feature_size, n_leafs[path_idx]);
     
     if(tmp_grid_depth != grid_h->grid_depth) {
       printf("[ERROR] grid_depth of path %d does not match in octree_read_batch_cpu\n", path_idx);
+      delete[] n_leafs;
+      delete[] n_blocks;
       exit(-1);
     }
     if(tmp_grid_height != grid_h->grid_height) {
       printf("[ERROR] grid_height of path %d does not match in octree_read_batch_cpu\n", path_idx);
+      delete[] n_leafs;
+      delete[] n_blocks;
       exit(-1);
     }
     if(tmp_grid_width != grid_h->grid_width) {
       printf("[ERROR] grid_width of path %d does not match in octree_read_batch_cpu\n", path_idx);
+      delete[] n_leafs;
+      delete[] n_blocks;
       exit(-1);
     }
     if(tmp_feature_size != grid_h->feature_size) {
       printf("[ERROR] feature_size of path %d does not match in octree_read_batch_cpu (%d, %d)\n", path_idx, grid_h->feature_size, tmp_feature_size);
+      delete[] n_leafs;
+      delete[] n_blocks;
       exit(-1);
     }
   }
 
   // prefix sums
-  for(int path_idx = 1; path_idx < n_paths; ++path_idx) {
+  for(auto path_idx = 1; path_idx < n_paths; ++path_idx) {
     n_leafs[path_idx] += n_leafs[path_idx-1];
     n_blocks[path_idx] += n_blocks[path_idx-1];
   }
@@ -389,7 +384,7 @@ void octree_read_batch_cpu(int n_paths, char** paths, int n_threads, octree* gri
   omp_set_num_threads(n_threads);
   #endif
   #pragma omp parallel for
-  for(int path_idx = 0; path_idx < n_paths; ++path_idx) {
+  for(auto path_idx = 0; path_idx < n_paths; ++path_idx) {
     FILE* fp = fopen(paths[path_idx], "rb");
     int tmp_magic_number = -1;
     sfread(&(tmp_magic_number), sizeof(ot_size_t), 1, fp);
@@ -405,23 +400,25 @@ void octree_read_batch_cpu(int n_paths, char** paths, int n_threads, octree* gri
     sfread(grid_h->prefix_leafs + n_blocks_offset, sizeof(ot_size_t), n_blocks_num, fp);
     fclose(fp);
     
-    for(int grid_idx = n_blocks_offset; grid_idx < n_blocks_offset + n_blocks_num; ++grid_idx) {
+    for(auto grid_idx = n_blocks_offset; grid_idx < n_blocks_offset + n_blocks_num; ++grid_idx) {
       grid_h->prefix_leafs[grid_idx] += n_leafs_offset;
     }
   }
+
+  delete[] n_leafs;
+  delete[] n_blocks;
 }
 
 
-extern "C"
 void dense_read_prealloc_batch_cpu(int n_paths, char** paths, int n_threads, int n_dim, const int* dims, ot_data_t* data) {
   int offset = 1;
-  for(int dim_idx = 1; dim_idx < n_dim; ++dim_idx) {
+  for(auto dim_idx = 1; dim_idx < n_dim; ++dim_idx) {
     offset *= dims[dim_idx];
   }
 
-  int dims_single[n_dim];
+  int *dims_single = new int[n_dim];
   dims_single[0] = 1;
-  for(int dim_idx = 1; dim_idx < n_dim; ++dim_idx) {
+  for(auto dim_idx = 1; dim_idx < n_dim; ++dim_idx) {
     dims_single[dim_idx] = dims[dim_idx];
   }
   
@@ -429,8 +426,9 @@ void dense_read_prealloc_batch_cpu(int n_paths, char** paths, int n_threads, int
   omp_set_num_threads(n_threads);
   #endif
   #pragma omp parallel for
-  for(int path_idx = 0; path_idx < n_paths; ++path_idx) {
+  for(auto path_idx = 0; path_idx < n_paths; ++path_idx) {
     dense_read_prealloc_cpu(paths[path_idx], n_dim, dims_single, data + path_idx * offset);
   }
+  delete[] dims_single;
 }
 

@@ -34,7 +34,7 @@ void octree_pool2x2x2_struct_cpu(const octree* in, octree* out) {
   const int n_blocks = octree_num_blocks(in);
 
   #pragma omp parallel for
-  for(int grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
+  for(auto grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
     ot_tree_t* in_tree = octree_get_tree(in, grid_idx);
     ot_tree_t* out_tree = octree_get_tree(out, grid_idx);
   
@@ -46,7 +46,7 @@ void octree_pool2x2x2_struct_cpu(const octree* in, octree* out) {
 
     if(level == 1) {
       if(tree_isset_bit(in_tree, 0)) {
-        for(int bit_idx_l1 = 1; bit_idx_l1 < 9; ++bit_idx_l1) {
+        for(auto bit_idx_l1 = 1; bit_idx_l1 < 9; ++bit_idx_l1) {
           int bit_idx_l2 = tree_child_bit_idx(bit_idx_l1);
           if(tree_isset_bit(in_tree, bit_idx_l1) && tree_cnt1(in_tree, bit_idx_l2, bit_idx_l2+8) == 0) {
             tree_unset_bit(out_tree, bit_idx_l1);
@@ -57,10 +57,10 @@ void octree_pool2x2x2_struct_cpu(const octree* in, octree* out) {
 
     if(level == 2) {
       if(tree_isset_bit(in_tree, 0)) {
-        for(int bit_idx_l1 = 1; bit_idx_l1 < 9; ++bit_idx_l1) {
+        for(auto bit_idx_l1 = 1; bit_idx_l1 < 9; ++bit_idx_l1) {
           if(tree_isset_bit(in_tree, bit_idx_l1)) {
             int bit_idx_l2 = tree_child_bit_idx(bit_idx_l1);
-            for(int idx = 0; idx < 8; ++idx) {
+            for(auto idx = 0; idx < 8; ++idx) {
               tree_unset_bit(out_tree, bit_idx_l2);
               bit_idx_l2++;
             }
@@ -79,7 +79,7 @@ void octree_pool2x2x2_data_cpu(const octree* in, octree* out) {
   const ot_size_t feature_size = in->feature_size;
 
   #pragma omp parallel for
-  for(int grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
+  for(auto grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
     ot_tree_t* out_tree = octree_get_tree(out, grid_idx);
     // ot_data_t* out_data = out->data_ptrs[grid_idx];
     ot_data_t* out_data = octree_get_data(out, grid_idx);
@@ -94,7 +94,7 @@ void octree_pool2x2x2_data_cpu(const octree* in, octree* out) {
       }
       else {
 
-        for(int bit_idx_l1 = 1; bit_idx_l1 < 9; ++bit_idx_l1) {
+        for(auto bit_idx_l1 = 1; bit_idx_l1 < 9; ++bit_idx_l1) {
           int out_data_idx_l1 = tree_data_idx(out_tree, bit_idx_l1, feature_size);
           if(tree_isset_bit(in_tree, bit_idx_l1)) {
             if(!tree_isset_bit(out_tree, bit_idx_l1)) {
@@ -103,7 +103,7 @@ void octree_pool2x2x2_data_cpu(const octree* in, octree* out) {
             }
             else {
 
-              for(int idx_l2 = 0; idx_l2 < 8; ++idx_l2) {
+              for(auto idx_l2 = 0; idx_l2 < 8; ++idx_l2) {
                 int bit_idx_l2 = tree_child_bit_idx(bit_idx_l1) + idx_l2;
                 int out_data_idx_l2 = tree_data_idx(out_tree, bit_idx_l2, feature_size);
                 if(tree_isset_bit(in_tree, bit_idx_l2)) {
@@ -191,7 +191,7 @@ void octree_pool2x2x2_bwd_cpu(const octree* in, const octree* grad_out, octree* 
   ot_size_t feature_size = in->feature_size;
 
   #pragma omp parallel for
-  for(int grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
+  for(auto grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
     ot_tree_t* out_tree = octree_get_tree(grad_out, grid_idx);
     // ot_data_t* grad_out_data = grad_out->data_ptrs[grid_idx];
     ot_data_t* grad_out_data = octree_get_data(grad_out, grid_idx);
@@ -209,7 +209,7 @@ void octree_pool2x2x2_bwd_cpu(const octree* in, const octree* grad_out, octree* 
       }
       else {
 
-        for(int bit_idx_l1 = 1; bit_idx_l1 < 9; ++bit_idx_l1) {
+        for(auto bit_idx_l1 = 1; bit_idx_l1 < 9; ++bit_idx_l1) {
           int out_data_idx_l1 = tree_data_idx(out_tree, bit_idx_l1, feature_size);
           if(tree_isset_bit(in_tree, bit_idx_l1)) {
             if(!tree_isset_bit(out_tree, bit_idx_l1)) {
@@ -218,7 +218,7 @@ void octree_pool2x2x2_bwd_cpu(const octree* in, const octree* grad_out, octree* 
             }
             else {
 
-              for(int idx_l2 = 0; idx_l2 < 8; ++idx_l2) {
+              for(auto idx_l2 = 0; idx_l2 < 8; ++idx_l2) {
                 int bit_idx_l2 = tree_child_bit_idx(bit_idx_l1) + idx_l2;
                 int out_data_idx_l2 = tree_data_idx(out_tree, bit_idx_l2, feature_size);
                 if(tree_isset_bit(in_tree, bit_idx_l2)) {

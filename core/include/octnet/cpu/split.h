@@ -23,24 +23,29 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#pragma once
 #ifndef OCTREE_SPLIT_CPU_H
 #define OCTREE_SPLIT_CPU_H
 
+#include "octnet/core/api.h"
 #include "octnet/core/core.h"
 
-extern "C" {
-
+OCTREE_API
 void octree_split_by_prob_cpu(const octree* in, const octree* prob, const ot_data_t thr, bool check, octree* out);
+OCTREE_API
 void octree_split_full_cpu(const octree* in, octree* out);
 
 // reconstruction is on halve the resolution in NxNxN, rec N/2xN/2xN/2, out NxNxN
+OCTREE_API
 void octree_split_reconstruction_surface_cpu(const octree* in, const octree* rec, ot_data_t rec_thr_from, ot_data_t rec_thr_to, octree* out);
 
 
+OCTREE_API
 void octree_split_bwd_cpu(const octree* in, const octree* grad_out, octree* grad_in);
 
+OCTREE_API
 void octree_split_dense_reconstruction_surface_fres_cpu(const ot_data_t* features, const ot_data_t* reconstruction, int n, int dense_depth, int dense_height, int dense_width, int feature_size, ot_data_t rec_thr_from, ot_data_t rec_thr_to, int band, octree* out);
+OCTREE_API
 void octree_split_dense_reconstruction_surface_fres_bwd_cpu(const octree* grad_out, ot_data_t* grad_in);
-}
 
 #endif 

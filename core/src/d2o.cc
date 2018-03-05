@@ -52,7 +52,7 @@ void dense_to_octree_cpu(const octree* grid_h_in, const int dense_depth, const i
   int vx_width_off = (dense_width - grid_h_in->grid_width * 8) / 2;
 
   #pragma omp parallel for
-  for(int grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
+  for(auto grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
     int gn, dl0, hl0, wl0;
     octree_split_grid_idx(grid_h_in, grid_idx, &gn, &dl0, &hl0, &wl0); 
 
@@ -79,9 +79,9 @@ void dense_to_octree_cpu(const octree* grid_h_in, const int dense_depth, const i
       // std::cout << "bit_idx_l0 is SET" << std::endl;
 
       // see child nodes if are set - second level
-      for(int dl1 = 0; dl1 < 2; ++dl1) {
-        for(int hl1 = 0; hl1 < 2; ++hl1) {
-          for(int wl1 = 0; wl1 < 2; ++wl1) {
+      for(auto dl1 = 0; dl1 < 2; ++dl1) {
+        for(auto hl1 = 0; hl1 < 2; ++hl1) {
+          for(auto wl1 = 0; wl1 < 2; ++wl1) {
             int bit_idx_l1 = 1 + (dl1 * 2 + hl1) * 2 + wl1;
             int dl1_1 = dl0 + dl1*4;
             int hl1_1 = hl0 + hl1*4;
@@ -95,9 +95,9 @@ void dense_to_octree_cpu(const octree* grid_h_in, const int dense_depth, const i
             }
             else {
 
-              for(int dl2 = 0; dl2 < 2; ++dl2) {
-                for(int hl2 = 0; hl2 < 2; ++hl2) {
-                  for(int wl2 = 0; wl2 < 2; ++wl2) {
+              for(auto dl2 = 0; dl2 < 2; ++dl2) {
+                for(auto hl2 = 0; hl2 < 2; ++hl2) {
+                  for(auto wl2 = 0; wl2 < 2; ++wl2) {
                     int bit_idx_l2 = tree_child_bit_idx(bit_idx_l1) + (dl2 * 2 + hl2) * 2 + wl2;
                     int dl2_1 = dl1_1 + dl2*2;
                     int hl2_1 = hl1_1 + hl2*2;
@@ -109,9 +109,9 @@ void dense_to_octree_cpu(const octree* grid_h_in, const int dense_depth, const i
                     }
                     else {
 
-                      for(int dl3 = 0; dl3 < 2; ++dl3) {
-                        for(int hl3 = 0; hl3 < 2; ++hl3) {
-                          for(int wl3 = 0; wl3 < 2; ++wl3) {
+                      for(auto dl3 = 0; dl3 < 2; ++dl3) {
+                        for(auto hl3 = 0; hl3 < 2; ++hl3) {
+                          for(auto wl3 = 0; wl3 < 2; ++wl3) {
                             int bit_idx_l3 = tree_child_bit_idx(bit_idx_l2) + (dl3 * 2 + hl3) * 2 + wl3;
                             int d = dl2_1 + dl3;
                             int h = hl2_1 + hl3;
@@ -120,12 +120,12 @@ void dense_to_octree_cpu(const octree* grid_h_in, const int dense_depth, const i
                             int data_idx = tree_data_idx(tree, bit_idx_l3, feature_size);
                             ot_data_t* out = data + data_idx;
                             if(dense_format == DENSE_FORMAT_DHWC) {
-                              for(int f = 0; f < feature_size; ++f) {
+                              for(auto f = 0; f < feature_size; ++f) {
                                 out[f] = dense[(((gn * dense_depth + d) * dense_height + h) * dense_width + w) * feature_size + f];
                               }
                             }
                             else if(dense_format == DENSE_FORMAT_CDHW) {
-                              for(int f = 0; f < feature_size; ++f) {
+                              for(auto f = 0; f < feature_size; ++f) {
                                 out[f] = dense[(((gn * feature_size + f) * dense_depth + d) * dense_height + h) * dense_width + w];
                               }
                             }
@@ -151,62 +151,46 @@ void dense_to_octree_cpu(const octree* grid_h_in, const int dense_depth, const i
 
 }
 
-
-
-extern "C"
 void dhwc_to_octree_avg_cpu(const octree* grid_h_in, const int dense_depth, const int dense_height, const int dense_width, const ot_data_t* data, int out_feature_size, octree* grid_h_out) {
   dense_to_octree_cpu<DENSE_FORMAT_DHWC, REDUCE_AVG>(grid_h_in, dense_depth, dense_height, dense_width, data, out_feature_size, grid_h_out);
 }
 
-extern "C"
 void cdhw_to_octree_avg_cpu(const octree* grid_h_in, const int dense_depth, const int dense_height, const int dense_width, const ot_data_t* data, int out_feature_size, octree* grid_h_out) {
   dense_to_octree_cpu<DENSE_FORMAT_CDHW, REDUCE_AVG>(grid_h_in, dense_depth, dense_height, dense_width, data, out_feature_size, grid_h_out);
 }
 
-
-extern "C"
 void dhwc_to_octree_max_cpu(const octree* grid_h_in, const int dense_depth, const int dense_height, const int dense_width, const ot_data_t* data, int out_feature_size, octree* grid_h_out) {
   dense_to_octree_cpu<DENSE_FORMAT_DHWC, REDUCE_MAX>(grid_h_in, dense_depth, dense_height, dense_width, data, out_feature_size, grid_h_out);
 }
 
-extern "C"
 void cdhw_to_octree_max_cpu(const octree* grid_h_in, const int dense_depth, const int dense_height, const int dense_width, const ot_data_t* data, int out_feature_size, octree* grid_h_out) {
   dense_to_octree_cpu<DENSE_FORMAT_CDHW, REDUCE_MAX>(grid_h_in, dense_depth, dense_height, dense_width, data, out_feature_size, grid_h_out);
 }
 
-
-extern "C"
 void dhwc_to_octree_sum_cpu(const octree* grid_h_in, const int dense_depth, const int dense_height, const int dense_width, const ot_data_t* data, int out_feature_size, octree* grid_h_out) {
   dense_to_octree_cpu<DENSE_FORMAT_DHWC, REDUCE_SUM>(grid_h_in, dense_depth, dense_height, dense_width, data, out_feature_size, grid_h_out);
 }
 
-extern "C"
 void cdhw_to_octree_sum_cpu(const octree* grid_h_in, const int dense_depth, const int dense_height, const int dense_width, const ot_data_t* data, int out_feature_size, octree* grid_h_out) {
   dense_to_octree_cpu<DENSE_FORMAT_CDHW, REDUCE_SUM>(grid_h_in, dense_depth, dense_height, dense_width, data, out_feature_size, grid_h_out);
 }
 
-extern "C"
 void dhwc_to_octree_sum_bwd_cpu(const octree* grad_out_grid_h, const int dense_depth, const int dense_height, const int dense_width, ot_data_t* grad_in_data) {
   // octree_to_dense_cpu<DENSE_FORMAT_DHWC, false>(grad_out_grid_h, grad_in_data); 
   octree_to_dhwc_cpu(grad_out_grid_h, dense_depth, dense_height, dense_width, grad_in_data);
 }
 
-extern "C"
 void cdhw_to_octree_sum_bwd_cpu(const octree* grad_out_grid_h, const int dense_depth, const int dense_height, const int dense_width, ot_data_t* grad_in_data) {
   // octree_to_dense_cpu<DENSE_FORMAT_CDHW, false>(grad_out_grid_h, grad_in_data); 
   octree_to_cdhw_cpu(grad_out_grid_h, dense_depth, dense_height, dense_width, grad_in_data);
 }
 
-
-extern "C"
 void dhwc_to_octree_avg_bwd_cpu(const octree* grad_out_grid_h, const int dense_depth, const int dense_height, const int dense_width, ot_data_t* grad_in_data) {
   // octree_to_dense_cpu<DENSE_FORMAT_DHWC, true>(grad_out_grid_h, grad_in_data); 
   octree_to_dhwc_avg_cpu(grad_out_grid_h, dense_depth, dense_height, dense_width, grad_in_data);
 }
 
-extern "C"
 void cdhw_to_octree_avg_bwd_cpu(const octree* grad_out_grid_h, const int dense_depth, const int dense_height, const int dense_width, ot_data_t* grad_in_data) {
   // octree_to_dense_cpu<DENSE_FORMAT_CDHW, true>(grad_out_grid_h, grad_in_data); 
   octree_to_cdhw_avg_cpu(grad_out_grid_h, dense_depth, dense_height, dense_width, grad_in_data);
 }
-

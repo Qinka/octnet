@@ -35,7 +35,7 @@
 #endif
 
 
-extern "C"
+
 void octree_mask_by_label_cpu(const octree* labels, int mask_label, bool check, octree* values) {
   if(check && (labels->feature_size != 1 || !octree_equal_trees_cpu(labels, values))) {
     printf("[ERROR] mask_by_label - tree structure of inputs do not match\n");
@@ -43,10 +43,10 @@ void octree_mask_by_label_cpu(const octree* labels, int mask_label, bool check, 
   }
 
   #pragma omp parallel for
-  for(int vx_idx = 0; vx_idx < labels->n_leafs; ++vx_idx) {
+  for(auto vx_idx = 0; vx_idx < labels->n_leafs; ++vx_idx) {
     int label = labels->data[vx_idx];
     if(label == mask_label) {
-      for(int f = 0; f < values->feature_size; ++f) {
+      for(auto f = 0; f < values->feature_size; ++f) {
         values->data[vx_idx * values->feature_size + f] = 0;
       }
     }
@@ -55,7 +55,7 @@ void octree_mask_by_label_cpu(const octree* labels, int mask_label, bool check, 
 
 
 
-extern "C"
+
 void octree_determine_gt_split_cpu(const octree* struc, const ot_data_t* gt, octree* out) {
   octree_resize_cpu(struc->n, struc->grid_depth, struc->grid_height, struc->grid_width, 1, struc->n_leafs, out);
   octree_cpy_trees_cpu_cpu(struc, out);
@@ -65,7 +65,7 @@ void octree_determine_gt_split_cpu(const octree* struc, const ot_data_t* gt, oct
   int dense_height = struc->grid_height * 8;
   int dense_width = struc->grid_width * 8;
 
-  for(int leaf_idx = 0; leaf_idx < struc->n_leafs; ++leaf_idx) {
+  for(auto leaf_idx = 0; leaf_idx < struc->n_leafs; ++leaf_idx) {
     int grid_idx = leaf_idx_to_grid_idx(struc, leaf_idx);
     const ot_tree_t* tree = octree_get_tree(struc, grid_idx);
 
@@ -78,9 +78,9 @@ void octree_determine_gt_split_cpu(const octree* struc, const ot_data_t* gt, oct
     int width = width_from_depth(depth);
     
     int sum = 0;
-    for(int dd = 0; dd < width; ++dd) {
-      for(int hh = 0; hh < width; ++hh) {
-        for(int ww = 0; ww < width; ++ww) {
+    for(auto dd = 0; dd < width; ++dd) {
+      for(auto hh = 0; hh < width; ++hh) {
+        for(auto ww = 0; ww < width; ++ww) {
           float val = gt[(((n * 1 + 0) * dense_depth + (d+dd)) * dense_height + (h+hh)) * dense_width + (w+ww)];
           sum += round(val);
         }

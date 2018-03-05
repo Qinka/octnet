@@ -23,12 +23,11 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#pragma once
 #ifndef OCTREE_CONV_CPU_H
 #define OCTREE_CONV_CPU_H
 
 #include "octnet/core/core.h"
-
-extern "C" {
 
 /// Forward pass of a 3x3s3 convolution on the given grid-octree structure 
 /// grid_in. The convolution in bigger octree cells are sum pooled.
@@ -38,6 +37,7 @@ extern "C" {
 /// @param bias channels_out x 1 conv bias vector.
 /// @param channels_out number of output channels for this convolution.
 /// @param grid output of the convolution operation.
+OCTREE_API
 void octree_conv3x3x3_sum_cpu(const octree* grid_in, const ot_data_t* weights, const ot_data_t* bias, int channels_out, octree* grid);
 
 /// Backward pass of a 3x3x3 convolution on a grid-octree structure with 
@@ -47,6 +47,7 @@ void octree_conv3x3x3_sum_cpu(const octree* grid_in, const ot_data_t* weights, c
 /// @param grad_out gradient wrt. the output of the forward pass.
 /// @param channels_in number of input channels.
 /// @param grad_in gradient wrt. to the input of this operation. 
+OCTREE_API
 void octree_conv3x3x3_sum_bwd_cpu(const ot_data_t* weights, const octree* grad_out, int channels_in, octree* grad_in);
 
 /// Backward pass of a 3x3x3 convolution on a grid-octree structure with 
@@ -56,6 +57,7 @@ void octree_conv3x3x3_sum_bwd_cpu(const ot_data_t* weights, const octree* grad_o
 /// @param scale factor multiplied to the parameter gradient before accumulation.
 /// @param grad_weights gradients wrt. weights parameters.
 /// @param grad_bias gradients wrt. bias parameters.
+OCTREE_API
 void octree_conv3x3x3_sum_wbwd_cpu(const octree* grid_in, const octree* grad_out, ot_data_t scale, ot_data_t* grad_weights, ot_data_t* grad_bias);
 
 
@@ -67,6 +69,7 @@ void octree_conv3x3x3_sum_wbwd_cpu(const octree* grid_in, const octree* grad_out
 /// @param bias channels_out x 1 conv bias vector.
 /// @param channels_out number of output channels for this convolution.
 /// @param grid output of the convolution operation.
+OCTREE_API
 void octree_conv3x3x3_avg_cpu(const octree* grid_in, const ot_data_t* weights, const ot_data_t* bias, int channels_out, octree* grid);
 
 /// Backward pass of a 3x3x3 convolution on a grid-octree structure with 
@@ -76,6 +79,7 @@ void octree_conv3x3x3_avg_cpu(const octree* grid_in, const ot_data_t* weights, c
 /// @param grad_out gradient wrt. the output of the forward pass.
 /// @param channels_in number of input channels.
 /// @param grad_in gradient wrt. to the input of this operation. 
+OCTREE_API
 void octree_conv3x3x3_avg_bwd_cpu(const ot_data_t* weights, const octree* grad_out, int channels_in, octree* grad_in);
 
 /// Backward pass of a 3x3x3 convolution on a grid-octree structure with 
@@ -85,8 +89,7 @@ void octree_conv3x3x3_avg_bwd_cpu(const ot_data_t* weights, const octree* grad_o
 /// @param scale factor multiplied to the parameter gradient before accumulation.
 /// @param grad_weights gradients wrt. weights parameters.
 /// @param grad_bias gradients wrt. bias parameters.
+OCTREE_API
 void octree_conv3x3x3_avg_wbwd_cpu(const octree* grid_in, const octree* grad_out, ot_data_t scale, ot_data_t* grad_weights, ot_data_t* grad_bias);
-
-}
 
 #endif 

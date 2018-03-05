@@ -23,12 +23,11 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#pragma once
 #ifndef OCTREE_POOL_CPU_H
 #define OCTREE_POOL_CPU_H
 
 #include "octnet/core/pool.h"
-
-extern "C" {
 
 /// This method implements a average pooling operation for grid-octree 
 /// structures. This is realized by pooling together 8 neighbouring shallow
@@ -38,6 +37,7 @@ extern "C" {
 /// @param in input grid-octree structure. grid_depth % 2 == 0, 
 ///           grid_height % 2 == 0, and grid_height % 2 == 0 must satisfied.
 /// @param out output of this operation.
+OCTREE_API
 void octree_gridpool2x2x2_avg_cpu(const octree* in, octree* out);
 
 /// Backward pass of @see octree_gridpool2x2x2_avg_cpu.
@@ -45,6 +45,7 @@ void octree_gridpool2x2x2_avg_cpu(const octree* in, octree* out);
 ///           grid_height % 2 == 0, and grid_height % 2 == 0 must satisfied.
 /// @param grad_out gradient with respect to forward pass output.
 /// @param grad_in gradient with respect to the input.
+OCTREE_API
 void octree_gridpool2x2x2_avg_bwd_cpu(const octree* in, const octree* grad_out, octree* grad_in);
 
 /// This method implements a max pooling operation for grid-octree 
@@ -55,6 +56,7 @@ void octree_gridpool2x2x2_avg_bwd_cpu(const octree* in, const octree* grad_out, 
 /// @param in input grid-octree structure. grid_depth % 2 == 0, 
 ///           grid_height % 2 == 0, and grid_height % 2 == 0 must satisfied.
 /// @param out output of this operation.
+OCTREE_API
 void octree_gridpool2x2x2_max_cpu(const octree* in, octree* out);
 
 /// Backward pass of @see octree_gridpool2x2x2_max_cpu.
@@ -62,6 +64,7 @@ void octree_gridpool2x2x2_max_cpu(const octree* in, octree* out);
 ///           grid_height % 2 == 0, and grid_height % 2 == 0 must satisfied.
 /// @param grad_out gradient with respect to forward pass output.
 /// @param grad_in gradient with respect to the input.
+OCTREE_API
 void octree_gridpool2x2x2_max_bwd_cpu(const octree* in, const octree* grad_out, octree* grad_in);
 
 /// This method implements a sum pooling operation for grid-octree 
@@ -72,6 +75,7 @@ void octree_gridpool2x2x2_max_bwd_cpu(const octree* in, const octree* grad_out, 
 /// @param in input grid-octree structure. grid_depth % 2 == 0, 
 ///           grid_height % 2 == 0, and grid_height % 2 == 0 must satisfied.
 /// @param out output of this operation.
+OCTREE_API
 void octree_gridpool2x2x2_sum_cpu(const octree* in, octree* out);
 
 
@@ -83,12 +87,14 @@ void octree_gridpool2x2x2_sum_cpu(const octree* in, octree* out);
 /// @param level_1 if true, cells on level 2 are pooled together
 /// @param level_2 if true, cells on level 3 are pooled together
 /// @param out output 
+OCTREE_API
 void octree_pool2x2x2_avg_cpu(const octree* in, bool level_0, bool level_1, bool level_2, octree* out);
 
 /// Backward pass for @see octreee_pool2x2x2_avg_cpu. 
 /// @param in input grid-octree structure.
 /// @param grad_out gradient with respect to forward pass output.
 /// @param grad_in gradient with respect to the input.
+OCTREE_API
 void octree_pool2x2x2_avg_bwd_cpu(const octree* in, const octree* grad_out, octree* grad_in);
 
 /// This function implements a max pooling on shallow octree cells, it pools
@@ -99,15 +105,14 @@ void octree_pool2x2x2_avg_bwd_cpu(const octree* in, const octree* grad_out, octr
 /// @param level_1 if true, cells on level 2 are pooled together
 /// @param level_2 if true, cells on level 3 are pooled together
 /// @param out output 
+OCTREE_API
 void octree_pool2x2x2_max_cpu(const octree* in, bool level_0, bool level_1, bool level_2, octree* out);
 
 /// Backward pass for @see octreee_pool2x2x2_max_cpu. 
 /// @param in input grid-octree structure.
 /// @param grad_out gradient with respect to forward pass output.
 /// @param grad_in gradient with respect to the input.
+OCTREE_API
 void octree_pool2x2x2_max_bwd_cpu(const octree* in, const octree* grad_out, octree* grad_in);
-
-
-}
 
 #endif 

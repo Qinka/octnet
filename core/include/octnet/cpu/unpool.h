@@ -23,24 +23,25 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#pragma once
 #ifndef OCTREE_UNPOOL_CPU_H
 #define OCTREE_UNPOOL_CPU_H
 
 #include "octnet/core/core.h"
-
-extern "C" {
 
 /// Performs a nearest-neighbour unpooling operation. 
 /// The number of shallow octrees is increased 8-times, but after this operation
 /// there are no more leaf cells on the finest resolution. 
 /// @param in
 /// @param out
+OCTREE_API
 void octree_gridunpool2x2x2_cpu(const octree* in, octree* out);
 
 /// Computes the gradient of the nearest neighbour unpooling operation.
 /// @param in
 /// @param grad_out
 /// @param grad_in
+OCTREE_API
 void octree_gridunpool2x2x2_bwd_cpu(const octree* in, const octree* grad_out, octree* grad_in);
 
 
@@ -50,6 +51,7 @@ void octree_gridunpool2x2x2_bwd_cpu(const octree* in, const octree* grad_out, oc
 /// @param in 
 /// @param in_struct guidance
 /// @param out
+OCTREE_API
 void octree_gridunpoolguided2x2x2_cpu(const octree* in, const octree* in_struct, octree* out);
 
 /// Computes the gradient of the guided nearest neighbour unpooling operation.
@@ -57,8 +59,7 @@ void octree_gridunpoolguided2x2x2_cpu(const octree* in, const octree* in_struct,
 /// @param in_struct guidance
 /// @param grad_out
 /// @param grad_in
+OCTREE_API
 void octree_gridunpoolguided2x2x2_bwd_cpu(const octree* in, const octree* in_struct, const octree* grad_out, octree* grad_in);
-
-}
 
 #endif 

@@ -23,12 +23,11 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#pragma once
 #ifndef OCTREE_COMBINE_CPU_H
 #define OCTREE_COMBINE_CPU_H
 
 #include "octnet/core/core.h"
-
-extern "C" {
 
 /// Concatenates two grid-octrees with the same structure to one grid-octree
 /// along the feature dimension.
@@ -37,6 +36,7 @@ extern "C" {
 /// @param check if True the tree structures of in1 and in2 are tested
 ///              for equivalence.
 /// @param out
+OCTREE_API
 void octree_concat_cpu(const octree* in1, const octree* in2, bool check, octree* out);
 
 /// Computes the gradient to the concatenation operation octree_concat_cpu.
@@ -47,6 +47,7 @@ void octree_concat_cpu(const octree* in1, const octree* in2, bool check, octree*
 ///                    otherwise, only the gradient for grad_in1 is computed.
 /// @param grad_in1
 /// @param grad_in2
+OCTREE_API
 void octree_concat_bwd_cpu(const octree* in1, const octree* in2, const octree* grad_out, bool do_grad_in2, octree* grad_in1, octree* grad_in2);
 
 
@@ -56,6 +57,7 @@ void octree_concat_bwd_cpu(const octree* in1, const octree* in2, const octree* g
 /// @param in2
 /// @param feature_size2 number of feature channels in in2
 /// @param out
+OCTREE_API
 void octree_concat_dense_cpu(const octree* in1, const ot_data_t* in2, ot_size_t feature_size2, octree* out);
 
 /// Computes the gradient to the concatenation operation octree_concat_dense_cpu.
@@ -67,6 +69,7 @@ void octree_concat_dense_cpu(const octree* in1, const ot_data_t* in2, ot_size_t 
 ///                    otherwise, only the gradient for grad_in1 is computed.
 /// @param grad_in1
 /// @param grad_in2
+OCTREE_API
 void octree_concat_dense_bwd_cpu(const octree* in1, const ot_data_t* in2, ot_size_t feature_size2, const octree* grad_out, bool do_grad_in2, octree* grad_in1, ot_data_t* grad_in2);
 
 /// Concatenates N grid-octrees one grid-octree along the batch dimension.
@@ -74,6 +77,7 @@ void octree_concat_dense_bwd_cpu(const octree* in1, const ot_data_t* in2, ot_siz
 /// @param in array of n grid-octrees
 /// @param n number of grid-octrees in in
 /// @param out
+OCTREE_API
 void octree_combine_n_cpu(octree** in, const int n, octree* out);
 
 
@@ -82,6 +86,7 @@ void octree_combine_n_cpu(octree** in, const int n, octree* out);
 /// @param from index of first grid octree to extract.
 /// @param to index of last grid octree to extract (exclusive).
 /// @param out
+OCTREE_API
 void octree_extract_n_cpu(const octree* in, int from, int to, octree* out);
 
 /// Extracts certain feature channels from the grid octree in.
@@ -89,8 +94,7 @@ void octree_extract_n_cpu(const octree* in, int from, int to, octree* out);
 /// @param from index of first feature to extract.
 /// @param to index of last feature to extract (exclusive).
 /// @param out
+OCTREE_API
 void octree_extract_feature_cpu(const octree* in, int from, int to, octree* out);
-
-} //extern "C"
 
 #endif

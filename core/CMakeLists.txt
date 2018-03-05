@@ -23,15 +23,22 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.3)
 set(CMAKE_MACOSX_RPATH 1)
 
 set(CMAKE_CXX_STANDARD 11)
 
 # set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_BUILD_TYPE Release)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -msse -msse2 -msse3 -msse4.2 -fPIC")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse -msse2 -msse3 -msse4.2 -fPIC")
+if(MSVC)
+  set(CMAKE_C_FLAGS   "${CMAKE_C_FLAG}   /arch:SSE /arch:SSE2 /arch:SSE3 /arch:SSE4.2 ")
+  set(CMAKE_CXX_FLAGS "${CMAKE_XXC_FLAG} /arch:SSE /arch:SSE2 /arch:SSE3 /arch:SSE4.2 ")
+  add_definitions(/DOCTREE_EXPORT)
+else(MSVC)
+  set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -msse -msse2 -msse3 -msse4.2 -fPIC")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse -msse2 -msse3 -msse4.2 -fPIC")
+endif(MSVC)
+
 
 find_package(OpenMP)
 if (OPENMP_FOUND)
@@ -42,27 +49,27 @@ endif()
 include_directories("include/")
 
 set(OCTREE_CPU_SRCS 
-  src/core.cpp
-  src/io.cpp
-  src/o2d.cpp
-  src/d2o.cpp
-  src/conv.cpp
-  src/pool.cpp
-  src/gridpool.cpp
-  src/gridunpool.cpp
-  src/math.cpp
-  src/misc.cpp
-  src/concat.cpp
-  src/combine.cpp
-  src/activations.cpp
-  src/split.cpp
-  src/loss.cpp
-  src/volumetric_upsampling.cpp
+  src/core.cc
+  src/io.cc
+  src/o2d.cc
+  src/d2o.cc
+  src/conv.cc
+  src/pool.cc
+  src/gridpool.cc
+  src/gridunpool.cc
+  src/math.cc
+  src/misc.cc
+  src/concat.cc
+  src/combine.cc
+  src/activations.cc
+  src/split.cc
+  src/loss.cc
+  src/volumetric_upsampling.cc
 )
 
 add_library(octnet_core SHARED ${OCTREE_CPU_SRCS})
 
-add_executable(test_octree test/test_octree.cpp)
+add_executable(test_octree test/test_octree.cc)
 target_link_libraries(test_octree octnet_core)
 
 

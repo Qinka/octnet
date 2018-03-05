@@ -34,7 +34,7 @@
 #endif
 
 
-extern "C"
+
 void octree_add_cpu(const octree* in1, ot_data_t fac1, const octree* in2, ot_data_t fac2, bool check, octree* out) {
   if(check && (in1->feature_size != in2->feature_size || !octree_equal_trees_cpu(in1, in2))) {
     printf("[ERROR] add - tree structure of inputs do not match\n");
@@ -51,36 +51,36 @@ void octree_add_cpu(const octree* in1, ot_data_t fac1, const octree* in2, ot_dat
 
   ot_size_t n = in1->n_leafs * in1->feature_size;
   #pragma omp parallel for
-  for(int idx = 0; idx < n; ++idx) {
+  for(auto idx = 0; idx < n; ++idx) {
     out->data[idx] = fac1 * in1->data[idx] + fac2 * in2->data[idx];
   }
 }
 
 
-extern "C"
+
 void octree_scalar_mul_cpu(octree* grid, const ot_data_t scalar) {
   int n = grid->n_leafs * grid->feature_size;
   #pragma omp parallel for
-  for(int idx = 0; idx < n; ++idx) {
+  for(auto idx = 0; idx < n; ++idx) {
     grid->data[idx] *= scalar; 
   }
 }
 
-extern "C"
+
 void octree_scalar_add_cpu(octree* grid, const ot_data_t scalar) {
   int n = grid->n_leafs * grid->feature_size;
   #pragma omp parallel for
-  for(int idx = 0; idx < n; ++idx) {
+  for(auto idx = 0; idx < n; ++idx) {
     grid->data[idx] += scalar; 
   }
 }
 
 
-extern "C"
+
 void octree_sign_cpu(octree* grid) {
   int n = grid->n_leafs * grid->feature_size;
   #pragma omp parallel for
-  for(int idx = 0; idx < n; ++idx) {
+  for(auto idx = 0; idx < n; ++idx) {
     float val = grid->data[idx];
     if(val < 0) {
       grid->data[idx] = -1;
@@ -94,32 +94,32 @@ void octree_sign_cpu(octree* grid) {
   }
 }
 
-extern "C"
+
 void octree_abs_cpu(octree* grid) {
   int n = grid->n_leafs * grid->feature_size;
   #pragma omp parallel for
-  for(int idx = 0; idx < n; ++idx) {
+  for(auto idx = 0; idx < n; ++idx) {
     float val = grid->data[idx];
     grid->data[idx] = fabs(val);
   }
 }
 
-extern "C"
+
 void octree_log_cpu(octree* grid) {
   int n = grid->n_leafs * grid->feature_size;
   #pragma omp parallel for
-  for(int idx = 0; idx < n; ++idx) {
+  for(auto idx = 0; idx < n; ++idx) {
     float val = grid->data[idx];
     grid->data[idx] = log(val);
   }
 }
 
 
-extern "C"
+
 ot_data_t octree_min_cpu(const octree* grid_in) {
   int n = grid_in->n_leafs * grid_in->feature_size;
   ot_data_t min = grid_in->data[0];
-  for(int idx = 1; idx < n; ++idx) {
+  for(auto idx = 1; idx < n; ++idx) {
     ot_data_t val = grid_in->data[idx];
     if(val < min) {
       min = val;
@@ -128,11 +128,11 @@ ot_data_t octree_min_cpu(const octree* grid_in) {
   return min;
 }
 
-extern "C"
+
 ot_data_t octree_max_cpu(const octree* grid_in) {
   int n = grid_in->n_leafs * grid_in->feature_size;
   ot_data_t max = grid_in->data[0];
-  for(int idx = 1; idx < n; ++idx) {
+  for(auto idx = 1; idx < n; ++idx) {
     ot_data_t val = grid_in->data[idx];
     if(val > max) {
       max = val;

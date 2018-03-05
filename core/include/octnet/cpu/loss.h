@@ -23,12 +23,13 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#pragma once
 #ifndef OCTREE_LOSS_CPU_H
 #define OCTREE_LOSS_CPU_H
 
+#include "octnet/core/api.h"
 #include "octnet/core/core.h"
 
-extern "C" {
 
 /// Computes the mean squared error of the input and target. 
 /// Input and target are supposed to have the same tree structure.
@@ -38,6 +39,7 @@ extern "C" {
 /// @param check if true, the tree structures of input and target are checked for 
 ///              equality 
 /// @return mean squared error 
+OCTREE_API
 ot_data_t octree_mse_loss_cpu(const octree* input, const octree* target, bool size_average, bool check);
 
 /// Computes the gradient of the  mean squared error wrt. input and target. 
@@ -48,6 +50,7 @@ ot_data_t octree_mse_loss_cpu(const octree* input, const octree* target, bool si
 /// @param check if true, the tree structures of input and target are checked for 
 ///              equality 
 /// @param grad the gradient wrt. input
+OCTREE_API
 void octree_mse_loss_bwd_cpu(const octree* input, const octree* target, bool size_average, bool check, octree* grad);
 
 
@@ -62,6 +65,7 @@ void octree_mse_loss_bwd_cpu(const octree* input, const octree* target, bool siz
 ///              equality 
 /// @param output negative log-ligkelihood
 /// @param total_weight sum of all weight coefficients over the volume
+OCTREE_API
 void octree_nll_loss_cpu(const octree* input, const octree* target, const ot_data_t* weights, int class_base, bool size_average, bool check, ot_data_t* output, ot_data_t* total_weight);
 
 /// Computes the gradient of the negative log-likelihood wrt. input and target. 
@@ -75,6 +79,7 @@ void octree_nll_loss_cpu(const octree* input, const octree* target, const ot_dat
 /// @param check if true, the tree structures of input and target are checked for 
 ///              equality 
 /// @param grad the gradient wrt. input
+OCTREE_API
 void octree_nll_loss_bwd_cpu(const octree* input, const octree* target, const ot_data_t* weights, const ot_data_t total_weight, int class_base, bool size_average, bool check, octree* grad);
 
 
@@ -89,6 +94,7 @@ void octree_nll_loss_bwd_cpu(const octree* input, const octree* target, const ot
 ///              equality 
 /// @param output binary cross-entropy
 /// @param total_weight sum of all weight coefficients over the volume
+OCTREE_API
 void octree_bce_loss_cpu(const octree* input, const octree* target, bool size_average, bool check, ot_data_t* output, ot_data_t* total_weight);
 
 /// Computes the gradient of the binary cross-entropy wrt. input and target. 
@@ -99,6 +105,7 @@ void octree_bce_loss_cpu(const octree* input, const octree* target, bool size_av
 /// @param check if true, the tree structures of input and target are checked for 
 ///              equality 
 /// @param grad the gradient wrt. input
+OCTREE_API
 void octree_bce_loss_bwd_cpu(const octree* input, const octree* target, bool size_average, bool check, octree* grad);
 
 
@@ -109,6 +116,7 @@ void octree_bce_loss_bwd_cpu(const octree* input, const octree* target, bool siz
 /// @param size_average if true, the loss is averaged by the size of the volume
 /// @param output binary cross-entropy
 /// @param total_weight sum of all weight coefficients over the volume
+OCTREE_API
 void octree_bce_dense_loss_cpu(const octree* input, const ot_data_t* target, bool size_average, ot_data_t* output, ot_data_t* total_weight);
 
 /// Computes the gradient of the binary cross-entropy wrt. input and target. 
@@ -117,6 +125,7 @@ void octree_bce_dense_loss_cpu(const octree* input, const ot_data_t* target, boo
 /// @param target
 /// @param size_average if true, the loss is averaged by the size of the volume
 /// @param grad the gradient wrt. input
+OCTREE_API
 void octree_bce_dense_loss_bwd_cpu(const octree* input, const ot_data_t* target, bool size_average, octree* grad);
 
 
@@ -128,6 +137,7 @@ void octree_bce_dense_loss_bwd_cpu(const octree* input, const ot_data_t* target,
 /// @param size_average if true, the loss is averaged by the size of the volume
 /// @param output binary cross-entropy
 /// @param total_weight sum of all weight coefficients over the volume
+OCTREE_API
 void octree_bce_ds_loss_cpu(const octree* input, const octree* target, const octree* weights, bool size_average, ot_data_t* output, ot_data_t* total_weight);
 
 /// Computes the gradient of the binary cross-entropy wrt. input and target. 
@@ -138,7 +148,7 @@ void octree_bce_ds_loss_cpu(const octree* input, const octree* target, const oct
 /// @param size_average if true, the loss is averaged by the size of the volume
 /// @param total_weight sum of all weight coefficients over the volume
 /// @param grad the gradient wrt. input
+OCTREE_API
 void octree_bce_ds_loss_bwd_cpu(const octree* input, const octree* target, const octree* weights, bool size_average, ot_data_t total_weight, octree* grad);
-}
 
-#endif 
+#endif

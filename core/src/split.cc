@@ -31,7 +31,7 @@
 #include <cstdio>
 #include <cstdlib>
 
-extern "C"
+
 void octree_split_by_prob_cpu(const octree* in, const octree* prob, const ot_data_t thr, bool check, octree* out) {
   if(prob->feature_size != 1) {
     printf("[ERROR] split_by_prob - prob feature size != 1\n");
@@ -51,7 +51,7 @@ void octree_split_by_prob_cpu(const octree* in, const octree* prob, const ot_dat
   int n_blocks = octree_num_blocks(in);
 
   #pragma omp parallel for
-  for(int grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
+  for(auto grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
     const ot_tree_t* itree = octree_get_tree(in, grid_idx);
     ot_tree_t* otree = octree_get_tree(out, grid_idx);
 
@@ -67,7 +67,7 @@ void octree_split_by_prob_cpu(const octree* in, const octree* prob, const ot_dat
     else {
 
       tree_set_bit(otree, 0);
-      for(int bit_idx_l1 = 1; bit_idx_l1 < 9; ++bit_idx_l1) {
+      for(auto bit_idx_l1 = 1; bit_idx_l1 < 9; ++bit_idx_l1) {
         if(!tree_isset_bit(itree, bit_idx_l1)) {
           int data_idx = tree_data_idx(itree, bit_idx_l1, 1);
           if(prob_data[data_idx] >= thr) {
@@ -77,7 +77,7 @@ void octree_split_by_prob_cpu(const octree* in, const octree* prob, const ot_dat
         else {
 
           tree_set_bit(otree, bit_idx_l1);
-          for(int add_bit_idx_l2 = 0; add_bit_idx_l2 < 8; ++add_bit_idx_l2) {
+          for(auto add_bit_idx_l2 = 0; add_bit_idx_l2 < 8; ++add_bit_idx_l2) {
             int bit_idx_l2 = tree_child_bit_idx(bit_idx_l1) + add_bit_idx_l2;
             if(!tree_isset_bit(itree, bit_idx_l2)) {
               int data_idx = tree_data_idx(itree, bit_idx_l2, 1);
@@ -103,15 +103,15 @@ void octree_split_by_prob_cpu(const octree* in, const octree* prob, const ot_dat
   octree_cpy_sup_to_sub_cpu(in, out);
 }
 
-extern "C"
+
 void octree_split_full_cpu(const octree* in, octree* out) {
   octree_resize_as_cpu(in, out);
   int n_blocks = octree_num_blocks(in);
 
   #pragma omp parallel for
-  for(int grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
+  for(auto grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
     ot_tree_t* tree = octree_get_tree(out, grid_idx);
-    for(int tree_idx = 0; tree_idx < N_TREE_INTS; ++tree_idx) {
+    for(auto tree_idx = 0; tree_idx < N_TREE_INTS; ++tree_idx) {
       tree[tree_idx] = ~0;
     }
   }
@@ -124,7 +124,7 @@ void octree_split_full_cpu(const octree* in, octree* out) {
 }
 
 
-extern "C"
+
 void octree_split_reconstruction_surface_cpu(const octree* in, const octree* rec, ot_data_t rec_thr_from, ot_data_t rec_thr_to, octree* out) {
   if(rec->feature_size != 1) {
     printf("[ERROR] split_reconstruction_surface - feature size of rec has to be 1\n");
@@ -139,7 +139,7 @@ void octree_split_reconstruction_surface_cpu(const octree* in, const octree* rec
   octree_cpy_trees_cpu_cpu(in, out);
 
   // determine tree structure
-  for(int leaf_idx = 0; leaf_idx < in->n_leafs; ++leaf_idx) {
+  for(auto leaf_idx = 0; leaf_idx < in->n_leafs; ++leaf_idx) {
     int in_grid_idx = leaf_idx_to_grid_idx(in, leaf_idx);
     const ot_tree_t* in_tree = octree_get_tree(in, in_grid_idx);
 
@@ -178,7 +178,7 @@ void octree_split_reconstruction_surface_cpu(const octree* in, const octree* rec
 
     // along d
     int grid_idx, bit_idx;
-    for(int fd = 0; fd < 2; ++fd) {
+    for(auto fd = 0; fd < 2; ++fd) {
       int d = ds + (fd*(width+1)-1); 
       int h = hs; 
       int w = ws;
@@ -206,7 +206,7 @@ void octree_split_reconstruction_surface_cpu(const octree* in, const octree* rec
     }
 
     // along h
-    for(int fh = 0; fh < 2; ++fh) {
+    for(auto fh = 0; fh < 2; ++fh) {
       int h = hs + (fh*(width+1)-1); 
       int d = ds; 
       int w = ws;
@@ -234,7 +234,7 @@ void octree_split_reconstruction_surface_cpu(const octree* in, const octree* rec
     }
 
     // along w
-    for(int fw = 0; fw < 2; ++fw) {
+    for(auto fw = 0; fw < 2; ++fw) {
       int w = ws + (fw*(width+1)-1); 
       int d = ds;
       int h = hs; 
@@ -264,7 +264,7 @@ void octree_split_reconstruction_surface_cpu(const octree* in, const octree* rec
     // if state change occured, then split leaf (for now full split - full split of shallow octree)
     if(leaf_state != other_state) {
       ot_tree_t* out_tree = octree_get_tree(out, in_grid_idx);
-      for(int tree_idx = 0; tree_idx < N_TREE_INTS; ++tree_idx) {
+      for(auto tree_idx = 0; tree_idx < N_TREE_INTS; ++tree_idx) {
         out_tree[tree_idx] = ~0;
       }    
     }
@@ -272,7 +272,7 @@ void octree_split_reconstruction_surface_cpu(const octree* in, const octree* rec
     
   // printf("in: %d, %d,%d,%d, %d, %d\n", in->n, in->grid_depth,in->grid_height,in->grid_width, in->feature_size, in->n_leafs);
   // printf("out: %d, %d,%d,%d, %d, %d\n", out->n, out->grid_depth,out->grid_height,out->grid_width, out->feature_size, out->n_leafs);
-  // for(int grid_idx = 0; grid_idx < octree_num_blocks(out); ++grid_idx) {
+  // for(auto grid_idx = 0; grid_idx < octree_num_blocks(out); ++grid_idx) {
   //   std::cout << tree_bit_str_cpu(octree_get_tree(out, grid_idx)) << std::endl;
   // }
   octree_upd_n_leafs_cpu(out);
@@ -287,7 +287,7 @@ void octree_split_reconstruction_surface_cpu(const octree* in, const octree* rec
 
 
 
-extern "C"
+
 void octree_split_bwd_cpu(const octree* in, const octree* grad_out, octree* grad_in) {
   octree_cpy_scalars(in, grad_in);
   octree_resize_as_cpu(in, grad_in);
@@ -300,7 +300,7 @@ void octree_split_bwd_cpu(const octree* in, const octree* grad_out, octree* grad
 
 
 
-extern "C"
+
 void octree_split_dense_reconstruction_surface_fres_cpu(const ot_data_t* features, const ot_data_t* reconstruction, int n, int dense_depth, int dense_height, int dense_width, int feature_size, ot_data_t rec_thr_from, ot_data_t rec_thr_to, int band, octree* out) {
   if(dense_depth % 8 != 0 || dense_height % 8 != 0 || dense_width % 8 != 0) {
     printf("[ERROR] octree_split_dense_reconstruction_surface_fres_cpu - dense dims has to be a factor of 8\n");
@@ -313,13 +313,13 @@ void octree_split_dense_reconstruction_surface_fres_cpu(const ot_data_t* feature
   octree_clr_trees_cpu(out);
   int n_blocks = octree_num_blocks(out);
 
-  for(int grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
+  for(auto grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
     ot_tree_t* tree = octree_get_tree(out, grid_idx);
 
     int n,gd,gh,gw;
     octree_split_grid_idx(out, grid_idx, &n,&gd,&gh,&gw);
 
-    for(int idx = 0; idx < 8*8*8; ++idx) {
+    for(auto idx = 0; idx < 8*8*8; ++idx) {
       bool differ = false;
       
       int bw = idx % 8;
@@ -334,7 +334,7 @@ void octree_split_dense_reconstruction_surface_fres_cpu(const ot_data_t* feature
       int hc = (gh * 8 + bh);
       int wc = (gw * 8 + bw);
       
-      for(int off = 0; off < band_width*band_width*band_width && !differ; ++off) {
+      for(auto off = 0; off < band_width*band_width*band_width && !differ; ++off) {
         int off_w = off % band_width;
         int off_h = ((off - off_w) / band_width) % band_width;
         int off_d = off / (band_width*band_width);
@@ -350,7 +350,7 @@ void octree_split_dense_reconstruction_surface_fres_cpu(const ot_data_t* feature
         bool occ_c = reconstruction[rec_idx] >= rec_thr_from && reconstruction[rec_idx] <= rec_thr_to;
         if(!occ_c) continue;
 
-        for(int nb = 0; nb < 3*3*3 && !differ; ++nb) {
+        for(auto nb = 0; nb < 3*3*3 && !differ; ++nb) {
           if(nb == 13) continue;
           int nb_w = nb % 3;
           int nb_h = ((nb - nb_w) / 3) % 3;
@@ -378,7 +378,7 @@ void octree_split_dense_reconstruction_surface_fres_cpu(const ot_data_t* feature
   octree_upd_prefix_leafs_cpu(out);
   octree_resize_as_cpu(out, out);
 
-  for(int leaf_idx = 0; leaf_idx < out->n_leafs; ++leaf_idx) {
+  for(auto leaf_idx = 0; leaf_idx < out->n_leafs; ++leaf_idx) {
     // const int grid_idx = out.data[leaf_idx * out->feature_size];
     const int grid_idx = leaf_idx_to_grid_idx(out, leaf_idx);
     const ot_tree_t* tree = octree_get_tree(out, grid_idx);
@@ -392,9 +392,9 @@ void octree_split_dense_reconstruction_surface_fres_cpu(const ot_data_t* feature
     const int cell_width3 = cell_width * cell_width * cell_width;
 
     ot_data_t* out_data = octree_get_data(out, grid_idx) + data_idx * out->feature_size;
-    for(int f = 0; f < feature_size; ++f) {
+    for(auto f = 0; f < feature_size; ++f) {
       ot_data_t val = 0;
-      for(int idx = 0; idx < cell_width3; ++idx) {
+      for(auto idx = 0; idx < cell_width3; ++idx) {
         int idx_w = idx % cell_width;
         int idx_h = ((idx - idx_w) / cell_width) % cell_width;
         int idx_d = idx / (cell_width*cell_width);
@@ -410,7 +410,7 @@ void octree_split_dense_reconstruction_surface_fres_cpu(const ot_data_t* feature
   }
 }
 
-extern "C"
+
 void octree_split_dense_reconstruction_surface_fres_bwd_cpu(const octree* grad_out, ot_data_t* grad_in) {
   int dense_depth = 8 * grad_out->grid_depth;
   int dense_height = 8 * grad_out->grid_height;
@@ -418,13 +418,13 @@ void octree_split_dense_reconstruction_surface_fres_bwd_cpu(const octree* grad_o
   int feature_size = grad_out->feature_size;
   int n_voxels = grad_out->n * dense_depth * dense_height * dense_width;
 
-  for(int vx_idx = 0; vx_idx < n_voxels; ++vx_idx) {
+  for(auto vx_idx = 0; vx_idx < n_voxels; ++vx_idx) {
     int n = vx_idx / (dense_depth * dense_height * dense_width);
     int w = vx_idx % dense_width;
     int h = ((vx_idx - w) / dense_width) % dense_height;
     int d = ((((vx_idx - w) / dense_width) - h) / dense_height) % dense_depth;
 
-    for(int f = 0; f < feature_size; ++f) {
+    for(auto f = 0; f < feature_size; ++f) {
       int grad_in_idx = (((n * feature_size + f) * dense_depth + d) * dense_height + h) * dense_width + w;
       grad_in[grad_in_idx] = 0;
     }
@@ -443,7 +443,7 @@ void octree_split_dense_reconstruction_surface_fres_bwd_cpu(const octree* grad_o
     int data_idx = tree_data_idx(tree, bit_idx, feature_size);
     const ot_data_t* grad_out_data = octree_get_data(grad_out, grid_idx) + data_idx;
 
-    for(int f = 0; f < feature_size; ++f) {
+    for(auto f = 0; f < feature_size; ++f) {
       int grad_in_idx = (((n * feature_size + f) * dense_depth + d) * dense_height + h) * dense_width + w;
       grad_in[grad_in_idx] += grad_out_data[f];
     }

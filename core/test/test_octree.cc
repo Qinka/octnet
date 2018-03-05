@@ -27,6 +27,7 @@
 #include <sstream>
 #include <vector>
 #include <string.h>
+#include <time.h>
 
 #include "octnet/test/objects.h"
 
@@ -45,10 +46,10 @@ void test_split_grid_idx_(int n, int grid_depth, int grid_height, int grid_width
   grid.grid_width = grid_width;
 
   int grid_idx = 0;
-  for(int gn = 0; gn < n; ++gn) {
-    for(int gd = 0; gd < grid_depth; ++gd) {
-      for(int gh = 0; gh < grid_height; ++gh) {
-        for(int gw = 0; gw < grid_width; ++gw) {
+  for(auto gn = 0; gn < n; ++gn) {
+    for(auto gd = 0; gd < grid_depth; ++gd) {
+      for(auto gh = 0; gh < grid_height; ++gh) {
+        for(auto gw = 0; gw < grid_width; ++gw) {
           int tn, td, th, tw;
           octree_split_grid_idx(&grid, grid_idx, &tn,&td,&th,&tw);
           if(!(gn == tn && gd == td && gh == th && gw == tw)) {
@@ -105,7 +106,7 @@ void test_combine_extract_n() {
   int n_grids = 16;
   int gn = 1; int gd = 8; int gh = 16; int gw = 32; int fs = 8;
   octree** grids = new octree*[n_grids];
-  for(int idx = 0; idx < n_grids; ++idx) {
+  for(auto idx = 0; idx < n_grids; ++idx) {
     grids[idx] = create_test_octree_rand(gn,gd,gh,gw, fs, 0.5,0.5,0.5);
     // octree_print_cpu(grids[idx]);
     if(!octree_equal_cpu(grids[idx], grids[idx])) {
@@ -116,7 +117,7 @@ void test_combine_extract_n() {
   octree* cmb = octree_new_cpu();
   octree_combine_n_cpu(grids, n_grids, cmb);
 
-  for(int idx = 0; idx < n_grids; ++idx) {
+  for(auto idx = 0; idx < n_grids; ++idx) {
     octree* ext = octree_new_cpu();
     octree_extract_n_cpu(cmb, idx, idx+1, ext);
 
@@ -129,7 +130,7 @@ void test_combine_extract_n() {
   
   octree_free_cpu(cmb);
 
-  for(int idx = 0; idx < n_grids; ++idx) {
+  for(auto idx = 0; idx < n_grids; ++idx) {
     octree_free_cpu(grids[idx]);
   }
   delete[] grids;
@@ -143,7 +144,7 @@ void test_IO(int n_threads) {
   octree** grids = new octree*[n];
   std::vector<std::string> paths;
   char** paths_c = new char*[n];
-  for(int idx = 0; idx < n; ++idx) {
+  for(auto idx = 0; idx < n; ++idx) {
     std::stringstream ss;
     ss << "test_" << idx << ".oc";
     paths.push_back(ss.str());
@@ -155,7 +156,7 @@ void test_IO(int n_threads) {
     octree_write_cpu(paths[idx].c_str(), grids[idx]);
   }
 
-  for(int idx = 0; idx < n; ++idx) {
+  for(auto idx = 0; idx < n; ++idx) {
     printf("  read oc to %s\n", paths[idx].c_str());
     octree* grid = octree_new_cpu();
     octree_read_cpu(paths[idx].c_str(), grid);
@@ -167,7 +168,7 @@ void test_IO(int n_threads) {
 
   octree* grid = octree_new_cpu();
   octree_read_batch_cpu(n, paths_c, n_threads, grid);
-  for(int idx = 0; idx < n; ++idx) {
+  for(auto idx = 0; idx < n; ++idx) {
     octree* grid_ext = octree_new_cpu();
     octree_extract_n_cpu(grid, idx, idx+1, grid_ext);
     if(!octree_equal_cpu(grids[idx], grid_ext)) {
@@ -177,7 +178,7 @@ void test_IO(int n_threads) {
   }
   octree_free_cpu(grid);
   
-  for(int idx = 0; idx < n; ++idx) {
+  for(auto idx = 0; idx < n; ++idx) {
     octree_free_cpu(grids[idx]);
     delete[] paths_c[idx];
   }

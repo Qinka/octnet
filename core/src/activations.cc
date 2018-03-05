@@ -30,7 +30,6 @@
 #include <omp.h>
 #endif
 
-extern "C"
 void octree_relu_cpu(const octree* grid_in, bool inplace, octree* grid_out) {
   if(!inplace) {
     octree_resize_as_cpu(grid_in, grid_out);
@@ -41,16 +40,14 @@ void octree_relu_cpu(const octree* grid_in, bool inplace, octree* grid_out) {
 
   ot_size_t feature_size = grid_in->feature_size;
   #pragma omp parallel for
-  for(int vx_idx = 0; vx_idx < grid_in->n_leafs; ++vx_idx) {
-    for(int f = 0; f < feature_size; ++f) {
+  for(auto vx_idx = 0; vx_idx < grid_in->n_leafs; ++vx_idx) {
+    for(auto f = 0; f < feature_size; ++f) {
       ot_data_t in_val = grid_in->data[vx_idx * feature_size + f];
       grid_out->data[vx_idx * feature_size + f] = in_val <= 0 ? 0 : in_val;
     }
   }
 }
 
-
-extern "C"
 void octree_relu_bwd_cpu(const octree* grid_in, const octree* grad_out, bool inplace, octree* grad_in) {
   if(!inplace) {
     octree_resize_as_cpu(grad_out, grad_in);
@@ -61,8 +58,8 @@ void octree_relu_bwd_cpu(const octree* grid_in, const octree* grad_out, bool inp
   
   ot_size_t feature_size = grid_in->feature_size;
   #pragma omp parallel for
-  for(int vx_idx = 0; vx_idx < grad_out->n_leafs; ++vx_idx) {
-    for(int f = 0; f < feature_size; ++f) {
+  for(auto vx_idx = 0; vx_idx < grad_out->n_leafs; ++vx_idx) {
+    for(auto f = 0; f < feature_size; ++f) {
       ot_data_t in_val = grid_in->data[vx_idx * feature_size + f];
       ot_data_t grad_val = grad_out->data[vx_idx * feature_size + f];
       grad_in->data[vx_idx * feature_size + f] = in_val <= 0 ? 0 : grad_val;
@@ -70,9 +67,6 @@ void octree_relu_bwd_cpu(const octree* grid_in, const octree* grad_out, bool inp
   }
 }
 
-
-
-extern "C"
 void octree_sigmoid_cpu(const octree* in, bool inplace, octree* out) {
   if(!inplace) {
     octree_resize_as_cpu(in, out);
@@ -83,15 +77,14 @@ void octree_sigmoid_cpu(const octree* in, bool inplace, octree* out) {
 
   ot_size_t feature_size = in->feature_size;
   #pragma omp parallel for
-  for(int vx_idx = 0; vx_idx < in->n_leafs; ++vx_idx) {
-    for(int f = 0; f < feature_size; ++f) {
+  for(auto vx_idx = 0; vx_idx < in->n_leafs; ++vx_idx) {
+    for(auto f = 0; f < feature_size; ++f) {
       ot_data_t in_val = in->data[vx_idx * feature_size + f];
       out->data[vx_idx * feature_size + f] = 1. / (1. + expf(-in_val));
     }
   }
 }
 
-extern "C"
 void octree_sigmoid_bwd_cpu(const octree* in, const octree* out, const octree* grad_out, bool inplace, octree* grad_in) {
   if(!inplace) {
     octree_resize_as_cpu(in, grad_in);
@@ -102,8 +95,8 @@ void octree_sigmoid_bwd_cpu(const octree* in, const octree* out, const octree* g
 
   ot_size_t feature_size = in->feature_size;
   #pragma omp parallel for
-  for(int vx_idx = 0; vx_idx < in->n_leafs; ++vx_idx) {
-    for(int f = 0; f < feature_size; ++f) {
+  for(auto vx_idx = 0; vx_idx < in->n_leafs; ++vx_idx) {
+    for(auto f = 0; f < feature_size; ++f) {
       ot_data_t out_val = out->data[vx_idx * feature_size + f];
       ot_data_t grad_val = grad_out->data[vx_idx * feature_size + f];
       grad_in->data[vx_idx * feature_size + f] = grad_val * (1. - out_val) * out_val;
@@ -111,9 +104,6 @@ void octree_sigmoid_bwd_cpu(const octree* in, const octree* out, const octree* g
   }
 }
 
-
-
-extern "C"
 void octree_logsoftmax_cpu(const octree* in, octree* out) {
   octree_resize_as_cpu(in, out);
   octree_cpy_scalars(in, out);
@@ -122,28 +112,27 @@ void octree_logsoftmax_cpu(const octree* in, octree* out) {
 
   ot_size_t feature_size = in->feature_size;
   #pragma omp parallel for
-  for(int vx_idx = 0; vx_idx < in->n_leafs; ++vx_idx) {
+  for(auto vx_idx = 0; vx_idx < in->n_leafs; ++vx_idx) {
     ot_data_t max_val = -1e9;
-    for(int f = 0; f < feature_size; ++f) {
+    for(auto f = 0; f < feature_size; ++f) {
       ot_data_t val = in->data[vx_idx * feature_size + f];
       max_val = FMAX(max_val, val);
     }
 
     ot_data_t logsum = 0;
-    for(int f = 0; f < feature_size; ++f) {
+    for(auto f = 0; f < feature_size; ++f) {
       ot_data_t val = in->data[vx_idx * feature_size + f];
       logsum += expf(val - max_val);
     }
     logsum = max_val + logf(logsum);
 
-    for(int f = 0; f < feature_size; ++f) {
+    for(auto f = 0; f < feature_size; ++f) {
       ot_data_t val = in->data[vx_idx * feature_size + f];
       out->data[vx_idx * feature_size + f] = val - logsum;
     }
   }
 }
 
-extern "C"
 void octree_logsoftmax_bwd_cpu(const octree* in, const octree* out, const octree* grad_out, octree* grad_in) {
   octree_resize_as_cpu(in, grad_in);
   octree_cpy_scalars(in, grad_in);
@@ -152,13 +141,13 @@ void octree_logsoftmax_bwd_cpu(const octree* in, const octree* out, const octree
   
   ot_size_t feature_size = in->feature_size;
   #pragma omp parallel for
-  for(int vx_idx = 0; vx_idx < in->n_leafs; ++vx_idx) {
+  for(auto vx_idx = 0; vx_idx < in->n_leafs; ++vx_idx) {
     ot_data_t sum = 0;
-    for(int f = 0; f < feature_size; ++f) {
+    for(auto f = 0; f < feature_size; ++f) {
       sum += grad_out->data[vx_idx * feature_size + f];
     }
 
-    for(int f = 0; f < feature_size; ++f) {
+    for(auto f = 0; f < feature_size; ++f) {
       const int didx = vx_idx * feature_size + f;
       grad_in->data[didx] = grad_out->data[didx] - expf(out->data[didx]) * sum;
     }

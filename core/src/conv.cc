@@ -49,7 +49,7 @@ void octree_conv3x3x3_cpu(const octree* grid_in, const ot_data_t* weights, const
   octree_fill_data_cpu(grid, 0);
 
   #pragma omp parallel for
-  for(int grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
+  for(auto grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
     ot_tree_t* tree = octree_get_tree(grid, grid_idx);
     // ot_data_t* in_data = grid_in->data_ptrs[grid_idx];
     ot_data_t* in_data = octree_get_data(grid_in, grid_idx);
@@ -79,9 +79,9 @@ void octree_conv3x3x3_cpu(const octree* grid_in, const ot_data_t* weights, const
     else {
 
       int bit_idx_l1 = 1;
-      for(int bdl1 = 0; bdl1 < 2; ++bdl1) {
-        for(int bhl1 = 0; bhl1 < 2; ++bhl1) {
-          for(int bwl1 = 0; bwl1 < 2; ++bwl1) {
+      for(auto bdl1 = 0; bdl1 < 2; ++bdl1) {
+        for(auto bhl1 = 0; bhl1 < 2; ++bhl1) {
+          for(auto bwl1 = 0; bwl1 < 2; ++bwl1) {
 
             if(!tree_isset_bit(tree, bit_idx_l1)) {
               int out_data_idx = tree_data_idx(tree, bit_idx_l1, channels_out);
@@ -100,9 +100,9 @@ void octree_conv3x3x3_cpu(const octree* grid_in, const ot_data_t* weights, const
             else {
 
               int bit_idx_l2 = tree_child_bit_idx(bit_idx_l1);
-              for(int bdl2 = 0; bdl2 < 2; ++bdl2) {
-                for(int bhl2 = 0; bhl2 < 2; ++bhl2) {
-                  for(int bwl2 = 0; bwl2 < 2; ++bwl2) {
+              for(auto bdl2 = 0; bdl2 < 2; ++bdl2) {
+                for(auto bhl2 = 0; bhl2 < 2; ++bhl2) {
+                  for(auto bwl2 = 0; bwl2 < 2; ++bwl2) {
 
                     if(!tree_isset_bit(tree, bit_idx_l2)) {
                       int out_data_idx = tree_data_idx(tree, bit_idx_l2, channels_out);
@@ -120,14 +120,14 @@ void octree_conv3x3x3_cpu(const octree* grid_in, const ot_data_t* weights, const
                     else {
 
                       int bit_idx_l3 = tree_child_bit_idx(bit_idx_l2);
-                      for(int bdl3 = 0; bdl3 < 2; ++bdl3) {
-                        for(int bhl3 = 0; bhl3 < 2; ++bhl3) {
-                          for(int bwl3 = 0; bwl3 < 2; ++bwl3) {
+                      for(auto bdl3 = 0; bdl3 < 2; ++bdl3) {
+                        for(auto bhl3 = 0; bhl3 < 2; ++bhl3) {
+                          for(auto bwl3 = 0; bwl3 < 2; ++bwl3) {
                             int out_data_idx = tree_data_idx(tree, bit_idx_l3, channels_out);
                             // printf("%d, %d,%d,%d\n", bit_idx_l3, ds+bdl1*4+bdl2*2+bdl3, hs+bhl1*4+bhl2*2+bhl3, ws+bwl1*4+bwl2*2+bwl3);
                             conv3x3x3_point<INV_FILTER_FALSE>(gn, ds+bdl1*4+bdl2*2+bdl3, hs+bhl1*4+bhl2*2+bhl3, ws+bwl1*4+bwl2*2+bwl3, 
                                 grid_in, weights, channels_out, 1, out_data + out_data_idx);  
-                            for(int co = 0; co < channels_out; ++co) {
+                            for(auto co = 0; co < channels_out; ++co) {
                               out_data[out_data_idx + co] += bias[co];
                             }
                             bit_idx_l3++;
@@ -170,7 +170,7 @@ void octree_conv3x3x3_bwd_cpu(const ot_data_t* weights, const octree* grad_out, 
   octree_fill_data_cpu(grad_in, 0);
 
   #pragma omp parallel for
-  for(int grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
+  for(auto grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
     ot_tree_t* tree = octree_get_tree(grad_in, grid_idx);
     // ot_data_t* grad_in_data = grad_in->data_ptrs[grid_idx];
     ot_data_t* grad_in_data = octree_get_data(grad_in, grid_idx);
@@ -200,9 +200,9 @@ void octree_conv3x3x3_bwd_cpu(const ot_data_t* weights, const octree* grad_out, 
     else {
 
       int bit_idx_l1 = 1;
-      for(int bdl1 = 0; bdl1 < 2; ++bdl1) {
-        for(int bhl1 = 0; bhl1 < 2; ++bhl1) {
-          for(int bwl1 = 0; bwl1 < 2; ++bwl1) {
+      for(auto bdl1 = 0; bdl1 < 2; ++bdl1) {
+        for(auto bhl1 = 0; bhl1 < 2; ++bhl1) {
+          for(auto bwl1 = 0; bwl1 < 2; ++bwl1) {
 
             if(!tree_isset_bit(tree, bit_idx_l1)) {
               int out_data_idx = tree_data_idx(tree, bit_idx_l1, channels_out);
@@ -221,9 +221,9 @@ void octree_conv3x3x3_bwd_cpu(const ot_data_t* weights, const octree* grad_out, 
             else {
 
               int bit_idx_l2 = tree_child_bit_idx(bit_idx_l1);
-              for(int bdl2 = 0; bdl2 < 2; ++bdl2) {
-                for(int bhl2 = 0; bhl2 < 2; ++bhl2) {
-                  for(int bwl2 = 0; bwl2 < 2; ++bwl2) {
+              for(auto bdl2 = 0; bdl2 < 2; ++bdl2) {
+                for(auto bhl2 = 0; bhl2 < 2; ++bhl2) {
+                  for(auto bwl2 = 0; bwl2 < 2; ++bwl2) {
 
                     if(!tree_isset_bit(tree, bit_idx_l2)) {
                       int out_data_idx = tree_data_idx(tree, bit_idx_l2, channels_out);
@@ -241,9 +241,9 @@ void octree_conv3x3x3_bwd_cpu(const ot_data_t* weights, const octree* grad_out, 
                     else {
 
                       int bit_idx_l3 = tree_child_bit_idx(bit_idx_l2);
-                      for(int bdl3 = 0; bdl3 < 2; ++bdl3) {
-                        for(int bhl3 = 0; bhl3 < 2; ++bhl3) {
-                          for(int bwl3 = 0; bwl3 < 2; ++bwl3) {
+                      for(auto bdl3 = 0; bdl3 < 2; ++bdl3) {
+                        for(auto bhl3 = 0; bhl3 < 2; ++bhl3) {
+                          for(auto bwl3 = 0; bwl3 < 2; ++bwl3) {
                             int in_data_idx = tree_data_idx(tree, bit_idx_l3, channels_in);
                             conv3x3x3_point<INV_FILTER_TRUE>(gn, ds+bdl1*4+bdl2*2+bdl3, hs+bhl1*4+bhl2*2+bhl3, ws+bwl1*4+bwl2*2+bwl3, 
                                 grad_out, weights, channels_in, 1, grad_in_data + in_data_idx);  
@@ -280,7 +280,7 @@ void octree_conv3x3x3_wbwd_cpu(const octree* grid_in, const octree* grad_out, ot
   const int channels_in = grid_in->feature_size;
 
   #pragma omp parallel for
-  for(int grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
+  for(auto grid_idx = 0; grid_idx < n_blocks; ++grid_idx) {
     ot_tree_t* tree = octree_get_tree(grid_in, grid_idx);
     // ot_data_t* grid_in_data = grid_in->data_ptrs[grid_idx];
     ot_data_t* grid_in_data = octree_get_data(grid_in, grid_idx);
@@ -313,9 +313,9 @@ void octree_conv3x3x3_wbwd_cpu(const octree* grid_in, const octree* grad_out, ot
     else {
 
       int bit_idx_l1 = 1;
-      for(int bdl1 = 0; bdl1 < 2; ++bdl1) {
-        for(int bhl1 = 0; bhl1 < 2; ++bhl1) {
-          for(int bwl1 = 0; bwl1 < 2; ++bwl1) {
+      for(auto bdl1 = 0; bdl1 < 2; ++bdl1) {
+        for(auto bhl1 = 0; bhl1 < 2; ++bhl1) {
+          for(auto bwl1 = 0; bwl1 < 2; ++bwl1) {
 
             if(!tree_isset_bit(tree, bit_idx_l1)) {
               float factor;
@@ -337,9 +337,9 @@ void octree_conv3x3x3_wbwd_cpu(const octree* grid_in, const octree* grad_out, ot
             else {
 
               int bit_idx_l2 = tree_child_bit_idx(bit_idx_l1);
-              for(int bdl2 = 0; bdl2 < 2; ++bdl2) {
-                for(int bhl2 = 0; bhl2 < 2; ++bhl2) {
-                  for(int bwl2 = 0; bwl2 < 2; ++bwl2) {
+              for(auto bdl2 = 0; bdl2 < 2; ++bdl2) {
+                for(auto bhl2 = 0; bhl2 < 2; ++bhl2) {
+                  for(auto bwl2 = 0; bwl2 < 2; ++bwl2) {
 
                     if(!tree_isset_bit(tree, bit_idx_l2)) {
                       int out_data_idx = tree_data_idx(tree, bit_idx_l2, channels_out);
@@ -359,13 +359,13 @@ void octree_conv3x3x3_wbwd_cpu(const octree* grid_in, const octree* grad_out, ot
                     else {
 
                       int bit_idx_l3 = tree_child_bit_idx(bit_idx_l2);
-                      for(int bdl3 = 0; bdl3 < 2; ++bdl3) {
-                        for(int bhl3 = 0; bhl3 < 2; ++bhl3) {
-                          for(int bwl3 = 0; bwl3 < 2; ++bwl3) {
+                      for(auto bdl3 = 0; bdl3 < 2; ++bdl3) {
+                        for(auto bhl3 = 0; bhl3 < 2; ++bhl3) {
+                          for(auto bwl3 = 0; bwl3 < 2; ++bwl3) {
                             int out_data_idx = tree_data_idx(tree, bit_idx_l3, channels_out);
                             conv3x3x3_point_wbwd(gn, ds+bdl1*4+bdl2*2+bdl3, hs+bhl1*4+bhl2*2+bhl3, ws+bwl1*4+bwl2*2+bwl3, 
                                 grid_in, grad_out_data + out_data_idx, channels_out, scale, grad_weights);  
-                            for(int co = 0; co < channels_out; ++co) {
+                            for(auto co = 0; co < channels_out; ++co) {
                               ot_data_t val = scale * grad_out_data[out_data_idx + co];
                               #if defined(_OPENMP)
                               #pragma omp atomic
@@ -398,31 +398,26 @@ void octree_conv3x3x3_wbwd_cpu(const octree* grid_in, const octree* grad_out, ot
 }
 
 
-
-
-
-extern "C"
 void octree_conv3x3x3_sum_cpu(const octree* grid_in_h, const ot_data_t* weights, const ot_data_t* bias, int channels_out, octree* grid) {
   octree_conv3x3x3_cpu<REDUCE_SUM>(grid_in_h, weights, bias, channels_out, grid);
 }
-extern "C"
+
 void octree_conv3x3x3_sum_bwd_cpu(const ot_data_t* weights, const octree* grad_out, int channels_in, octree* grad_in) {
   octree_conv3x3x3_bwd_cpu<REDUCE_SUM>(weights, grad_out, channels_in, grad_in);
 }
-extern "C"
+
 void octree_conv3x3x3_sum_wbwd_cpu(const octree* grid_in, const octree* grad_out, ot_data_t scale, ot_data_t* grad_weights, ot_data_t* grad_bias) {
   octree_conv3x3x3_wbwd_cpu<REDUCE_SUM>(grid_in, grad_out, scale, grad_weights, grad_bias); 
 }
 
-extern "C"
 void octree_conv3x3x3_avg_cpu(const octree* grid_in_h, const ot_data_t* weights, const ot_data_t* bias, int channels_out, octree* grid) {
   octree_conv3x3x3_cpu<REDUCE_AVG>(grid_in_h, weights, bias, channels_out, grid);
 }
-extern "C"
+
 void octree_conv3x3x3_avg_bwd_cpu(const ot_data_t* weights, const octree* grad_out, int channels_in, octree* grad_in) {
   octree_conv3x3x3_bwd_cpu<REDUCE_AVG>(weights, grad_out, channels_in, grad_in);
 }
-extern "C"
+
 void octree_conv3x3x3_avg_wbwd_cpu(const octree* grid_in, const octree* grad_out, ot_data_t scale, ot_data_t* grad_weights, ot_data_t* grad_bias) {
   octree_conv3x3x3_wbwd_cpu<REDUCE_AVG>(grid_in, grad_out, scale, grad_weights, grad_bias); 
 }

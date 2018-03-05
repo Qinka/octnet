@@ -23,12 +23,12 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#pragma once
 #ifndef VOLUMETC_UPSAMPLING_CPU_H
 #define VOLUMETC_UPSAMPLING_CPU_H
 
+#include "octnet/core/api.h"
 #include "octnet/core/types.h"
-
-extern "C" {
 
 /// 3D nearest neighbour interpolation along depth, height, width.
 /// @param in
@@ -39,6 +39,7 @@ extern "C" {
 /// @param feature_size
 /// @param upsampling factor should be > 1.
 /// @param out
+OCTREE_API
 void volumetric_nn_upsampling_cdhw_cpu(const ot_data_t* in, int n, int in_depth, int in_height, int in_width, int feature_size, int upsampling_factor, ot_data_t* out);
 
 /// Computes the gradient of the 3D nearest neighbour interpolation.
@@ -50,8 +51,7 @@ void volumetric_nn_upsampling_cdhw_cpu(const ot_data_t* in, int n, int in_depth,
 /// @param feature_size
 /// @param upsampling factor should be > 1.
 /// @param grad_in
+OCTREE_API
 void volumetric_nn_upsampling_cdhw_bwd_cpu(const ot_data_t* grad_out, int n, int in_depth, int in_height, int in_width, int feature_size, int upsampling_factor, ot_data_t* grad_in);
-
-}
 
 #endif 
