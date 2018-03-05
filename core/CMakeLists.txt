@@ -103,7 +103,7 @@ add_library(octnet_core SHARED ${OCTREE_CPU_SRCS})
 endif(ENABLE_CUDA)
 
 if(MSVC)
-target_compile_definitions(octnet_core PUBLIC /DOCTREE_EXPORT)
+target_compile_definitions(octnet_core PUBLIC /D OCTREE_EXPORT)
 endif(MSVC)
 
 add_executable(test_octree test/test_octree.cc)

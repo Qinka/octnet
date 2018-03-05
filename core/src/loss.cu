@@ -83,7 +83,7 @@ struct octree_mse_loss_from_leaf_idx : public thrust::unary_function<int, ot_dat
   }
 };
 
-extern "C"
+
 ot_data_t octree_mse_loss_gpu(const octree* input, const octree* target, bool size_average, bool check) {
   if(!octree_equal_shape(input, target)) {
     printf("[ERROR] mse_loss - shape of inputs do not match\n");
@@ -135,7 +135,7 @@ __global__ void kernel_mse_loss_bwd(octree grad, int n_leafs, const octree input
 }
 
 
-extern "C"
+
 void octree_mse_loss_bwd_gpu(const octree* input, const octree* target, bool size_average, bool check, octree* grad) {
   if(!octree_equal_shape(input, target)) {
     printf("[ERROR] mse_loss_bwd - shape of inputs do not match\n");
@@ -211,7 +211,7 @@ struct octree_mse_ds_loss_from_leaf_idx : public thrust::unary_function<int, ot_
   }
 };
 
-extern "C"
+
 ot_data_t octree_mse_ds_loss_gpu(const octree* input, const octree* target, bool size_average) {
   if(!octree_equal_shape(input, target)) {
     printf("[ERROR] mse_ds_loss - shape of inputs do not match\n");
@@ -274,7 +274,7 @@ __global__ void kernel_mse_ds_loss_bwd(octree grad, int n_leafs, const octree in
 }
 
 
-extern "C"
+
 void octree_mse_loss_ds_bwd_gpu(const octree* input, const octree* target, bool size_average, octree* grad) {
   if(!octree_equal_shape(input, target)) {
     printf("[ERROR] mse_ds_loss_bwd - shape of inputs do not match\n");
@@ -346,7 +346,7 @@ struct octree_nll_loss_from_leaf_idx : public thrust::unary_function<int, float2
 };
 
 
-extern "C"
+
 void octree_nll_loss_gpu(const octree* input, const octree* target, const ot_data_t* weights, int class_base, bool size_average, bool check, ot_data_t* output, ot_data_t* total_weight) {
   if(input->n != target->n || input->grid_depth != target->grid_depth || input->grid_height != target->grid_height || input->grid_width != target->grid_width || 1 != target->feature_size) {
     printf("[ERROR] nll_loss - shape of inputs do not match\n");
@@ -404,7 +404,7 @@ __global__ void kernel_nll_loss_bwd(octree grad, int n_leafs, const octree input
   }
 }
 
-extern "C"
+
 void octree_nll_loss_bwd_gpu(const octree* input, const octree* target, const ot_data_t* weights, const ot_data_t total_weight, int class_base, bool size_average, bool check, octree* grad) {
   if(input->n != target->n || input->grid_depth != target->grid_depth || input->grid_height != target->grid_height || input->grid_width != target->grid_width || 1 != target->feature_size) {
     printf("[ERROR] nll_loss_bwd - shape of inputs do not match\n");
@@ -474,7 +474,7 @@ struct octree_bce_loss_from_leaf_idx : public thrust::unary_function<int, ot_dat
   }
 };
 
-extern "C"
+
 void octree_bce_loss_gpu(const octree* input, const octree* target, bool size_average, bool check, ot_data_t* output, ot_data_t* total_weight) {
   if(!octree_equal_shape(input, target)) {
     printf("[ERROR] bce_loss - shape of inputs do not match\n");
@@ -530,7 +530,7 @@ __global__ void kernel_bce_loss_bwd(octree grad, int n_leafs, const octree input
 }
 
 
-extern "C"
+
 void octree_bce_loss_bwd_gpu(const octree* input, const octree* target, bool size_average, bool check, octree* grad) {
   if(!octree_equal_shape(input, target)) {
     printf("[ERROR] bce_loss_bwd - shape of inputs do not match\n");
@@ -609,7 +609,7 @@ struct octree_bce_dense_loss_from_leaf_idx : public thrust::unary_function<int, 
   }
 };
 
-extern "C"
+
 void octree_bce_dense_loss_gpu(const octree* input, const ot_data_t* target, bool size_average, ot_data_t* output, ot_data_t* total_weight) {
   thrust::counting_iterator<int> iter(0);
   *output = thrust::transform_reduce(
@@ -669,7 +669,7 @@ __global__ void kernel_bce_dense_loss_bwd(octree grad, int n_leafs, const octree
 }
 
 
-extern "C"
+
 void octree_bce_dense_loss_bwd_gpu(const octree* input, const ot_data_t* target, bool size_average, octree* grad) {
   octree_cpy_scalars(input, grad);
   octree_resize_as_gpu(input, grad);
@@ -748,7 +748,7 @@ struct octree_bce_ds_loss_from_leaf_idx : public thrust::unary_function<int, flo
   }
 };
 
-extern "C"
+
 void octree_bce_ds_loss_gpu(const octree* input, const octree* target, const octree* weights, bool size_average, ot_data_t* output, ot_data_t* total_weight) {
   if(!octree_equal_shape(input, target)) {
     printf("[ERROR] bce_ds_loss - shape of inputs do not match\n");
@@ -832,7 +832,7 @@ __global__ void kernel_bce_ds_loss_bwd(octree grad, int n_leafs, const octree in
 }
 
 
-extern "C"
+
 void octree_bce_ds_loss_bwd_gpu(const octree* input, const octree* target, const octree* weights, bool size_average, ot_data_t total_weight, octree* grad) {
   if(!octree_equal_shape(input, target)) {
     printf("[ERROR] bce_ds_loss_bwd - shape of inputs do not match\n");
@@ -879,7 +879,7 @@ struct dense_bce_loss_fcn : public thrust::unary_function<int, float2> {
   }
 };
 
-extern "C"
+
 void dense_bce_loss_gpu(const ot_data_t* input, const ot_data_t* target, const ot_data_t* weights, ot_size_t N, ot_data_t* output, ot_data_t* total_weight) {
 
   float2 init;
@@ -913,7 +913,7 @@ __global__ void kernel_dense_bce_loss_bwd(ot_data_t* grad, ot_size_t N, const ot
 }
 
 
-extern "C"
+
 void dense_bce_loss_bwd_gpu(const ot_data_t* input, const ot_data_t* target, const ot_data_t* weights, ot_size_t N, ot_data_t total_weight, ot_data_t* grad) {
   ot_data_t norm = total_weight > 0 ? 1.0 / total_weight : 0;
 

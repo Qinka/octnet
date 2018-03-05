@@ -25,6 +25,7 @@
 
 #include "octnet/core/conv3x3x3.h"
 #include "octnet/cpu/cpu.h"
+#include "octnet/cpu/conv.h"
 
 #include <cstdlib>
 #include <cstdio>

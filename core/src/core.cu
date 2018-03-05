@@ -40,7 +40,7 @@
 
 
 
-extern "C"
+
 octree* octree_new_gpu() {
   octree* grid = new octree;
   grid->n = 0;
@@ -60,7 +60,7 @@ octree* octree_new_gpu() {
   return grid;
 }
 
-extern "C"
+
 void octree_free_gpu(octree* grid_d) {
   device_free(grid_d->trees);
   device_free(grid_d->prefix_leafs);
@@ -117,7 +117,7 @@ __global__ void kernel_octree_clr_trees(ot_tree_t* trees, const int n_tree_ints)
   }
 }
 
-extern "C"
+
 void octree_clr_trees_gpu(octree* grid_d) {
   // cudaMemset(grid_d->trees, 0, octree_num_blocks(grid_d) * N_TREE_INTS * sizeof(ot_tree_t));
   int n_tree_ints = octree_num_blocks(grid_d) * N_TREE_INTS;
@@ -127,7 +127,7 @@ void octree_clr_trees_gpu(octree* grid_d) {
   CUDA_POST_KERNEL_CHECK; 
 }
 
-extern "C"
+
 void octree_fill_data_gpu(octree* grid_d, ot_data_t fill_value) {
   int n = grid_d->feature_size * grid_d->n_leafs;
   thrust::fill_n(thrust::device, grid_d->data, n, fill_value);
@@ -152,7 +152,7 @@ struct thrust_tree_num_leafs : public thrust::unary_function<int, OUT_TYPE> {
   }
 };
 
-extern "C"
+
 void octree_upd_n_leafs_gpu(octree* grid_d) {
   int n_blocks = octree_num_blocks(grid_d);
   thrust::counting_iterator<int> grid_idx_iter(0);
@@ -164,7 +164,7 @@ void octree_upd_n_leafs_gpu(octree* grid_d) {
   );
 }
 
-extern "C"
+
 void octree_upd_prefix_leafs_gpu(octree* grid_d) {
   int n_blocks = octree_num_blocks(grid_d);
   thrust::counting_iterator<int> grid_idx_iter(0);
@@ -231,7 +231,7 @@ __global__ void kernel_cpy_sup_to_sub(octree sub, int n_leafs, const octree sup)
   }
 }
 
-extern "C"
+
 void octree_cpy_sup_to_sub_gpu(const octree* sup, octree* sub) {
   octree_leaf_idx_to_grid_idx_gpu(sub, sub->feature_size, sub->data_capacity, sub->data);
   kernel_cpy_sup_to_sub<<<GET_BLOCKS(sub->n_leafs), CUDA_NUM_THREADS>>>(
@@ -257,7 +257,7 @@ __global__ void kernel_cpy_sub_to_sup(octree sup, int n_leafs, const octree sub)
   }
 }
 
-extern "C"
+
 void octree_cpy_sub_to_sup_sum_gpu(const octree* sub, octree* sup) {
   octree_fill_data_gpu(sup, 0); 
   kernel_cpy_sub_to_sup<<<GET_BLOCKS(sub->n_leafs), CUDA_NUM_THREADS>>>(
@@ -266,7 +266,7 @@ void octree_cpy_sub_to_sup_sum_gpu(const octree* sub, octree* sup) {
   CUDA_POST_KERNEL_CHECK; 
 }
 
-extern "C"
+
 void octree_copy_gpu(const octree* src, octree* dst) {
   octree_resize_as_gpu(src, dst);
   octree_cpy_trees_gpu_gpu(src, dst);

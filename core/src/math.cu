@@ -42,7 +42,7 @@ __global__ void kernel_add(ot_data_t* out, int n_data, const ot_data_t* in1, ot_
 }
 
 
-extern "C"
+
 void octree_add_gpu(const octree* in1, ot_data_t fac1, const octree* in2, ot_data_t fac2, bool check, octree* out) {
   if(DEBUG) { 
     printf("[DEBUG] octree_add_gpu\n");
@@ -77,7 +77,7 @@ __global__ void kernel_scalar_mul(ot_data_t* data, int N, const ot_data_t scalar
   }
 }
 
-extern "C"
+
 void octree_scalar_mul_gpu(octree* grid, const ot_data_t scalar) {
   int n = grid->n_leafs * grid->feature_size;
   kernel_scalar_mul<<<GET_BLOCKS(n), CUDA_NUM_THREADS>>>(
@@ -93,7 +93,7 @@ __global__ void kernel_scalar_add(ot_data_t* data, int N, const ot_data_t scalar
   }
 }
 
-extern "C"
+
 void octree_scalar_add_gpu(octree* grid, const ot_data_t scalar) {
   int n = grid->n_leafs * grid->feature_size;
   kernel_scalar_add<<<GET_BLOCKS(n), CUDA_NUM_THREADS>>>(
@@ -117,7 +117,7 @@ __global__ void kernel_sign(ot_data_t* data, int N) {
     }
   }
 }
-extern "C"
+
 void octree_sign_gpu(octree* grid) {
   int n = grid->n_leafs * grid->feature_size;
   kernel_sign<<<GET_BLOCKS(n), CUDA_NUM_THREADS>>>(
@@ -133,7 +133,7 @@ __global__ void kernel_abs(ot_data_t* data, int N) {
     data[idx] = fabs(val);
   }
 }
-extern "C"
+
 void octree_abs_gpu(octree* grid) {
   int n = grid->n_leafs * grid->feature_size;
   kernel_abs<<<GET_BLOCKS(n), CUDA_NUM_THREADS>>>(
@@ -149,7 +149,7 @@ __global__ void kernel_log(ot_data_t* data, int N) {
     data[idx] = log(val);
   }
 }
-extern "C"
+
 void octree_log_gpu(octree* grid) {
   int n = grid->n_leafs * grid->feature_size;
   kernel_log<<<GET_BLOCKS(n), CUDA_NUM_THREADS>>>(
@@ -161,7 +161,7 @@ void octree_log_gpu(octree* grid) {
 
 
 
-extern "C"
+
 ot_data_t octree_min_gpu(const octree* grid_in) {
   int n = grid_in->n_leafs * grid_in->feature_size;
   float* min_d = thrust::min_element(thrust::device, grid_in->data, grid_in->data + n);
@@ -170,7 +170,7 @@ ot_data_t octree_min_gpu(const octree* grid_in) {
   return min_h;
 }
 
-extern "C"
+
 ot_data_t octree_max_gpu(const octree* grid_in) {
   int n = grid_in->n_leafs * grid_in->feature_size;
   float* max_d = thrust::max_element(thrust::device, grid_in->data, grid_in->data + n);

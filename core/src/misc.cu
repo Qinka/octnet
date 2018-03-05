@@ -46,7 +46,7 @@ __global__ void kernel_mask_by_label(ot_data_t* values, int n_leafs, const ot_da
   }
 }
 
-extern "C"
+
 void octree_mask_by_label_gpu(const octree* labels, int mask_label, bool check, octree* values) {
   if(check && (labels->feature_size != 1 || !octree_equal_trees_gpu(labels, values))) {
     printf("[ERROR] mask_by_label - tree structure of inputs do not match\n");
@@ -92,7 +92,7 @@ __global__ void kernel_determine_gt_split(octree out, int n_leafs, const octree 
   }
 }
 
-extern "C"
+
 void octree_determine_gt_split_gpu(const octree* struc, const ot_data_t* gt, octree* out) {
   octree_resize_gpu(struc->n, struc->grid_depth, struc->grid_height, struc->grid_width, 1, struc->n_leafs, out);
   octree_cpy_trees_gpu_gpu(struc, out);

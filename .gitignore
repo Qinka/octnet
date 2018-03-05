@@ -20,3 +20,8 @@ reproduce/results
 build.d
 
 .vscode
+pytorch/octnet/_ext
+pytorch/build
+pytorch/dist
+
+*.egg-info

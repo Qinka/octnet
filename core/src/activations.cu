@@ -164,7 +164,7 @@ __global__ void kernel_logsoftmax(ot_data_t* out, int n_leafs, const ot_data_t* 
   }
 }
 
-extern "C"
+
 void octree_logsoftmax_gpu(const octree* in, octree* out) {
   octree_resize_as_gpu(in, out);
   octree_cpy_scalars(in, out);
@@ -192,7 +192,7 @@ __global__ void kernel_logsoftmax_bwd(ot_data_t* grad_in, int n_leafs, const ot_
   }
 }
 
-extern "C"
+
 void octree_logsoftmax_bwd_gpu(const octree* in, const octree* out, const octree* grad_out, octree* grad_in) {
   octree_resize_as_gpu(in, grad_in);
   octree_cpy_scalars(in, grad_in);

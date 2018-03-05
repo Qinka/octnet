@@ -26,6 +26,7 @@
 #include "octnet/gpu/pool.h"
 #include "octnet/gpu/gpu.h"
 #include "octnet/core/z_curve.h"
+#include "octnet/gpu/split.h"
 
 #include <thrust/execution_policy.h>
 
@@ -80,7 +81,7 @@ __global__ void kernel_split_by_prob_struct(octree out, int n_blocks, const octr
   }
 }
 
-extern "C"
+
 void octree_split_by_prob_gpu(const octree* in, const octree* prob, const ot_data_t thr, bool check, octree* out) {
   if(prob->feature_size != 1) {
     printf("[ERROR]: split_by_prob - prob feature size != 1 (is %d)\n", prob->feature_size);
@@ -110,7 +111,7 @@ void octree_split_by_prob_gpu(const octree* in, const octree* prob, const ot_dat
   octree_cpy_sup_to_sub_gpu(in, out);
 }
 
-extern "C"
+
 void octree_split_full_gpu(const octree* in, octree* out) {
   octree_resize_as_gpu(in, out);
   int n_blocks = octree_num_blocks(in);
@@ -260,7 +261,7 @@ __global__ void kernel_split_reconstruction_surface_struct(octree out, int n_lea
   }
 }
 
-extern "C"
+
 void octree_split_reconstruction_surface_gpu(const octree* in, const octree* rec, ot_data_t rec_thr_from, ot_data_t rec_thr_to, octree* out) {
   if(rec->feature_size != 1) {
     printf("[ERROR] split_reconstruction_surface - feature size of rec has to be 1\n");
@@ -286,7 +287,7 @@ void octree_split_reconstruction_surface_gpu(const octree* in, const octree* rec
   octree_cpy_sup_to_sub_gpu(in, out);
 }
 
-extern "C"
+
 void octree_split_bwd_gpu(const octree* in, const octree* grad_out, octree* grad_in) {
   octree_cpy_scalars(in, grad_in);
   octree_resize_as_gpu(in, grad_in);
@@ -485,7 +486,7 @@ __global__ void kernel_split_dense_reconstruction_surface_data(octree out, ot_si
   }
 }
 
-extern "C"
+
 void octree_split_dense_reconstruction_surface_gpu(const ot_data_t* features, const ot_data_t* reconstruction, int n, int dense_depth, int dense_height, int dense_width, int feature_size, ot_data_t rec_thr_from, ot_data_t rec_thr_to, int structure_type, octree* out) {
   if(dense_depth % 4 != 0 || dense_height % 4 != 0 || dense_width % 4 != 0) {
     printf("[ERROR] octree_split_dense_reconstruction_surface_gpu - dense dims has to be a factor of 4\n");
@@ -576,7 +577,7 @@ __global__ void kernel_split_dense_reconstruction_surface_bwd(ot_data_t* grad_in
   }
 }
 
-extern "C"
+
 void octree_split_dense_reconstruction_surface_bwd_gpu(const octree* grad_out, ot_data_t* grad_in) {
   int dense_depth = 4 * grad_out->grid_depth;
   int dense_height = 4 * grad_out->grid_height;
@@ -688,7 +689,7 @@ __global__ void kernel_octree_split_dense_reconstruction_surface_fres_data(octre
   }
 }
 
-extern "C"
+
 void octree_split_dense_reconstruction_surface_fres_gpu(const ot_data_t* features, const ot_data_t* reconstruction, int n, int dense_depth, int dense_height, int dense_width, int feature_size, ot_data_t rec_thr_from, ot_data_t rec_thr_to, int band, octree* out) {
   if(dense_depth % 8 != 0 || dense_height % 8 != 0 || dense_width % 8 != 0) {
     printf("[ERROR] octrecpue_split_dense_reconstruction_surface_fres_gpu - dense dims has to be a factor of 8\n");
@@ -747,7 +748,7 @@ __global__ void kernel_octree_split_dense_reconstruction_surface_fres_bwd(ot_dat
     }
   }
 }
-extern "C"
+
 void octree_split_dense_reconstruction_surface_fres_bwd_gpu(const octree* grad_out, ot_data_t* grad_in) {
   int dense_depth = 8 * grad_out->grid_depth;
   int dense_height = 8 * grad_out->grid_height;
@@ -827,7 +828,6 @@ __global__ void kernel_split_tsdf_or_trees(ot_tree_t* out_trees, const int n_tre
   }
 }
 
-extern "C"
 void octree_split_tsdf_gpu(const ot_data_t* features, const ot_data_t* reconstruction, const octree* guide, int n, int dense_depth, int dense_height, int dense_width, int feature_size, int band, octree* out) {
   if(dense_depth % 4 != 0 || dense_height % 4 != 0 || dense_width % 4 != 0) {
     printf("[ERROR] octree_split_tsdf_gpu - dense dims has to be a factor of 4\n");

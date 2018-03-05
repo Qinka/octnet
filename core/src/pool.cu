@@ -253,25 +253,25 @@ void octree_pool2x2x2_bwd_gpu(const octree* in, const octree* grad_out, octree* 
 
 
 
-extern "C"
+
 void octree_pool2x2x2_avg_gpu(const octree* in, bool level_0, bool level_1, bool level_2, octree* out) {
   if(DEBUG) { printf("[DEBUG] octree_pool2x2x2_avg_gpu\n"); }
   octree_pool2x2x2_gpu<REDUCE_AVG>(in, level_0, level_1, level_2, out);
 }
 
-extern "C"
+
 void octree_pool2x2x2_max_gpu(const octree* in, bool level_0, bool level_1, bool level_2, octree* out) {
   if(DEBUG) { printf("[DEBUG] octree_pool2x2x2_max_gpu\n"); }
   octree_pool2x2x2_gpu<REDUCE_MAX>(in, level_0, level_1, level_2, out);
 }
 
-extern "C"
+
 void octree_pool2x2x2_avg_bwd_gpu(const octree* in, const octree* grad_out, octree* grad_in) {
   if(DEBUG) { printf("[DEBUG] octree_pool2x2x2_avg_bwd_gpu\n"); }
   octree_pool2x2x2_bwd_gpu<REDUCE_AVG>(in, grad_out, grad_in);
 }
 
-extern "C"
+
 void octree_pool2x2x2_max_bwd_gpu(const octree* in, const octree* grad_out, octree* grad_in) {
   if(DEBUG) { printf("[DEBUG] octree_pool2x2x2_max_bwd_gpu\n"); }
   octree_pool2x2x2_bwd_gpu<REDUCE_MAX>(in, grad_out, grad_in);
