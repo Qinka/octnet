@@ -31,7 +31,7 @@
 #include <omp.h>
 #endif
 
-#include "geometry_cpu.h"
+#include "octnet/geometry/geometry_cpu.h"
 
 
 int ray_casting_cpu(float3 vx_offset, float3 vx_width, int depth, int height, int width, float3 C, float3 ray, int** pos, float** ts) {

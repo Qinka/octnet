@@ -372,7 +372,7 @@ local function script_path()
 end
 local sp = script_path()
 
-local libnames = {sp..'../../core/build/liboctnet_core.so', sp..'../../core/build/liboctnet_core.dylib'} 
+local libnames = {'liboctnet_core.so', 'liboctnet_core.dylib', 'octnet_core.dll', 'octnet_core.lib'} 
 local ok = false
 for i = 1, #libnames do
   ok = pcall(function () oc.cpu = ffi.load(libnames[i]) end)

@@ -1,4 +1,5 @@
 # Copyright (c) 2017, The OctNet authors
+#               2018, Johann Lee
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -23,15 +24,22 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+## CMAKE
 cmake_minimum_required(VERSION 3.3)
+project(octnet)
+
+
+###
+## Setting
+###
+
 set(CMAKE_MACOSX_RPATH 1)
 
+## C/C++ standard
 set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_C_STANDARD   11)
 
-option(ENABLE_CUDA"Enable CUDA" OFF)
-
-# set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_BUILD_TYPE Release)
+## SSE arch
 if(MSVC)
   set(CMAKE_C_FLAGS   "${CMAKE_C_FLAG}   /arch:SSE /arch:SSE2 /arch:SSE3 /arch:SSE4.2 ")
   set(CMAKE_CXX_FLAGS "${CMAKE_XXC_FLAG} /arch:SSE /arch:SSE2 /arch:SSE3 /arch:SSE4.2 ")
@@ -40,74 +48,118 @@ else(MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse -msse2 -msse3 -msse4.2 -fPIC")
 endif(MSVC)
 
-
+## Open MP
 find_package(OpenMP)
 if (OPENMP_FOUND)
   set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 endif()
 
-include_directories("include/")
+
+###
+## Options
+###
+option(
+  ENABLE_CUDA
+  "Enable support of CUDA"
+  OFF
+  )
+option(
+  ENABLE_TORCH
+  "Enable support of torch"
+  ON
+  )
+option(
+  ENABLE_CREATER
+  "ENABLE tools of create datas"
+  ON
+  )
+
+
+###
+## Variables
+###
+#PATH
+set(OCTNET_DIR       ${PROJECT_SOURCE_DIR})
+set(OCTNET_SRC_DIR   ${OCTNET_DIR}/src)
+set(CORE_DIR         ${OCTNET_SRC_DIR}/core)
+set(CORE_CPU_DIR     ${CORE_DIR}/cpu)
+set(CORE_GPU_DIR     ${CORE_DIR}/gpu)
+set(CREATER_DIR      ${OCTNET_SRC_DIR}/create)
+set(GEOMETRY_DIR      ${OCTNET_SRC_DIR}/geometry)
+set(TH_DIR           ${OCTNET_SRC_DIR}/th)
+set(TH_CPU_DIR       ${TH_DIR}/cpu)
+set(TH_GPU_DIR       ${TH_DIR}/gpu)
+set(OCTNET_INC_DIR   ${OCTNET_DIR}/include)
+set(OCTNET_TEST_DIR  ${OCTNET_DIR}/test)
+
+# SRC
+aux_source_directory(${CORE_CPU_DIR} CORE_CPU_SRC)
+aux_source_directory(${CORE_GPU_DIR} CORE_GPU_SRC)
+aux_source_directory(${CREATER_DIR}  CREATER_SRC)
+aux_source_directory(${GEOMETRY_DIR} GEOMETRY_SRC)
+aux_source_directory(${TH_CPU_DIR}   TH_CPU_SRC)
+aux_source_directory(${TH_GPU_DIR}   TH_GPU_SRC)
+set(OCTNET_SRC ${CORE_CPU_SRC})
+if (ENABLE_CUDA)
+  set(OCTNET_SRC ${OCTNET_SRC} ${CORE_GPU_SRC})
+endif(ENABLE_CUDA)
+if (ENABLE_CREATER)
+  set(OCTNET_SRC ${OCTNET_SRC} ${CREATER_SRC} ${GEOMETRY_SRC})
+endif(ENABLE_CREATER)
+if (ENABLE_TORCH)
+  set(OCTNET_SRC ${OCTNET_SRC} ${TH_CPU_SRC})
+  if(ENABLE_CUDA)
+    set(OCTNET_SRC ${OCTNET_SRC} ${TH_GPU_SRC})
+  endif(ENABLE_CUDA)
+endif(ENABLE_TORCH)
+
+# find cuda
 if(ENABLE_CUDA)
   find_package(CUDA 8.0 REQUIRED)
   set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS};-std=c++11")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_FORCE_INLINES -Wall")
 endif(ENABLE_CUDA)
 
+# find torch
+if (ENABLE_TORCH)
+  find_package(Torch REQUIRED)
+  include_directories(${TH_INCLUDE_DIR})
+  include_directories("${Torch_INSTALL_INCLUDE}/THC")
+  link_directories("${Torch_INSTALL_LIB}")
+  set(TORCH_LIBS TH THC)
+endif(ENABLE_TORCH)
 
-set(OCTREE_CPU_SRCS 
-  src/core.cc
-  src/io.cc
-  src/o2d.cc
-  src/d2o.cc
-  src/conv.cc
-  src/pool.cc
-  src/gridpool.cc
-  src/gridunpool.cc
-  src/math.cc
-  src/misc.cc
-  src/concat.cc
-  src/combine.cc
-  src/activations.cc
-  src/split.cc
-  src/loss.cc
-  src/volumetric_upsampling.cc
-)
-
-set(OCTREE_GPU_SRCS 
-  src/core.cu
-  src/o2d.cu
-  src/d2o.cu
-  src/conv.cu
-  src/oc2col.cu
-  src/col2oc.cu
-  src/conv_mm.cu
-  src/pool.cu
-  src/gridpool.cu
-  src/gridunpool.cu
-  src/activations.cu
-  src/split.cu
-  src/math.cu
-  src/misc.cu
-  src/concat.cu
-  src/combine.cu
-  src/loss.cu
-  src/volumetric_upsampling.cu
-)
+# include Path
+include_directories(${OCTNET_INC_DIR})
 
 if(ENABLE_CUDA)
-cuda_add_library(octnet_core SHARED ${OCTREE_GPU_SRCS} ${OCTREE_CPU_SRCS})
-CUDA_ADD_CUBLAS_TO_TARGET(octnet_core)
+  cuda_add_library(octnet SHARED ${OCTNET_SRC})
+  CUDA_ADD_CUBLAS_TO_TARGET(octnet)
 else(ENABLE_CUDA)
-add_library(octnet_core SHARED ${OCTREE_CPU_SRCS})
+  add_library(octnet SHARED ${OCTNET_SRC})
 endif(ENABLE_CUDA)
-
+#define
 if(MSVC)
-target_compile_definitions(octnet_core PUBLIC /D OCTREE_EXPORT)
+  target_compile_definitions(octnet PUBLIC /D OCTREE_EXPORT)
 endif(MSVC)
+# torch
+if (ENABLE_TORCH)
+  target_link_libraries(octnet ${TORCH_LIBS})
+endif(ENABLE_TORCH)
 
-add_executable(test_octree test/test_octree.cc)
-target_link_libraries(test_octree octnet_core)
+enable_testing()
+
+add_executable(test_octree ${OCTNET_TEST_DIR}/test_octree.cc)
+target_link_libraries(test_octree octnet)
+
+add_executable(test_create ${OCTNET_TEST_DIR}/test_create.cpp)
+target_link_libraries(test_create octnet ${OctNetCore_LIBRARY})
+
+
+
+add_test(OCTNET_TEST test_octnet)
+add_test(OCTNET_TEST test_create)
 
 
 if(ENABLE_CUDA)

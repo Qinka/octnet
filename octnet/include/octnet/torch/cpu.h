@@ -27,15 +27,10 @@
 #define OCTREE_TORCH_H
 
 #include "octnet/core/core.h"
+#include "TH.h"
 
-#include "THC.h"
 
-extern "C" {
-
-THCudaStorage* octree_data_torch_gpu(octree* grid);
-
-cublasHandle_t octree_torch_current_cublas_handle_gpu(THCState* state);
-
-}
+OCTREE_API
+THFloatStorage* octree_data_torch_cpu(octree* grid);
 
 #endif // OCTREE_TORCH_H

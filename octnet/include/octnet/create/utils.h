@@ -3,10 +3,11 @@
 
 #include "octnet/core/core.h"
 
-extern "C" {
 
+OCTREE_API
 void octree_scanline_fill(octree* grid, ot_data_t fill_value);
 
+OCTREE_API
 void octree_occupancy_to_surface(octree* in, octree* out);
 
 /// Converts a dense occupancy representation to a dense surface representation
@@ -19,8 +20,8 @@ void octree_occupancy_to_surface(octree* in, octree* out);
 /// @param width
 /// @param surface_width
 /// @param surface
+OCTREE_API
 void dense_occupancy_to_surface(const ot_data_t* dense, int depth, int height, int width, int n_iter, ot_data_t* surface);
 
-}
 
 #endif
