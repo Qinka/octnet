@@ -14,7 +14,7 @@ import pyoctnet
 
 def create_data_with_model(cla=10, vx_res = 64,mn10_path = 'mn10.zip', pad=2, n_rots = 1, n_processes = 10, n_threads = 1, seed_num = 42):
 
-  out_root = './preprocessed/mn' + cla + '/r' + str(vx_res)
+  out_root = './preprocessed/mn' + str(cla) + '/r' + str(vx_res)
 
   random.seed(seed_num)
   np.random.seed(seed_num)
