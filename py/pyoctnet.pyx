@@ -80,7 +80,7 @@ cdef class FloatArrayWrapper:
 
 
 
-cdef extern from os.path.join(OC_INC_DIR,"octnet/core/core.h"):
+cdef extern from (os.path.join(OC_INC_DIR,"octnet/core/core.h")):
   ctypedef int ot_size_t;
   ctypedef float ot_data_t;
   ctypedef int ot_tree_t;
@@ -112,7 +112,7 @@ cdef extern from os.path.join(OC_INC_DIR,"octnet/core/core.h"):
   int octree_mem_using(const octree* grid);
 
 
-cdef extern from os.path.join(OC_INC_DIR,"octnet/cpu/cpu.h"):
+cdef extern from (os.path.join(OC_INC_DIR,"octnet/cpu/cpu.h")):
   void octree_print_cpu(const octree* grid_h);
   octree* octree_new_cpu();
   void octree_free_cpu(octree* grid_h);
@@ -122,12 +122,12 @@ cdef extern from os.path.join(OC_INC_DIR,"octnet/cpu/cpu.h"):
   void octree_upd_prefix_leafs_cpu(octree* grid_h);
   bool octree_equal_cpu(const octree* in1, const octree* in2);
 
-cdef extern from os.path.join(OC_INC_DIR,"octnet/cpu/dense.h"):
+cdef extern from (os.path.join(OC_INC_DIR,"octnet/cpu/dense.h")):
   void octree_to_dhwc_cpu(const octree* grid_h, const int dense_depth, const int dense_height, const int dense_width, ot_data_t* data);
   void octree_to_cdhw_cpu(const octree* grid_h, const int dense_depth, const int dense_height, const int dense_width, ot_data_t* data);
   void cdhw_to_octree_avg_cpu(const octree* grid_h_in, const int dense_depth, const int dense_height, const int dense_width, const ot_data_t* data, int out_feature_size, octree* grid_h_out);
 
-cdef extern from os.path.join(OC_INC_DIR,"octnet/cpu/io.h"):
+cdef extern from (os.path.join(OC_INC_DIR,"octnet/cpu/io.h")):
   void octree_read_deprecated_cpu(const char* path, octree* grid_h);
   void dense_read_prealloc_deprecated_cpu(const char* path, int n_dim, const int* dims, ot_data_t* data);
   int* dense_read_header_deprecated_cpu(const char* path, int* n_dim);
@@ -143,26 +143,26 @@ cdef extern from os.path.join(OC_INC_DIR,"octnet/cpu/io.h"):
   void dense_write_cpu(const char* path, int n_dim, const int* dims, const ot_data_t* data);
 
 
-cdef extern from os.path.join(OC_INC_DIR,"octnet/cpu/misc.h"):
+cdef extern from (os.path.join(OC_INC_DIR,"octnet/cpu/misc.h")):
   void octree_determine_gt_split_cpu(const octree* struc, const ot_data_t* gt, octree* out);
 
-cdef extern from os.path.join(OC_INC_DIR,"octnet/cpu/split.h"):
+cdef extern from (os.path.join(OC_INC_DIR,"octnet/cpu/split.h")):
   void octree_split_dense_reconstruction_surface_fres_cpu(const ot_data_t* features, const ot_data_t* reconstruction, int n, int dense_depth, int dense_height, int dense_width, int feature_size, ot_data_t rec_thr_from, ot_data_t rec_thr_to, int band, octree* out);
 
-cdef extern from os.path.join(OC_INC_DIR,"octnet/cpu/pool.h"):
+cdef extern from (os.path.join(OC_INC_DIR,"octnet/cpu/pool.h")):
   void octree_gridpool2x2x2_max_cpu(const octree* in_oc, octree* out);
 
-cdef extern from os.path.join(OC_INC_DIR,"octnet/cpu/unpool.h"):
+cdef extern from (os.path.join(OC_INC_DIR,"octnet/cpu/unpool.h")):
   void octree_gridunpool2x2x2_cpu(const octree* in_oc, octree* out);
   void octree_gridunpoolguided2x2x2_cpu(const octree* in_oc, const octree* in_struct, octree* out);
 
-cdef extern from os.path.join(OC_INC_DIR,"octnet/cpu/conv.h"):
+cdef extern from (os.path.join(OC_INC_DIR,"octnet/cpu/conv.h")):
   void octree_conv3x3x3_avg_cpu(const octree* grid_in_h, const ot_data_t* weights, const ot_data_t* bias, int channels_out, octree* grid);
 
-cdef extern from os.path.join(OC_INC_DIR,"octnet/cpu/combine.h"):
+cdef extern from (os.path.join(OC_INC_DIR,"octnet/cpu/combine.h")):
   void octree_extract_feature_cpu(const octree* grid_in, int feature_from, int feature_to, octree* out);
 
-cdef extern from os.path.join(OC_INC_DIR,"octnet/create/create.h"):
+cdef extern from (os.path.join(OC_INC_DIR,"octnet/create/create.h")):
   octree* octree_create_from_dense_cpu(const ot_data_t* data, int feature_size, int depth, int height, int width, bool fit, int fit_multiply, bool pack, int n_threads);
   octree* octree_create_from_dense2_cpu(const ot_data_t* occupancy, const ot_data_t* features, int feature_size, int depth, int height, int width, bool fit, int fit_multiply, bool pack, int n_threads);
   octree* octree_create_from_mesh_cpu(int n_verts_, float* verts_, int n_faces_, int* faces, bool rescale_verts, ot_size_t depth, ot_size_t height, ot_size_t width, bool fit, int fit_multiply, bool pack, int pad, int n_threads);
@@ -172,7 +172,7 @@ cdef extern from os.path.join(OC_INC_DIR,"octnet/create/create.h"):
   octree* octree_create_from_pc_cpu(float* xyz, const float* features, int n_pts, int feature_size, ot_size_t depth, ot_size_t height, ot_size_t width, bool normalize, bool normalize_inplace, bool fit, int fit_multiply, bool pack, int pad, int n_threads);
   void octree_create_dense_from_pc_cpu(const float* xyz, const float* features, float* vol, int n_pts, int feature_size, ot_size_t depth, ot_size_t height, ot_size_t width, int n_threads);
 
-cdef extern from os.path.join(OC_INC_DIR,"octnet/create/utils.h"):
+cdef extern from (os.path.join(OC_INC_DIR,"octnet/create/utils.h")):
   void octree_scanline_fill(octree* grid, ot_data_t fill_value);
   void octree_occupancy_to_surface(octree* inp, octree* out);
   void dense_occupancy_to_surface(const ot_data_t* dense, int depth, int height, int width, int n_iter, ot_data_t* surface);
