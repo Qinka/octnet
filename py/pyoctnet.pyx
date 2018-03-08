@@ -80,7 +80,7 @@ cdef class FloatArrayWrapper:
 
 
 
-cdef extern from unicodeunicode(os.path.join(OC_INC_DIR,"octnet/core/core.h")):
+cdef extern from "octnet/core/core.h":
   ctypedef int ot_size_t;
   ctypedef float ot_data_t;
   ctypedef int ot_tree_t;
