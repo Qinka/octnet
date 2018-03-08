@@ -75,6 +75,9 @@ option(
   ON
   )
 
+  variable_watch(USING_CUDA)
+  variable_watch(USING_TORCH)
+
 
 
 ###
@@ -149,7 +152,7 @@ if (USING_TORCH)
   target_link_libraries(octnet ${TORCH_LIBS})
 endif(USING_TORCH)
 
-USING_testing()
+ENABLE_testing()
 
 add_executable(test_octree ${OCTNET_TEST_DIR}/test_octree.cc)
 target_link_libraries(test_octree octnet)
