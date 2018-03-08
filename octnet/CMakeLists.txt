@@ -60,20 +60,21 @@ endif()
 ## Options
 ###
 option(
-  ENABLE_CUDA
+  USING_CUDA
   "Enable support of CUDA"
   OFF
   )
 option(
-  ENABLE_TORCH
+  USING_TORCH
   "Enable support of torch"
   ON
   )
 option(
-  ENABLE_CREATER
+  USING_CREATER
   "ENABLE tools of create datas"
   ON
   )
+
 
 
 ###
@@ -101,54 +102,54 @@ aux_source_directory(${GEOMETRY_DIR} GEOMETRY_SRC)
 aux_source_directory(${TH_CPU_DIR}   TH_CPU_SRC)
 aux_source_directory(${TH_GPU_DIR}   TH_GPU_SRC)
 set(OCTNET_SRC ${CORE_CPU_SRC})
-if (ENABLE_CUDA)
+if (USING_CUDA)
   set(OCTNET_SRC ${OCTNET_SRC} ${CORE_GPU_SRC})
-endif(ENABLE_CUDA)
-if (ENABLE_CREATER)
+endif(USING_CUDA)
+if (USING_CREATER)
   set(OCTNET_SRC ${OCTNET_SRC} ${CREATER_SRC} ${GEOMETRY_SRC})
-endif(ENABLE_CREATER)
-if (ENABLE_TORCH)
+endif(USING_CREATER)
+if (USING_TORCH)
   set(OCTNET_SRC ${OCTNET_SRC} ${TH_CPU_SRC})
-  if(ENABLE_CUDA)
+  if(USING_CUDA)
     set(OCTNET_SRC ${OCTNET_SRC} ${TH_GPU_SRC})
-  endif(ENABLE_CUDA)
-endif(ENABLE_TORCH)
+  endif(USING_CUDA)
+endif(USING_TORCH)
 
 # find cuda
-if(ENABLE_CUDA)
+if(USING_CUDA)
   find_package(CUDA 8.0 REQUIRED)
   set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS};-std=c++11")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_FORCE_INLINES -Wall")
-endif(ENABLE_CUDA)
+endif(USING_CUDA)
 
 # find torch
-if (ENABLE_TORCH)
+if (USING_TORCH)
   find_package(Torch REQUIRED)
   include_directories(${TH_INCLUDE_DIR})
   include_directories("${Torch_INSTALL_INCLUDE}/THC")
   link_directories("${Torch_INSTALL_LIB}")
   set(TORCH_LIBS TH THC)
-endif(ENABLE_TORCH)
+endif(USING_TORCH)
 
 # include Path
 include_directories(${OCTNET_INC_DIR})
 
-if(ENABLE_CUDA)
+if(USING_CUDA)
   cuda_add_library(octnet SHARED ${OCTNET_SRC})
   CUDA_ADD_CUBLAS_TO_TARGET(octnet)
-else(ENABLE_CUDA)
+else(USING_CUDA)
   add_library(octnet SHARED ${OCTNET_SRC})
-endif(ENABLE_CUDA)
+endif(USING_CUDA)
 #define
 if(MSVC)
   target_compile_definitions(octnet PUBLIC /D OCTREE_EXPORT)
 endif(MSVC)
 # torch
-if (ENABLE_TORCH)
+if (USING_TORCH)
   target_link_libraries(octnet ${TORCH_LIBS})
-endif(ENABLE_TORCH)
+endif(USING_TORCH)
 
-enable_testing()
+USING_testing()
 
 add_executable(test_octree ${OCTNET_TEST_DIR}/test_octree.cc)
 target_link_libraries(test_octree octnet)
@@ -162,7 +163,7 @@ add_test(OCTNET_TEST test_octnet)
 add_test(OCTNET_TEST test_create)
 
 
-if(ENABLE_CUDA)
+if(USING_CUDA)
   # performance tests
   # cuda_add_executable(test_data_idx_speed test/test_data_idx_speed.cu)
   # target_link_libraries(test_data_idx_speed ${OctNetCore_LIBRARY} octnet_core)
@@ -175,4 +176,4 @@ if(ENABLE_CUDA)
   # cuda_add_executable(test_conv_mm test/test_conv_mm.cu)
   # target_link_libraries(test_conv_mm ${OctNetCore_LIBRARY} octnet_core_gpu)
   # cuda_add_cublas_to_target(test_conv_mm)
-endif(ENABLE_CUDA)
+endif(USING_CUDA)
