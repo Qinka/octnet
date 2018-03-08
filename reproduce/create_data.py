@@ -109,7 +109,7 @@ def worker(rot_idx, rot, off_idx, off_path,n_rots,opsl,out_root,vx_res,pad,n_thr
   grid = pyoctnet.Octree.create_from_off(off_path.encode(), vx_res,vx_res,vx_res, R, pad=pad, n_threads=n_threads)
   print('  took %f[s]' % (time.time() - t))
 
-  oc_out_path = os.path.join(rot_out_dir, '%s_%s.oc' % (train_test_prefix.encode(), basename.encode()))
+  oc_out_path = os.path.join(rot_out_dir, b'%s_%s.oc' % (train_test_prefix.encode(), basename.encode()))
   print('write bin - %s' % oc_out_path)
   t = time.time()
   grid.write_bin(oc_out_path)
