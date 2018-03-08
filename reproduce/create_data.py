@@ -112,5 +112,5 @@ def worker(rot_idx, rot, off_idx, off_path,n_rots,opsl,out_root,vx_res,pad,n_thr
   oc_out_path = os.path.join(rot_out_dir, ('%s_%s.oc' % (train_test_prefix, basename)).encode())
   print('write bin - %s' % oc_out_path)
   t = time.time()
-  grid.write_bin(oc_out_path)
+  grid.write_bin(oc_out_path.encode())
   print('  took %f[s]' % (time.time() - t))
