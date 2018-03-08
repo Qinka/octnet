@@ -49,6 +49,7 @@ setup(
                             os.environ['OC_INC_DIR']
               ],
               libraries=['octnet'],
+              library_dirs=[os.environ['OC_LIB_DIR']],
               extra_compile_args=extra_compile_args,
               extra_link_args=extra_link_args
     )
