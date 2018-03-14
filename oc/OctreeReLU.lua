@@ -32,7 +32,9 @@ function OctreeReLU:__init(inplace)
 end
 
 function OctreeReLU:updateOutput(input)
-  self.output = input
+  if self.inplace then
+    self.output = input
+  end
 
   if input._type == 'oc_float' then
     oc.cpu.octree_relu_cpu(input.grid, self.inplace, self.output.grid)
@@ -44,7 +46,9 @@ function OctreeReLU:updateOutput(input)
 end 
 
 function OctreeReLU:updateGradInput(input, gradOutput)
-  self.gradInput = gradOutput
+  if self.inplace then
+    self.gradInput = gradOutput
+  end 
 
   if input._type == 'oc_float' then
     oc.cpu.octree_relu_bwd_cpu(input.grid, gradOutput.grid, self.inplace, self.gradInput.grid)

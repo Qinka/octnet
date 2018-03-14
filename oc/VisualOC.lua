@@ -49,7 +49,7 @@ function  VisualOC:updateOutput(input)
         first = false;
     end
     self.output = input
-    return output
+    return self.output
 end
 
 function VisualOC:updateGradInput(intput,gradOutput)
