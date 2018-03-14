@@ -40,6 +40,7 @@ function  VisualOC:updateOutput(input)
         elseif input._type == 'oc_cuda' then
             oc.gpu.octree_to_cdhw_gpu(input.grid, dense_depth, dense_height, dense_width, self.video:data())
         end
+        self.video:resize(out_size)
         self.ok = pcall(plot.image, plot.image, {tensor = video})
         if self.ok then
             print('Uploaded video\n\n\n')
