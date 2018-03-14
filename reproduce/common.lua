@@ -150,8 +150,8 @@ function common.net_he_init(net)
 end
 
 
-function common.train_epoch(opt, data_loader)
-  local net = opt.net or error('no net in train_epoch')
+function common.train_epoch(,opt, data_loader)
+  local net = opt.net(true) or error('no net in train_epoch')
   local criterion = opt.criterion or error('no criterion in train_epoch')
   local optimizer = opt.optimizer or error('no optimizer in train_epoch')
   local n_batches = data_loader:n_batches()
@@ -183,7 +183,7 @@ function common.train_epoch(opt, data_loader)
 end
 
 function common.test_epoch(opt, data_loader)
-  local net = opt.net or error('no net in test_epoch')
+  local net = opt.net(false) or error('no net in test_epoch')
   local criterion = opt.criterion or error('no criterion in test_epoch')
   local n_batches = data_loader:n_batches()
 

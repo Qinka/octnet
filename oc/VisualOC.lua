@@ -11,13 +11,14 @@ end
 
 local VisualOC, parent = torch.class('oc.VisualOC', 'oc.OctreeModule')
 
-function VisualOC:__init(dense_depth, dense_height, dense_width)
+function VisualOC:__init(skipped,dense_depth, dense_height, dense_width)
     parent.__init(self)
     self.ok = nil;
     self.video = torch.FloatTensor()
     self.dense_depth = dense_depth
     self.dense_height = dense_height
     self.dense_width = dense_width
+    self.skipped
 end
 
 function VisualOC:dense_dimensions(octrees)
@@ -29,8 +30,8 @@ function VisualOC:dense_dimensions(octrees)
 end 
 
 function  VisualOC:updateOutput(input)
-    if first then
-        print('\n\n\n\nsave visual oc\a')
+    if not self.skipped then
+        print('\nsave visual oc\a')
         local dense_depth, dense_height, dense_width = self:dense_dimensions(input)
         local out_size = torch.LongStorage({input:n() *input:feature_size() * dense_depth, 1,dense_height, dense_width})
         self.video:resize(out_size)
@@ -41,14 +42,7 @@ function  VisualOC:updateOutput(input)
         end
         self.video:resize(out_size)
         print(self.video:size())
-        -- self.ok = pcall(plot.image, plot.image, {tensor = video})
-        -- if self.ok then
-        --     print('Uploaded video\n\n\n')
-        -- else
-        --     print('Skipped video\n\n\n')
-        -- end
         plot:images{tensor=self.video}
-        first = false;
     end
     self.output = input
     return self.output

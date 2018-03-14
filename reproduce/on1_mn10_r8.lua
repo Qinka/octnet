@@ -28,11 +28,12 @@ function on1_mn10_r8.train(batch_size)
   opt.optimizer = optim['adam']
 
   local n_grids = 4096
-  opt.net = nn.Sequential()
+  function opt.net(skipped)
+    return nn.Sequential()
     -- conv(1,8)
     :add( oc.OctreeConvolutionMM(1,8, n_grids) )
     :add( oc.OctreeReLU(true) )
-    :add( oc.VisualOC() )
+    :add( oc.VisualOC(skipped) )
     :add( oc.OctreeToCDHW() )
     :add( nn.View(8*8*8*8) )
     -- dropout(0.5)
