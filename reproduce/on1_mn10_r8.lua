@@ -11,7 +11,7 @@ local on1_mn10_r8 = {}
 
 function on1_mn10_r8.train(batch_size,ll,skipped)
   local opt = {}
-
+  local ll = ll or ''
   opt.vx_size = 8
   opt.n_classes = 10
   opt.batch_size = batch_size
