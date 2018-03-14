@@ -59,6 +59,7 @@ include('OctreeSplitCriterion.lua')
 include('OctreeDummyCriterion.lua')
 
 include('VolumetricNNUpsampling.lua')
+include('VisualOC.lua')
 
 
 function oc.validateShape(in1, in2, ignore_dim) 
