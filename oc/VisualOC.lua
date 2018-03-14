@@ -13,7 +13,7 @@ end
 local VisualOCModel, parent = torch.class('oc.VisualOC', 'oc.OctreeModule')
 
 function VisualOCModel:__init()
-    parent.__init()
+    parent.__init(self)
     self.ok = nil;
     self.video = torch.FloatTensor()
     self.dense_depth = dense_depth
