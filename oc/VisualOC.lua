@@ -18,7 +18,7 @@ function VisualOC:__init(skipped,dense_depth, dense_height, dense_width)
     self.dense_depth = dense_depth
     self.dense_height = dense_height
     self.dense_width = dense_width
-    self.skipped
+    self.skipped = skipped
 end
 
 function VisualOC:dense_dimensions(octrees)
