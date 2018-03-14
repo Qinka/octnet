@@ -127,8 +127,7 @@ function common.string_split(str, sSeparator, nMax, bRegexp)
 end
 
 
-function common.net_he_init(net_f)
-  local net = net_f(false)
+function common.net_he_init(net)
   local function conv_init(model, name)
     for k,v in pairs(model:findModules(name)) do
       local n = v.kT * v.kW * v.kH * v.nOutputPlane
@@ -152,7 +151,7 @@ end
 
 
 function common.train_epoch(opt, data_loader)
-  local net = opt.net(true) or error('no net in train_epoch')
+  local net = opt.net or error('no net in train_epoch')
   local criterion = opt.criterion or error('no criterion in train_epoch')
   local optimizer = opt.optimizer or error('no optimizer in train_epoch')
   local n_batches = data_loader:n_batches()
@@ -184,7 +183,7 @@ function common.train_epoch(opt, data_loader)
 end
 
 function common.test_epoch(opt, data_loader)
-  local net = opt.net(false) or error('no net in test_epoch')
+  local net = opt.net or error('no net in test_epoch')
   local criterion = opt.criterion or error('no criterion in test_epoch')
   local n_batches = data_loader:n_batches()
 

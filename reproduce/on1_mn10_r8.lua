@@ -9,7 +9,7 @@ require('oc')
 
 local on1_mn10_r8 = {}
 
-function on1_mn10_r8.train(batch_size)
+function on1_mn10_r8.train(skipped,batch_size)
   local opt = {}
 
   opt.vx_size = 8
@@ -28,8 +28,7 @@ function on1_mn10_r8.train(batch_size)
   opt.optimizer = optim['adam']
 
   local n_grids = 4096
-  function opt.net(skipped)
-    return nn.Sequential()
+  opt.net() = nn.Sequential()
     -- conv(1,8)
     :add( oc.OctreeConvolutionMM(1,8, n_grids) )
     :add( oc.OctreeReLU(true) )
