@@ -10,9 +10,9 @@ if not plot:check_connection() then
    error('Could not connect, please ensure the visdom server is running')
 end
 
-local VisualOCModel, parent = torch.class('oc.VisualOC', 'oc.OctreeModule')
+local VisualOC, parent = torch.class('oc.VisualOC', 'oc.OctreeModule')
 
-function VisualOCModel:__init()
+function VisualOC:__init()
     parent.__init(self)
     self.ok = nil;
     self.video = torch.FloatTensor()
@@ -21,7 +21,7 @@ function VisualOCModel:__init()
     self.dense_width = dense_width
 end
 
-function VisualOCModel:dense_dimensions(octrees)
+function VisualOC:dense_dimensions(octrees)
     if self.dense_depth and self.dense_height and self.dense_width then
       return self.dense_depth, self.dense_height, self.dense_width 
     else
@@ -29,7 +29,7 @@ function VisualOCModel:dense_dimensions(octrees)
     end
   end 
 
-function  VisualOCModel:updateOutput(input)
+function  VisualOC:updateOutput(input)
     if first then
         local dense_depth, dense_height, dense_width = self:dense_dimensions(input)
         local out_size = torch.LongStorage({input:n(), input:feature_size(), dense_depth, dense_height, dense_width})
@@ -51,7 +51,7 @@ function  VisualOCModel:updateOutput(input)
     return output
 end
 
-function VisualOCModel:updateGradInput(intput,gradOutput)
+function VisualOC:updateGradInput(intput,gradOutput)
     self.gradInput = gradOutput
     return self.gradInput
 end
