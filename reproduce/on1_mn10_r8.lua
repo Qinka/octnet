@@ -16,7 +16,7 @@ function on1_mn10_r8.train(batch_size)
   opt.n_classes = 10
   opt.batch_size = batch_size
 
-  opt.ex_data_root = string.format('preprocessed/r%s',opt.vx_size)
+  opt.ex_data_root = string.format('preprocessed/mn%s/r%s',opt.n_classes,opt.vx_size)
   opt.ex_data_ext = 'oc'
   opt.out_root = string.format('results/on1/mn%s/r%s/b%s/%s',opt.n_classes,opt.vx_size,opt.batch_size,os.time())
 
