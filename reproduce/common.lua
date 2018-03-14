@@ -127,7 +127,8 @@ function common.string_split(str, sSeparator, nMax, bRegexp)
 end
 
 
-function common.net_he_init(net)
+function common.net_he_init(net_f)
+  local net = net_f(false)
   local function conv_init(model, name)
     for k,v in pairs(model:findModules(name)) do
       local n = v.kT * v.kW * v.kH * v.nOutputPlane
