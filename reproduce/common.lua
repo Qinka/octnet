@@ -150,7 +150,7 @@ function common.net_he_init(net)
 end
 
 
-function common.train_epoch(,opt, data_loader)
+function common.train_epoch(opt, data_loader)
   local net = opt.net(true) or error('no net in train_epoch')
   local criterion = opt.criterion or error('no criterion in train_epoch')
   local optimizer = opt.optimizer or error('no optimizer in train_epoch')
