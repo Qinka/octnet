@@ -46,6 +46,7 @@ function  VisualOC:updateOutput(input)
         else
             print('Skipped video\n\n\n')
         end
+        plot.image{img=video}
         first = false;
     end
     self.output = input
