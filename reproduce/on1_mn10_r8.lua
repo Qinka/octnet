@@ -42,8 +42,7 @@ function on1_mn10_r8.train(skipped,batch_size)
     :add( cudnn.ReLU(true) )
     -- fc(1024,10)
     :add( nn.Linear(1024, opt.n_classes) )
-  end
-
+    
   common.net_he_init(opt.net)
   opt.net:cuda()
   opt.criterion = nn.CrossEntropyCriterion()
