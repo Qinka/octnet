@@ -3,7 +3,7 @@
 
 require 'image'
 local visdom = require 'visdom'
-local first = false;
+local first = true;
 
 local plot = visdom{server = 'http://localhost', port = 8097}
 if not plot:check_connection() then

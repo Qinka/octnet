@@ -1,6 +1,6 @@
 #!/usr/bin/env th
 
-local on1_mn10_r16 = dofile('on1_mn10_r16.lua')
+local on1_mn10_r8 = dofile('on1_mn10_r8.lua')
 
 
-on1_mn10_r16.train(4)
+on1_mn10_r8.train(16)

@@ -7,9 +7,9 @@ require('cudnn')
 require('optim')
 require('oc')
 
-local on1_mn10_r8 = {}
+local on1_mn40_r8 = {}
 
-function on1_mn10_r8.train(batch_size)
+function on1_mn40_r8.train(batch_size)
   local opt = {}
 
   opt.vx_size = 8
@@ -18,11 +18,11 @@ function on1_mn10_r8.train(batch_size)
 
   opt.ex_data_root = string.format('preprocessed/mn%s/r%s',opt.n_classes,opt.vx_size)
   opt.ex_data_ext = 'oc'
-  opt.out_root = string.format('results/on1/mn%s/r%s/b%s/%s',opt.batch_size,opt.vx_size,opt.batch_size)
+  opt.out_root = string.format('results/on1/mn%s/b%s/s%s/%s',opt.n_classes,opt.batch_size,opt.vx_size,opt.batch_size)
 
   opt.weightDecay = 0.0001
   opt.learningRate = 1e-3
-  opt.n_epochs = 20
+  opt.n_epochs = 30
   opt.learningRate_steps = {}
   opt.learningRate_steps[15] = 0.1
   opt.optimizer = optim['adam']
@@ -30,17 +30,20 @@ function on1_mn10_r8.train(batch_size)
   local n_grids = 4096
   opt.net = nn.Sequential()
     -- conv(1,8)
-    :add( oc.OctreeConvolutionMM(1,8, n_grids) )
+    :add( oc.OctreeConvolutionMM(1,8, n_grids))
+    :add( oc.OctreeReLU(true) )
+    -- conv(8,16)
+    :add( oc.OctreeConvolutionMM(8,16, n_grids))
     :add( oc.OctreeReLU(true) )
 
     :add( oc.OctreeToCDHW() )
-    :add( nn.View(8*8*8*8) )
+    :add( nn.View(16*8*8*8) )
     -- dropout(0.5)
     :add( nn.Dropout(0.5) )
     -- fc(*,1024)
-    :add( nn.Linear(8*8*8*8, 1024) )
+    :add( nn.Linear(16*8*8*8, 1024) )
     :add( cudnn.ReLU(true) )
-    -- fc(1024,10)
+    -- fc(1024, classe)
     :add( nn.Linear(1024, opt.n_classes) )
 
   common.net_he_init(opt.net)
@@ -54,4 +57,4 @@ function on1_mn10_r8.train(batch_size)
   collectgarbage()
 end
 
-return on1_mn10_r8
+return on1_mn40_r8
