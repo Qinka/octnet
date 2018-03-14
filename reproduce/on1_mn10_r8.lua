@@ -12,6 +12,7 @@ local on1_mn10_r8 = {}
 function on1_mn10_r8.train(batch_size,skipped,ll)
   local opt = {}
   local ll = ll or ''
+  opt.vis_skipped = skipped
   opt.vx_size = 8
   opt.n_classes = 10
   opt.batch_size = batch_size
@@ -42,8 +43,8 @@ function on1_mn10_r8.train(batch_size,skipped,ll)
     :add( cudnn.ReLU(true) )
     -- fc(1024,10)
     :add( nn.Linear(1024, opt.n_classes) )
-  
 
+    
   common.net_he_init(opt.net)
   opt.net:cuda()
   opt.criterion = nn.CrossEntropyCriterion()

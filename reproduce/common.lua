@@ -187,6 +187,12 @@ function common.test_epoch(opt, data_loader)
   local criterion = opt.criterion or error('no criterion in test_epoch')
   local n_batches = data_loader:n_batches()
 
+
+  local vis_net = net:findModules('oc.VisualOC')
+  for net_idx = 1, table.getn(vis_net) do
+    vis_net.skipped = opt.skipped
+  end
+
   net:evaluate()
 
   local avg_f = 0
