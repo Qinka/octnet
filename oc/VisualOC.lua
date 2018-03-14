@@ -31,6 +31,7 @@ end
 
 function  VisualOC:updateOutput(input)
     if first then
+        print('save visual oc')
         local dense_depth, dense_height, dense_width = self:dense_dimensions(input)
         local out_size = torch.LongStorage({input:n(), input:feature_size(), dense_depth, dense_height, dense_width})
         self.video:resize(out_size)
