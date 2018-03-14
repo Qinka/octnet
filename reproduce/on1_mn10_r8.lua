@@ -28,7 +28,7 @@ function on1_mn10_r8.train(skipped,batch_size)
   opt.optimizer = optim['adam']
 
   local n_grids = 4096
-  opt.net() = nn.Sequential()
+  opt.net = nn.Sequential()
     -- conv(1,8)
     :add( oc.OctreeConvolutionMM(1,8, n_grids) )
     :add( oc.OctreeReLU(true) )
