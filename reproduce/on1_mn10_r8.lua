@@ -9,7 +9,7 @@ require('oc')
 
 local on1_mn10_r8 = {}
 
-function on1_mn10_r8.train(skipped,batch_size)
+function on1_mn10_r8.train(batch_size,ll,skipped)
   local opt = {}
 
   opt.vx_size = 8
@@ -18,7 +18,7 @@ function on1_mn10_r8.train(skipped,batch_size)
 
   opt.ex_data_root = string.format('preprocessed/mn%s/r%s',opt.n_classes,opt.vx_size)
   opt.ex_data_ext = 'oc'
-  opt.out_root = string.format('results/on1/mn%s/r%s/b%s/%s',opt.n_classes,opt.vx_size,opt.batch_size,os.time())
+  opt.out_root = string.format('results/on1/mn%s/r%s/b%s/%s',opt.n_classes,opt.vx_size,opt.batch_size,ll)
 
   opt.weightDecay = 0.0001
   opt.learningRate = 1e-3
@@ -42,7 +42,8 @@ function on1_mn10_r8.train(skipped,batch_size)
     :add( cudnn.ReLU(true) )
     -- fc(1024,10)
     :add( nn.Linear(1024, opt.n_classes) )
-    
+  
+
   common.net_he_init(opt.net)
   opt.net:cuda()
   opt.criterion = nn.CrossEntropyCriterion()
