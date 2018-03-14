@@ -31,7 +31,7 @@ end
 
 function  VisualOC:updateOutput(input)
     if first then
-        print('\n\n\n\nsave visual oc')
+        print('\n\n\n\nsave visual oc\a')
         local dense_depth, dense_height, dense_width = self:dense_dimensions(input)
         local out_size = torch.LongStorage({input:n(), input:feature_size(), dense_depth, dense_height, dense_width})
         self.video:resize(out_size)
@@ -40,7 +40,7 @@ function  VisualOC:updateOutput(input)
         elseif input._type == 'oc_cuda' then
             oc.gpu.octree_to_cdhw_gpu(input.grid, dense_depth, dense_height, dense_width, self.video:data())
         end
-        self.ok = pcall(plot.video, plot.video, {tensor = video})
+        self.ok = pcall(plot.image, plot.image, {tensor = video})
         if self.ok then
             print('Uploaded video\n\n\n')
         else
