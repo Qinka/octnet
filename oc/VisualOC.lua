@@ -1,7 +1,6 @@
 -- Copyright (C) 2018 Johann Lee
 -- GPLv3 (temp)
 
-require 'image'
 local visdom = require 'visdom'
 local first = true;
 
@@ -33,7 +32,7 @@ function  VisualOC:updateOutput(input)
     if first then
         print('\n\n\n\nsave visual oc\a')
         local dense_depth, dense_height, dense_width = self:dense_dimensions(input)
-        local out_size = torch.LongStorage({input:n() *input:feature_size() * dense_depth,1, dense_height, dense_width})
+        local out_size = torch.LongStorage({input:n() *input:feature_size() * dense_depth, dense_height, dense_width})
         self.video:resize(out_size)
         if input._type == 'oc_float' then
             oc.cpu.octree_to_cdhw_cpu(input.grid, dense_depth, dense_height, dense_width, self.video:data())
@@ -42,12 +41,12 @@ function  VisualOC:updateOutput(input)
         end
         self.video:resize(out_size)
         print(self.video)
-        self.ok = pcall(plot.image, plot.image, {tensor = video})
-        if self.ok then
-            print('Uploaded video\n\n\n')
-        else
-            print('Skipped video\n\n\n')
-        end
+        -- self.ok = pcall(plot.image, plot.image, {tensor = video})
+        -- if self.ok then
+        --     print('Uploaded video\n\n\n')
+        -- else
+        --     print('Skipped video\n\n\n')
+        -- end
         plot.images{tensor=video}
         first = false;
     end
