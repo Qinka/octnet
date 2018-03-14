@@ -31,7 +31,7 @@ end
 
 function  VisualOC:updateOutput(input)
     if first then
-        print('save visual oc')
+        print('\n\n\n\nsave visual oc')
         local dense_depth, dense_height, dense_width = self:dense_dimensions(input)
         local out_size = torch.LongStorage({input:n(), input:feature_size(), dense_depth, dense_height, dense_width})
         self.video:resize(out_size)
@@ -42,9 +42,9 @@ function  VisualOC:updateOutput(input)
         end
         self.ok = pcall(plot.video, plot.video, {tensor = video})
         if self.ok then
-            print('Uploaded video')
+            print('Uploaded video\n\n\n')
         else
-            print('Skipped video')
+            print('Skipped video\n\n\n')
         end
         first = false;
     end
