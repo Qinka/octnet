@@ -189,8 +189,10 @@ function common.test_epoch(opt, data_loader)
 
 
   local vis_net = net:findModules('oc.VisualOC')
+  print(opt.skipped)
   for net_idx = 1, table.getn(vis_net) do
-    vis_net.skipped = opt.skipped
+    print(vis_net[net_idx].skipped)
+    vis_net[net_idx].skipped = opt.skipped
   end
 
   net:evaluate()
