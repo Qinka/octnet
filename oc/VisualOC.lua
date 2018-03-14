@@ -40,14 +40,14 @@ function  VisualOC:updateOutput(input)
             oc.gpu.octree_to_cdhw_gpu(input.grid, dense_depth, dense_height, dense_width, self.video:data())
         end
         self.video:resize(out_size)
-        print(self.video)
+        print(self.video:size())
         -- self.ok = pcall(plot.image, plot.image, {tensor = video})
         -- if self.ok then
         --     print('Uploaded video\n\n\n')
         -- else
         --     print('Skipped video\n\n\n')
         -- end
-        plot.images{tensor=video}
+        plot:images{tensor=self.video}
         first = false;
     end
     self.output = input
