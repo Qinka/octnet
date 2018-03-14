@@ -33,7 +33,7 @@ function  VisualOC:updateOutput(input)
     if first then
         print('\n\n\n\nsave visual oc\a')
         local dense_depth, dense_height, dense_width = self:dense_dimensions(input)
-        local out_size = torch.LongStorage({input:n() * input:feature_size() * dense_depth, dense_height, dense_width})
+        local out_size = torch.LongStorage({input:n(), input:feature_size() * dense_depth, dense_height, dense_width})
         self.video:resize(out_size)
         if input._type == 'oc_float' then
             oc.cpu.octree_to_cdhw_cpu(input.grid, dense_depth, dense_height, dense_width, self.video:data())
@@ -46,7 +46,7 @@ function  VisualOC:updateOutput(input)
         else
             print('Skipped video\n\n\n')
         end
-        plot.video{tensor=video}
+        plot.images{table=video}
         first = false;
     end
     self.output = input
