@@ -380,6 +380,7 @@ for i = 1, #libnames do
 end
 
 if not ok then
+  error('[ERROR] could not find liboctnet')
 end
 
 local ok = false

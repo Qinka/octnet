@@ -3,16 +3,16 @@
 
 require 'image'
 local visdom = require 'visdom'
-local first = first;
+local first = false;
 
 local plot = visdom{server = 'http://localhost', port = 8097}
 if not plot:check_connection() then
-   error('Could not connect, please ensure the visdom server is running')
+    error('Could not connect, please ensure the visdom server is running')
 end
 
 local VisualOC, parent = torch.class('oc.VisualOC', 'oc.OctreeModule')
 
-function VisualOC:__init()
+function VisualOC:__init(dense_depth, dense_height, dense_width)
     parent.__init(self)
     self.ok = nil;
     self.video = torch.FloatTensor()
@@ -23,11 +23,11 @@ end
 
 function VisualOC:dense_dimensions(octrees)
     if self.dense_depth and self.dense_height and self.dense_width then
-      return self.dense_depth, self.dense_height, self.dense_width 
+        return self.dense_depth, self.dense_height, self.dense_width 
     else
-      return octrees:dense_depth(), octrees:dense_height(), octrees:dense_width()
+        return octrees:dense_depth(), octrees:dense_height(), octrees:dense_width()
     end
-  end 
+end 
 
 function  VisualOC:updateOutput(input)
     if first then
@@ -36,9 +36,9 @@ function  VisualOC:updateOutput(input)
         self.video:resize(out_size)
         if input._type == 'oc_float' then
             oc.cpu.octree_to_cdhw_cpu(input.grid, dense_depth, dense_height, dense_width, self.video:data())
-          elseif input._type == 'oc_cuda' then
+        elseif input._type == 'oc_cuda' then
             oc.gpu.octree_to_cdhw_gpu(input.grid, dense_depth, dense_height, dense_width, self.video:data())
-          end
+        end
         self.ok = pcall(plot.video, plot.video, {tensor = video})
         if self.ok then
             print('Uploaded video')
