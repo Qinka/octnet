@@ -4,7 +4,7 @@ local lfs = require('lfs')
 local common = {}
 
 
-package.path = '../th/?/init.lua;' .. package.path
+package.path = '../?/init.lua;' .. package.path
 
 function common.walk_paths(root, ext)
   local function walk_paths_(d, ps) 

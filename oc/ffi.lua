@@ -372,7 +372,7 @@ local function script_path()
 end
 local sp = script_path()
 
-local libnames = {'liboctnet_core.so', 'liboctnet_core.dylib', 'octnet_core.dll', 'octnet_core.lib'} 
+local libnames = {'liboctnet.so', 'liboctnet.dylib', 'octnet.dll', 'octnet.lib'} 
 local ok = false
 for i = 1, #libnames do
   ok = pcall(function () oc.cpu = ffi.load(libnames[i]) end)
@@ -383,7 +383,6 @@ if not ok then
   error('[ERROR] could not find liboctnet_core')
 end
 
-local libnames = {sp..'../../th/cpu/build/liboctnet_torch_cpu.so', sp..'../../th/cpu/build/liboctnet_torch_cpu.dylib'} 
 local ok = false
 for i = 1, #libnames do
   ok = pcall(function () oc.torch_cpu = ffi.load(libnames[i]) end)
@@ -397,7 +396,6 @@ end
 
 
 if cutorch then
-  local libnames = {sp..'../../core_gpu/build/liboctnet_core_gpu.so', sp..'../../core_gpu/build/liboctnet_core_gpu.dylib'} 
   local ok = false
   for i = 1, #libnames do
     ok = pcall(function () oc.gpu = ffi.load(libnames[i]) end)
@@ -408,7 +406,6 @@ if cutorch then
     error('[ERROR] could not find liboctnet_core_gpu')
   end
 
-  local libnames = {sp..'../../th/gpu/build/liboctnet_torch_gpu.so', sp..'../../th/gpu/build/liboctnet_torch_gpu.dylib'} 
   local ok = false
   for i = 1, #libnames do
     ok = pcall(function () oc.torch_gpu = ffi.load(libnames[i]) end)
