@@ -156,6 +156,12 @@ function common.train_epoch(opt, data_loader)
   local optimizer = opt.optimizer or error('no optimizer in train_epoch')
   local n_batches = data_loader:n_batches()
 
+  local vis_net = net:findModules('oc.VisualOC')
+  for net_idx = 1, table.getn(vis_net) do
+    vis_net[net_idx].skipped = true
+  end
+
+
   net:training()
 
   local parameters, grad_parameters = net:getParameters()
@@ -189,9 +195,7 @@ function common.test_epoch(opt, data_loader)
 
 
   local vis_net = net:findModules('oc.VisualOC')
-  print(opt.skipped)
   for net_idx = 1, table.getn(vis_net) do
-    print(vis_net[net_idx].skipped)
     vis_net[net_idx].skipped = opt.skipped
   end
 
