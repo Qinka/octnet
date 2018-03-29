@@ -9,16 +9,17 @@ require('oc')
 
 local on1_mn10_r64 = {}
 
-function on1_mn10_r64.train(batch_size)
+function on1_mn10_64.train(batch_size,skipped,ll)
   local opt = {}
-
+  local ll = ll or ''
+  opt.vis_skipped = skipped
   opt.vx_size = 64
   opt.n_classes = 10
   opt.batch_size = batch_size
 
-  opt.ex_data_root = string.format('preprocessed/r%s',opt.vx_size)
+  opt.ex_data_root = string.format('preprocessed/mn%s/r%s',opt.n_classes,opt.vx_size)
   opt.ex_data_ext = 'oc'
-  opt.out_root = string.format('results/on1/r%s/b%s/%s',opt.vx_size,opt.batch_size,os.time())
+  opt.out_root = string.format('results/on1/mn%s/r%s/b%s/%s',opt.n_classes,opt.vx_size,opt.batch_size,ll)
 
   opt.weightDecay = 0.0001
   opt.learningRate = 1e-3
