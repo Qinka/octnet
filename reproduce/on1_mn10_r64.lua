@@ -33,18 +33,22 @@ function on1_mn10_64.train(batch_size,skipped,ll)
     -- conv(1,8)
     :add( oc.OctreeConvolutionMM(1,8, n_grids) )
     :add( oc.OctreeReLU(true) )
+    :add( oc.VisualOC(skipped) )
     :add( oc.OctreeGridPool2x2x2('max') )
 
     :add( oc.OctreeConvolutionMM(8,16, n_grids) )
     :add( oc.OctreeReLU(true) )
+    :add( oc.VisualOC(skipped) )
     :add( oc.OctreeGridPool2x2x2('max') )
 
     :add( oc.OctreeConvolutionMM(16,24, n_grids) )
     :add( oc.OctreeReLU(true) )
+    :add( oc.VisualOC(skipped) )
     :add( oc.OctreeGridPool2x2x2('max') )
 
     :add( oc.OctreeConvolutionMM(24,32, n_grids) )
     :add( oc.OctreeReLU(true) )
+    :add( oc.VisualOC(skipped) )
 
     :add( oc.OctreeToCDHW() )
     :add( nn.View(32*8*8*8) )

@@ -16,7 +16,7 @@ function on1_mn10_r32.train(batch_size,skipped,ll)
   opt.vx_size = 32
   opt.n_classes = 10
   opt.batch_size = batch_size
-  
+
   opt.ex_data_root = string.format('preprocessed/mn%s/r%s',opt.n_classes,opt.vx_size)
   opt.ex_data_ext = 'oc'
   opt.out_root = string.format('results/on1/mn%s/r%s/b%s/%s',opt.n_classes,opt.vx_size,opt.batch_size,ll)
@@ -33,14 +33,17 @@ function on1_mn10_r32.train(batch_size,skipped,ll)
     -- conv(1,8)
     :add( oc.OctreeConvolutionMM(1,8, n_grids) )
     :add( oc.OctreeReLU(true) )
+    :add( oc.VisualOC(skipped) )
     :add( oc.OctreeGridPool2x2x2('max') )
 
     :add( oc.OctreeConvolutionMM(8,16, n_grids) )
     :add( oc.OctreeReLU(true) )
+    :add( oc.VisualOC(skipped) )
     :add( oc.OctreeGridPool2x2x2('max') )
 
     :add( oc.OctreeConvolutionMM(16,24, n_grids) )
     :add( oc.OctreeReLU(true) )
+    :add( oc.VisualOC(skipped) )
 
     :add( oc.OctreeToCDHW() )
     :add( nn.View(24*8*8*8) )
