@@ -3,4 +3,4 @@
 local on1_mn10_r8 = dofile('on1_mn10_r8.lua')
 
 
-on1_mn10_r8.train(16)
+on1_mn10_r8.train(16,true)
