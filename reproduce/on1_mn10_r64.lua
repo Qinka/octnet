@@ -9,7 +9,7 @@ require('oc')
 
 local on1_mn10_r64 = {}
 
-function on1_mn10_64.train(batch_size,skipped,ll)
+function on1_mn10_r64.train(batch_size,skipped,ll)
   local opt = {}
   local ll = ll or ''
   opt.vis_skipped = skipped
