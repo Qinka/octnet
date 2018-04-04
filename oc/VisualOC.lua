@@ -42,7 +42,10 @@ function  VisualOC:updateOutput(input)
         end
         self.video:resize(out_size)
         print(self.video:size())
-        plot:images{tensor=self.video}
+        self.video = self.video - torch.min(self.video)
+        self.video = self.video / torch.max(self.video) * 255
+        local rt = plot:images{tensor=(self.video * 255)}
+        print("result", rt)
     end
     self.output = input
     return self.output
