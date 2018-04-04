@@ -20,12 +20,12 @@ function VisualOC:__init(label,dense_depth, dense_height, dense_width)
     self.dense_height = dense_height
     self.dense_width = dense_width
     self.label = label or ''
-    self.force_mask = force_mask
     self.is_vis = false
 end
 
 function VisualOC:enable_vis()
-    self.is_vis = self.force_mask
+    print(force_mask)
+    self.is_vis = force_mask
 end
 
 function VisualOC:dense_dimensions(octrees)
