@@ -149,11 +149,11 @@ function common.net_he_init(net)
   linear_init(net)
 end
 
-function common.vis_epoch(opt, data_loader)
+function common.vis_epoch(opt, data_loader, vis_files)
   local net = opt.net or error('no net in test_epoch')
   local criterion = opt.criterion or error('no criterion in test_epoch')
   local n_batches = data_loader:n_batches()
-  local files = opt.vis_files or error('need files')
+  local files = vis_files or error('need files')
 
   local vis_net = net:findModules('oc.VisualOC')
   for net_idx = 1, table.getn(vis_net) do
@@ -247,10 +247,10 @@ end
 
 
 function common.worker(opt, train_data_loader, test_data_loader)
-
   -- enable logging
   local cmd = torch.CmdLine()
   cmd:log(paths.concat(opt.out_root, string.format('train_%d.log', sys.clock())))
+  local vis_files = opt.vis_files
 
   -- load state if it exists
   local state_path = paths.concat(opt.out_root, 'state.t7')
@@ -267,9 +267,9 @@ function common.worker(opt, train_data_loader, test_data_loader)
   end
 
 
-  if(opt.vis_files) then
+  if(vis_files) then
     -- vis
-    common.vis_epoch(opt,test_data_loader)
+    common.vis_epoch(opt,test_data_loader,vis_files)
   else
     -- train and test
     local start_epoch = 1
