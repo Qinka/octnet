@@ -120,7 +120,7 @@ function DataLoader:getFiles(fn)
     self.data_gpu:copy(self.data_cpu)
   elseif self.ex_data_ext == 'oc' then 
     self.data_cpu = oc.FloatOctree()
-    self.data_cpu:read_from_bin_batch(fn
+    self.data_cpu:read_from_bin_batch(fn)
     self.data_gpu = self.data_cpu:cuda(self.data_gpu)
   else
     error('unknown ex_data_ext: '..self.ex_data_ext)
