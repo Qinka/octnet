@@ -11,7 +11,7 @@ end
 
 local VisualOC, parent = torch.class('oc.VisualOC', 'oc.OctreeModule')
 
-function VisualOC:__init(skipped,dense_depth, dense_height, dense_width)
+function VisualOC:__init(skipped, label,dense_depth, dense_height, dense_width)
     parent.__init(self)
     self.ok = nil;
     self.video = torch.FloatTensor()
@@ -19,6 +19,7 @@ function VisualOC:__init(skipped,dense_depth, dense_height, dense_width)
     self.dense_height = dense_height
     self.dense_width = dense_width
     self.skipped = skipped
+    self.label = label
 end
 
 function VisualOC:dense_dimensions(octrees)
@@ -42,7 +43,7 @@ function  VisualOC:updateOutput(input)
         end
         self.video:resize(out_size)
         print(self.video:size())
-        plot:images{tensor=self.video}
+        plot:images{tensor=self.video, opts = {caption = self.label}}
     end
     self.output = input
     return self.output
