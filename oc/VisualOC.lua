@@ -50,7 +50,7 @@ function  VisualOC:updateOutput(input)
         self.video:resize(out_size)
         print(self.video:size())
         self.video = self.video - torch.min(self.video)
-        self.video = self.video / torch.max(self.video) * 255
+        self.video = self.video / torch.max(self.video)
         local tt = os.time()
         torch.save('vis/%s.ori' % (os.time() + math.random()),self.video,'ascii')
         -- local rt = plot:images{tensor=self.video, opts = {caption = self.label}}
