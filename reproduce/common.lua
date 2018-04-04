@@ -164,9 +164,6 @@ function common.vis_epoch(opt, data_loader, vis_files)
   
   local input = data_loader:getFiles(files)
   local output = net:forward(input)
-  output = output[{{1,target:size(1)}, {}}]
-  local f = criterion:forward(output, target)
-  print(f)
 end
 
 function common.train_epoch(opt, data_loader)
