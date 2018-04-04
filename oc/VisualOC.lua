@@ -19,7 +19,7 @@ function VisualOC:__init(label,dense_depth, dense_height, dense_width)
     self.dense_depth = dense_depth
     self.dense_height = dense_height
     self.dense_width = dense_width
-    self.label = label
+    self.label = label or ''
     self.force_mask = force_mask
     self.is_vis = false
 end

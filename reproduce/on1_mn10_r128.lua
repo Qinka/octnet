@@ -9,13 +9,13 @@ require('oc')
 
 local on1_mn10_r128 = {}
 
-function on1_mn10_r128.train(batch_size,skipped,ll)
+function on1_mn10_r128.train(batch_size,vis_files,ll)
   local opt = {}
   local ll = ll or ''
-  opt.vis_skipped = skipped
   opt.vx_size = 128
   opt.n_classes = 10
   opt.batch_size = batch_size
+  opt.vis_files = vis_files
 
   opt.ex_data_root = string.format('preprocessed/mn%s/r%s',opt.n_classes,opt.vx_size)
   opt.ex_data_ext = 'oc'
