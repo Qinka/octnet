@@ -4,9 +4,12 @@
 local visdom = require 'visdom'
 local first = true;
 
+
+local force_mask = true
 local plot = visdom{server = 'http://localhost', port = 8097}
 if not plot:check_connection() then
-    error('Could not connect, please ensure the visdom server is running')
+    print('Could not connect, please ensure the visdom server is running')
+    force_mask = false
 end
 
 local VisualOC, parent = torch.class('oc.VisualOC', 'oc.OctreeModule')
@@ -18,7 +21,7 @@ function VisualOC:__init(skipped,dense_depth, dense_height, dense_width)
     self.dense_depth = dense_depth
     self.dense_height = dense_height
     self.dense_width = dense_width
-    self.skipped = skipped
+    self.skipped = skipped and force_mask
 end
 
 function VisualOC:dense_dimensions(octrees)
