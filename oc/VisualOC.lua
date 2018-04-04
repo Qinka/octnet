@@ -7,7 +7,7 @@ local force_mask = true
 local plot = visdom{server = 'http://localhost', port = 8097}
 if not plot:check_connection() then
     print('Could not connect, please ensure the visdom server is running')
-    force_mask = false
+    force_mask = true
 end
 
 local VisualOC, parent = torch.class('oc.VisualOC', 'oc.OctreeModule')
@@ -49,10 +49,12 @@ function  VisualOC:updateOutput(input)
         end
         self.video:resize(out_size)
         print(self.video:size())
-        self.video = self.video - torch.min(self.video)
-        self.video = self.video / torch.max(self.video) * 255
-        local rt = plot:images{tensor=self.video, opts = {caption = self.label}}
-        print(rt)
+        --self.video = self.video - torch.min(self.video)
+        --self.video = self.video / torch.max(self.video) * 255
+        local tt = os.time()
+        torch.save('vis/%s.ori' % os.time() + math.random(),self.video)
+        -- local rt = plot:images{tensor=self.video, opts = {caption = self.label}}
+        -- print(rt)
     end
     self.output = input
     return self.output
