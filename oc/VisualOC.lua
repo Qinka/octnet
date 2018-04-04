@@ -3,11 +3,11 @@
 
 local visdom = require 'visdom'
 
-local force_mask = false
+local force_mask = true
 local plot = visdom{server = 'http://localhost', port = 8097}
 if not plot:check_connection() then
     print('Could not connect, please ensure the visdom server is running')
-    force_mask = true
+    force_mask = false
 end
 
 local VisualOC, parent = torch.class('oc.VisualOC', 'oc.OctreeModule')
