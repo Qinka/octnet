@@ -9,7 +9,7 @@ require('oc')
 
 local on1_mn10_r8 = {}
 
-function on1_mn10_r8.train(batch_size,skipped,ll)
+function on1_mn10_r8.create_net(batch_size,ll)
   local opt = {}
   local ll = ll or ''
   opt.vis_skipped = skipped
@@ -31,10 +31,10 @@ function on1_mn10_r8.train(batch_size,skipped,ll)
   local n_grids = 4096
   opt.net = nn.Sequential()
     -- conv(1,8)
---    :add( oc.VisualOC(skipped) )
+    :add( oc.VisualOC('Origin') )
     :add( oc.OctreeConvolutionMM(1,8, n_grids) )
     :add( oc.OctreeReLU(true) )
-    :add( oc.VisualOC(skipped) )
+    :add( oc.VisualOC('conv1') )
     :add( oc.OctreeToCDHW() )
     :add( nn.View(8*8*8*8) )
     -- dropout(0.5)
@@ -45,14 +45,19 @@ function on1_mn10_r8.train(batch_size,skipped,ll)
     -- fc(1024,10)
     :add( nn.Linear(1024, opt.n_classes) )
 
-    
   common.net_he_init(opt.net)
   opt.net:cuda()
   opt.criterion = nn.CrossEntropyCriterion()
   opt.criterion:cuda()
-  
+  return opt
+end
+
+function on1_mn10_r8.train(batch_size,vis_files,ll)
+  local opt = on1_mn10_r8.create_net(batch_size,ll)
+  if vis_files then
+    opt.vis_files = vis_files
+  end
   common.classification_worker(opt)
-  
   opt = nil
   collectgarbage()
 end

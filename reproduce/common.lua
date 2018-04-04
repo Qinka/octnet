@@ -149,18 +149,31 @@ function common.net_he_init(net)
   linear_init(net)
 end
 
+function common.vis_epoch(opt, data_loader)
+  local net = opt.net or error('no net in test_epoch')
+  local criterion = opt.criterion or error('no criterion in test_epoch')
+  local n_batches = data_loader:n_batches()
+  local files = opt.vis_files or error('need files')
+
+  local vis_net = net:findModules('oc.VisualOC')
+  for net_idx = 1, table.getn(vis_net) do
+    vis_net[net_idx]:enable_vis()
+  end
+
+  net:evaluate()
+  
+  local input = data_loader:getFiles(files)
+  local output = net:forward(input)
+  output = output[{{1,target:size(1)}, {}}]
+  local f = criterion:forward(output, target)
+  print(f)
+end
 
 function common.train_epoch(opt, data_loader)
   local net = opt.net or error('no net in train_epoch')
   local criterion = opt.criterion or error('no criterion in train_epoch')
   local optimizer = opt.optimizer or error('no optimizer in train_epoch')
   local n_batches = data_loader:n_batches()
-
-  local vis_net = net:findModules('oc.VisualOC')
-  for net_idx = 1, table.getn(vis_net) do
-    vis_net[net_idx].skipped = true
-  end
-
 
   net:training()
 
@@ -253,50 +266,57 @@ function common.worker(opt, train_data_loader, test_data_loader)
     end
   end
 
-  local start_epoch = 1
-  if opt.epoch then
-    start_epoch = opt.epoch + 1
-  end
-  print(string.format('[INFO] start_epoch=%d', start_epoch))
-  for epoch = start_epoch, opt.n_epochs do
-    opt.epoch = epoch
-    
-    -- clean up
-    opt.net:clearState()
-    collectgarbage('collect')
-    collectgarbage('collect')
 
-    -- train
-    print('[INFO] train epoch '..epoch..', lr='..opt.learningRate)
-    opt.data_fcn = opt.train_data_fcn
-    common.train_epoch(opt, train_data_loader)
-     
-    -- save network
-    print('[INFO] save net')
-    local net_path = paths.concat(opt.out_root, string.format('net_epoch%03d.t7', opt.epoch))
-    torch.save(net_path, opt.net:clearState())
-    print('[INFO] saved net to: ' .. net_path)
-
-    -- save state
-    if not opt.state_save_interval or opt.epoch % opt.state_save_interval == 0 then
-      print('[INFO] save state')
-      opt.net = opt.net:clearState()
-      torch.save(state_path, opt)
-      print('[INFO] saved state to: ' .. state_path)
+  if(opt.vis_files) then
+    -- vis
+    common.vis_epoch(opt,test_data_loader)
+  else
+    -- train and test
+    local start_epoch = 1
+    if opt.epoch then
+      start_epoch = opt.epoch + 1
     end
+    print(string.format('[INFO] start_epoch=%d', start_epoch))
+    for epoch = start_epoch, opt.n_epochs do
+      opt.epoch = epoch
+      
+      -- clean up
+      opt.net:clearState()
+      collectgarbage('collect')
+      collectgarbage('collect')
 
-    -- clean up 
-    collectgarbage('collect')
-    collectgarbage('collect')
+      -- train
+      print('[INFO] train epoch '..epoch..', lr='..opt.learningRate)
+      opt.data_fcn = opt.train_data_fcn
+      common.train_epoch(opt, train_data_loader)
+      
+      -- save network
+      print('[INFO] save net')
+      local net_path = paths.concat(opt.out_root, string.format('net_epoch%03d.t7', opt.epoch))
+      torch.save(net_path, opt.net:clearState())
+      print('[INFO] saved net to: ' .. net_path)
 
-    -- adjust learning rate
-    if opt.learningRate_steps[epoch] ~= nil then
-      opt.learningRate = opt.learningRate * opt.learningRate_steps[epoch]
+      -- save state
+      if not opt.state_save_interval or opt.epoch % opt.state_save_interval == 0 then
+        print('[INFO] save state')
+        opt.net = opt.net:clearState()
+        torch.save(state_path, opt)
+        print('[INFO] saved state to: ' .. state_path)
+      end
+
+      -- clean up 
+      collectgarbage('collect')
+      collectgarbage('collect')
+
+      -- adjust learning rate
+      if opt.learningRate_steps[epoch] ~= nil then
+        opt.learningRate = opt.learningRate * opt.learningRate_steps[epoch]
+      end
     end
+      
+    -- test network
+    common.test_epoch(opt, test_data_loader)
   end
-    
-  -- test network
-  common.test_epoch(opt, test_data_loader)
 end
 
 return common

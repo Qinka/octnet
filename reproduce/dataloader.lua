@@ -107,4 +107,29 @@ function DataLoader:n_batches()
 end
 
 
+function DataLoader:getFiles(fn)
+  if fn then
+    if type(fn) ~= "table" then
+      fn = {fn}
+    end
+    if self.ex_data_ext == 'cdhw' then
+    self.data_cpu = torch.FloatTensor(table.getn(fn), 1, self.vx_size, self.vx_size, self.vx_size)
+    oc.read_dense_from_bin_batch(fn, self.data_cpu)
+    self.data_gpu = self.data_gpu or torch.CudaTensor()
+    self.data_gpu:resize(self.data_cpu:size())
+    self.data_gpu:copy(self.data_cpu)
+  elseif self.ex_data_ext == 'oc' then 
+    self.data_cpu = oc.FloatOctree()
+    self.data_cpu:read_from_bin_batch(fn
+    self.data_gpu = self.data_cpu:cuda(self.data_gpu)
+  else
+    error('unknown ex_data_ext: '..self.ex_data_ext)
+  end 
+    collectgarbage(); collectgarbage()
+    return self.data_gpu
+  else
+    error(fn, "wrong file")
+  end
+end
+
 return dataloader
