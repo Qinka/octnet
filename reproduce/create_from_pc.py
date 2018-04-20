@@ -15,7 +15,7 @@ import pyoctnet
 # shape net core point clouds
 
 
-def create_oc_frompc(vx_res=256,in_root='PartAnnotation', n_, n_threads = 1):
+def create_oc_frompc(vx_res=256,in_root='PartAnnotation', n_processes=1, n_threads = 1):
     out_root = path.join('.preprocessed','partseg',str(vx_res))
     
     ## create out directory
@@ -41,13 +41,23 @@ def create_oc_frompc(vx_res=256,in_root='PartAnnotation', n_, n_threads = 1):
         pool = multiprocessing.Pool(processes=n_processes)
 
     for key in pairs:
-        
-
+        if n_processes > 1:
+            pool.applu_async(worker,args=(out_root,
+                                          pairs[key]['pts'],
+                                          pairs[key]['seg'],
+                                          vx_res,
+                                          n_thread,))
+        else:
+            worker(out_root,
+                   pairs[key]['pts'],
+                   pairs[key]['seg'],
+                   vx_res,
+                   n_thread)
+              
     if n_processes > 1:
         pool.close()
         pool.join()
     
-
 def worker(outroot: str, filedata : str, filelabels : [str], vx_res, n_threads=1):
     print('read data')
     t   = time.time()
@@ -79,14 +89,19 @@ def worker(outroot: str, filedata : str, filelabels : [str], vx_res, n_threads=1
     print('\ttook %f[s]' % (time.time() - t))
 
 def insert_into_pair(pair,file:str):
-    sp = file.split('.')[0].split(os.path.sep)
-    t = sp[0]
+    dp = file.split('.')
+    sp = "".join(dp[0:-1]).split(os.path.sep)
+    t = None
+    if dp[-1] == 'seg':
+        t = sp[-4]
+    else:
+        t = sp[-3]
     i = sp[-1]
     if not ((t,i) in pair):
         pair[(t,i)] = {'pts' : [], 'seg' : []}
-    if   len(sp) == 3:
+    if   dp[-1] == 'seg':
         pair[(t,i)]['pts'].append(file)
-    elif len(sp) == 4:
+    elif dp[-1] == 'pts':
         pair[(t,i)]['seg'].append(file)
 
 
