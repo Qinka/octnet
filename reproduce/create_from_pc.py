@@ -16,7 +16,7 @@ import pyoctnet
 
 
 def create_oc_frompc(vx_res=256,in_root='PartAnnotation', n_processes=1, n_threads = 1):
-    out_root = path.join('.preprocessed','partseg',str(vx_res))
+    out_root = os.path.join('.preprocessed','partseg',str(vx_res))
     
     ## create out directory
     if not os.path.isdir(out_root):
@@ -36,27 +36,31 @@ def create_oc_frompc(vx_res=256,in_root='PartAnnotation', n_processes=1, n_threa
     for sp in seg_paths:
         insert_into_pair(pairs,sp)
 
+    s_t = time.time()
     pool = None
     if n_processes > 1:
         pool = multiprocessing.Pool(processes=n_processes)
 
     for key in pairs:
+        print(key, "transforming")
         if n_processes > 1:
-            pool.applu_async(worker,args=(out_root,
+            pool.apply_async(worker,args=(out_root,
                                           pairs[key]['pts'],
                                           pairs[key]['seg'],
                                           vx_res,
-                                          n_thread,))
+                                          n_threads,))
         else:
             worker(out_root,
                    pairs[key]['pts'],
                    pairs[key]['seg'],
                    vx_res,
-                   n_thread)
+                   n_threads)
               
     if n_processes > 1:
         pool.close()
         pool.join()
+    
+    print('create data took %f[s]' % (time.time() - s_t))
     
 def worker(outroot: str, filedata : str, filelabels : [str], vx_res, n_threads=1):
     print('read data')
