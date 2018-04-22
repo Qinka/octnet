@@ -103,9 +103,8 @@ def insert_into_pair(pair,file:str):
     i = sp[-1]
     if not ((t,i) in pair):
         pair[(t,i)] = {'pts' : [], 'seg' : []}
-    if   dp[-1] == 'seg':
         pair[(t,i)]['pts'].append(file)
-    elif dp[-1] == 'pts':
+    elif dp[-1] == 'seg':
         pair[(t,i)]['seg'].append(file)
 
 
