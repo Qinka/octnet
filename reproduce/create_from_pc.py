@@ -44,13 +44,13 @@ def create_oc_frompc(vx_res=256,in_root='PartAnnotation', n_processes=1, n_threa
     for key in pairs:
         print(key, "transforming")
         if n_processes > 1:
-            pool.apply_async(worker,args=(out_root,
+            pool.apply_async(worker,args=(out_root, key,
                                           pairs[key]['pts'],
                                           pairs[key]['seg'],
                                           vx_res,
                                           n_threads,))
         else:
-            worker(out_root,
+            worker(out_root, key,
                    pairs[key]['pts'],
                    pairs[key]['seg'],
                    vx_res,
@@ -62,7 +62,7 @@ def create_oc_frompc(vx_res=256,in_root='PartAnnotation', n_processes=1, n_threa
     
     print('create data took %f[s]' % (time.time() - s_t))
     
-def worker(outroot: str, filedata : str, filelabels : [str], vx_res, n_threads=1):
+def worker(outroot: str, (t,i), filedata : str, filelabels : [str], vx_res, n_threads=1):
     print('read data', filedata)
     t   = time.time()
     xyz = np.loadtxt(filedata[0],dtype=np.float32)
@@ -86,8 +86,8 @@ def worker(outroot: str, filedata : str, filelabels : [str], vx_res, n_threads=1
     t = time.time()
     print('write bin')
     fprefix = filedata.split['.'][0].split(os.path.sep)
-    oc_out_path = os.path.join(outroot,fprefix[0] + os.path.sep + fprefix[2] + '_' + "pts.oc")
-    lb_out_path = os.path.join(outroot,fprefix[0] + os.path.sep + fprefix[2] + '_' + "seg.oc")
+    oc_out_path = os.path.join(outroot, t, i + '_' + "pts.oc")
+    lb_out_path = os.path.join(outroot, t, i + '_' + "seg.oc")
     grid.write_bin(oc_out_path)
     label.write_bin(lb_out_path)
     print('\ttook %f[s]' % (time.time() - t))
