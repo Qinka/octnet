@@ -63,35 +63,44 @@ def create_oc_frompc(vx_res=256,in_root='PartAnnotation', n_processes=1, n_threa
     print('create data took %f[s]' % (time.time() - s_t))
     
 def worker(outroot: str, key, filedata : str, filelabels : [str], vx_res, n_threads=1):
-    print('read data', filedata)
-    t   = time.time()
-    xyz = np.loadtxt(filedata[0],dtype=np.float32)
-    print('\ttook %f[s]' % (time.time() - t))
-
-    t = time.time()
-    print('read labels', filelabels)
-    ns = []
-    for fl in filelabels:
-        ns.append(np.loadtxt(fl,dtype=np.float32).reshape(-1,1))
-    plabel = np.concatenate(ns,axis=1) 
-    print('\ttook %f[s]' % (time.time() - t))
-
-    print('create octree')
-    # object
-    grid  = pyoctnet.Octree.create_from_pc_simple(xyz,vx_res,vx_res,vx_res,False,n_threads=n_threads)
-    # part seg
-    label = pyoctnet.Octree.create_from_pc(xyz,plabel,vx_res,vx_res,vx_res,False,n_threads=n_threads)
-    print('\ttook %f[s]' % (time.time() - t))
-    
-    t = time.time()
-    print('write bin')
-    fprefix = filedata.split['.'][0].split(os.path.sep)
-    oc_out_path = os.path.join(outroot, key[0], key[1] + '_' + "pts.oc")
-    lb_out_path = os.path.join(outroot, key[0], key[1] + '_' + "seg.oc")
-    grid.write_bin(oc_out_path)
-    label.write_bin(lb_out_path)
-    print('\ttook %f[s]' % (time.time() - t))
-
+    try:
+        print('read data', filedata)
+        t   = time.time()
+        xyz = np.loadtxt(filedata[0],dtype=np.float32)
+        print('\ttook %f[s]' % (time.time() - t))
+        
+        t = time.time()
+        print('read labels', filelabels)
+        ns = []
+        for fl in filelabels:
+            ns.append(np.loadtxt(fl,dtype=np.float32).reshape(-1,1))
+        plabel = np.concatenate(ns,axis=1) 
+        print('\ttook %f[s]' % (time.time() - t))
+        
+        print('create octree')
+        # object
+        grid  = pyoctnet.Octree.create_from_pc_simple(xyz,vx_res,vx_res,vx_res,False,n_threads=n_threads)
+        # part seg
+        label = pyoctnet.Octree.create_from_pc(xyz,plabel,vx_res,vx_res,vx_res,False,n_threads=n_threads)
+        print('\ttook %f[s]' % (time.time() - t))
+        
+        
+        oc_out_path = os.path.join(outroot, key[0], key[1] + '_' + "pts.oc")
+        lb_out_path = os.path.join(outroot, key[0], key[1] + '_' + "seg.oc")
+        if not os.path.exists(os.path.split(oc_out_path)[0]):
+            os.makedirs(os.path.split(oc_out_path)[0])
+        t = time.time()
+        print('write bin', oc_out_path, lb_out_path, grid)
+        grid.write_bin(oc_out_path.encode())
+        label.write_bin(lb_out_path.encode())
+        print('\ttook %f[s]' % (time.time() - t))
+    except KeyboardInterrupt as e:
+        raise e
+    except:
+        print('error; breake')
+        return
+        
+        
 def insert_into_pair(pair,file:str):
     dp = file.split('.')
     sp = "".join(dp[0:-1]).split(os.path.sep)
