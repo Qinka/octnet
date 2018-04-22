@@ -26,8 +26,9 @@ def create_oc_frompc(vx_res=256,in_root='PartAnnotation', n_processes=1, n_threa
     all_kinds = os.listdir(in_root)
     items = []
     for k in all_kinds:
-        for it in os.listdir(os.path.join(in_root,k,'points')):
-            items.append((k,it.split('.')[0],))
+        if os.path.isdir(k):
+            for it in os.listdir(os.path.join(in_root,k,'points')):
+                items.append((k,it.split('.')[0],))
 
     items.sort()
 
