@@ -7,7 +7,7 @@ function common.fname_train_test_split_pc(dps, pps)
   local ptrain = {}
   local ptest = {}
 
-  for i, _ in ipairs(ps) do
+  for i, _ in ipairs(dps) do
     if math.random() > 0.1 then
         table.insert(dtest, dps)
         table.insert(ptest, pps)
