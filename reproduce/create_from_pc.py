@@ -62,7 +62,7 @@ def create_oc_frompc(vx_res=256,in_root='PartAnnotation', n_processes=1, n_threa
     
     print('create data took %f[s]' % (time.time() - s_t))
     
-def worker(outroot: str, (t,i), filedata : str, filelabels : [str], vx_res, n_threads=1):
+def worker(outroot: str, key, filedata : str, filelabels : [str], vx_res, n_threads=1):
     print('read data', filedata)
     t   = time.time()
     xyz = np.loadtxt(filedata[0],dtype=np.float32)
@@ -86,8 +86,8 @@ def worker(outroot: str, (t,i), filedata : str, filelabels : [str], vx_res, n_th
     t = time.time()
     print('write bin')
     fprefix = filedata.split['.'][0].split(os.path.sep)
-    oc_out_path = os.path.join(outroot, t, i + '_' + "pts.oc")
-    lb_out_path = os.path.join(outroot, t, i + '_' + "seg.oc")
+    oc_out_path = os.path.join(outroot, key[0], key[1] + '_' + "pts.oc")
+    lb_out_path = os.path.join(outroot, key[0], key[1] + '_' + "seg.oc")
     grid.write_bin(oc_out_path)
     label.write_bin(lb_out_path)
     print('\ttook %f[s]' % (time.time() - t))
