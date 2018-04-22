@@ -1,6 +1,6 @@
 -- implementation for OctNet 1 classfication with resolution 8 and mn10
 
-local common = dofile('classification_common.lua')
+local common = dofile('seg_common.lua')
 require('nn')
 require('cunn')
 require('cudnn')
@@ -93,7 +93,7 @@ function seg1_a_r32.train(vis_files,ll)
   opt.net:cuda()
   opt.criterion = nn.CrossEntropyCriterion()
   opt.criterion:cuda()
-  common.classification_worker(opt)
+  common.seg_worker(opt)
   opt = nil
   collectgarbage()
 end
