@@ -77,18 +77,18 @@ def worker(inroot:str, outroot: str, item, vx_res, n_threads=1):
             else:
                 ns.append(np.zeros((xyz.shape[0],1)))
         plabel = np.concatenate(ns,axis=1) 
-        print('\ttook %f[s]' % (time.time() - t))
+        print('\ttook %f[s]' % (time.time() - t), plabel.shape)
         
         print('create octree')
         # object
-        grid  = pyoctnet.Octree.create_from_pc_simple(xyz,vx_res,vx_res,vx_res,False,n_threads=n_threads)
+        grid  = pyoctnet.Octree.create_from_pc_simple(xyz,1,vx_res,vx_res,vx_res,False,n_threads=n_threads)
         # part seg
-        label = pyoctnet.Octree.create_from_pc(xyz,plabel,vx_res,vx_res,vx_res,False,n_threads=n_threads)
+        label = pyoctnet.Octree.create_from_pc(xyz,plabel,  vx_res,vx_res,vx_res,False,n_threads=n_threads)
         print('\ttook %f[s]' % (time.time() - t))
         
         
-        oc_out_path = os.path.join(outroot, t, i + '_' + "pts.oc")
-        lb_out_path = os.path.join(outroot, t, i + '_' + "seg.oc")
+        oc_out_path = os.path.join(outroot, k, i + '_' + "pts.oc")
+        lb_out_path = os.path.join(outroot, k, i + '_' + "seg.oc")
         if not os.path.exists(os.path.split(oc_out_path)[0]):
             os.makedirs(os.path.split(oc_out_path)[0])
         t = time.time()
@@ -98,8 +98,11 @@ def worker(inroot:str, outroot: str, item, vx_res, n_threads=1):
         print('\ttook %f[s]' % (time.time() - t))
     except KeyboardInterrupt as e:
         raise e
-    except:
+    except Exception as e:
         print('error; breake')
+        print(e)
+        import traceback
+        traceback.print_exc()
         return
         
         
