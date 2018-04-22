@@ -8,15 +8,15 @@ function common.fname_train_test_split_pc(dps, pps)
   local ptest = {}
 
   for i, _ in ipairs(ps) do
-    if math.random() > 0.1 then
-        table.insert(dtest, dps)
-        table.insert(ptest, pps)
+    if math.random() < 0.1 then
+        table.insert(dtest, dps[i])
+        table.insert(ptest, pps[i])
     else
-        table.insert(dtrain, dps)
-        table.insert(ptrain, pps)
+        table.insert(dtrain, dps[i])
+        table.insert(ptrain, pps[i])
     end
   end
-  return dtrain, dtest，ptrain, ptest
+  return dtrain, dtest, ptrain, ptest
 end
 
 function common.seg_worker(opt)
@@ -31,7 +31,7 @@ function common.seg_worker(opt)
   local label_paths = common.walk_paths_cached(opt.ex_data_root, opt.ex_data_ext)
   table.sort(data_paths)
   table.sort(label_paths)
-  print('[INFO] load data_paths took '..t:time().real..'[s], '..(#data_paths)..(#label_paths))
+  print('[INFO] load data_paths took '..t:time().real..'[s], '..(#data_paths)..', '..(#label_paths))
 
   print('[INFO] train test split')
   local t = torch.Timer()
