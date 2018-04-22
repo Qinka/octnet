@@ -63,24 +63,24 @@ def create_oc_frompc(vx_res=256,in_root='PartAnnotation', n_processes=1, n_threa
     print('create data took %f[s]' % (time.time() - s_t))
     
 def worker(outroot: str, filedata : str, filelabels : [str], vx_res, n_threads=1):
-    print('read data')
+    print('read data', filedata)
     t   = time.time()
-    xyz = np.loadtxt(filedata)
+    xyz = np.loadtxt(filedata[0],dtype=np.float32)
     print('\ttook %f[s]' % (time.time() - t))
 
     t = time.time()
-    print('read labels')
+    print('read labels', filelabels)
     ns = []
     for fl in filelabels:
-        ns.append(np.loadtxt(fl))
-    plabels = np.concatenate(ns,axis=1) 
+        ns.append(np.loadtxt(fl,dtype=np.float32).reshape(-1,1))
+    plabel = np.concatenate(ns,axis=1) 
     print('\ttook %f[s]' % (time.time() - t))
 
     print('create octree')
     # object
     grid  = pyoctnet.Octree.create_from_pc_simple(xyz,vx_res,vx_res,vx_res,False,n_threads=n_threads)
     # part seg
-    label = pyoctnet.Octree.create_frompc(xyz,plabels,vx_res,vx_res,vx_res,False,n_threads=n_threads)
+    label = pyoctnet.Octree.create_from_pc(xyz,plabel,vx_res,vx_res,vx_res,False,n_threads=n_threads)
     print('\ttook %f[s]' % (time.time() - t))
     
     t = time.time()
