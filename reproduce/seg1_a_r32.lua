@@ -20,7 +20,7 @@ function seg1_a_r32.train(vis_files,ll)
 
   opt.ex_data_root = string.format('.preprocessed/partseg/%s/02691156',opt.vx_size)
   opt.ex_data_ext = 'oc'
-  opt.out_root = string.format('results/seg1/02691156/%s/%s'.opt.vx_size,ll)
+  opt.out_root = string.format('results/seg1/02691156/%s/%s',opt.vx_size,ll)
 
   opt.weightDecay = 0.0001
   opt.learningRate = 1e-3
