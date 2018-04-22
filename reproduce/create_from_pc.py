@@ -22,25 +22,30 @@ def create_oc_frompc(vx_res=256,in_root='PartAnnotation', n_processes=1, n_threa
     if not os.path.isdir(out_root):
         os.makedirs(out_root)
 
-    # list all pts, seg files files
-    pts_paths = []
-    for root, dirs, files in os.walk(in_root):
-        pts_paths.extend(glob(os.path.join(root,'*.pts')))
-    pts_paths.sort()
+    # list all kinds
+    all_kinds = os.listdir(in_root)
+    items = []
+    for k in all_kinds:
+        for it in os.listdir(os.path.join(in_root,k,'points')):
+            items.append((k,it.split('.')[0],))
+
+    items.sort()
 
     s_t = time.time()
     pool = None
     if n_processes > 1:
         pool = multiprocessing.Pool(processes=n_processes)
 
-    for p in pts_paths:
-        print(p, "transforming")
+    for it in items:
+        print(it, "transforming")
         if n_processes > 1:
-            pool.apply_async(worker,args=(out_root, p,
+            pool.apply_async(worker,args=(in_root, out_root,
+                                          it,
                                           vx_res,
                                           n_threads,))
         else:
-            worker(out_root, p,
+            worker(in_root, out_root,
+                   it,
                    vx_res,
                    n_threads)
               
@@ -50,23 +55,23 @@ def create_oc_frompc(vx_res=256,in_root='PartAnnotation', n_processes=1, n_threa
     
     print('create data took %f[s]' % (time.time() - s_t))
     
-def worker(outroot: str, filedata : str, vx_res, n_threads=1):
+def worker(inroot:str, outroot: str, item, vx_res, n_threads=1):
     try:
-        t,i = insert_into_pair(filedata)
-        prefix,item = os.path.split(filedata)
+        k = item[0]
+        i = item[1]
+        print(k,i)
 
-        kinds = os.listdir(prefix+'_label')
-        print('read data', filedata)
+        print('read data', item)
         t   = time.time()
-        xyz = np.loadtxt(filedata[0],dtype=np.float32)
+        xyz = np.loadtxt(os.path.join(inroot,k,'points',i+'.pts'),dtype=np.float32)
         print('\ttook %f[s]' % (time.time() - t))
         
         t = time.time()
         print('read labels')
         ns = []
-        os.listdir()
-        for k in kinds:
-            fp = os.path.join(prefix+'_label',k,i+'.seg')
+        parts = os.listdir(os.path.join(inroot,k,'points_label'))
+        for p in parts:
+            fp = os.path.join(inroot,k,'points_label',p,i+'.seg')
             if os.path.exists(fp):
                 ns.append(np.loadtxt(fp,dtype=np.float32).reshape(-1,1))
             else:
