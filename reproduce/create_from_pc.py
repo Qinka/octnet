@@ -24,35 +24,23 @@ def create_oc_frompc(vx_res=256,in_root='PartAnnotation', n_processes=1, n_threa
 
     # list all pts, seg files files
     pts_paths = []
-    seg_paths = []
     for root, dirs, files in os.walk(in_root):
         pts_paths.extend(glob(os.path.join(root,'*.pts')))
-        seg_paths.extend(glob(os.path.join(root,'*.seg')))
     pts_paths.sort()
-    seg_paths.sort()
-    pairs = {}
-    for pp in pts_paths:
-        insert_into_pair(pairs,pp)
-    for sp in seg_paths:
-        insert_into_pair(pairs,sp)
 
     s_t = time.time()
     pool = None
     if n_processes > 1:
         pool = multiprocessing.Pool(processes=n_processes)
 
-    for key in pairs:
-        print(key, "transforming")
+    for p in pts_paths:
+        print(p, "transforming")
         if n_processes > 1:
-            pool.apply_async(worker,args=(out_root, key,
-                                          pairs[key]['pts'],
-                                          pairs[key]['seg'],
+            pool.apply_async(worker,args=(out_root, p,
                                           vx_res,
                                           n_threads,))
         else:
-            worker(out_root, key,
-                   pairs[key]['pts'],
-                   pairs[key]['seg'],
+            worker(out_root, p,
                    vx_res,
                    n_threads)
               
@@ -62,18 +50,27 @@ def create_oc_frompc(vx_res=256,in_root='PartAnnotation', n_processes=1, n_threa
     
     print('create data took %f[s]' % (time.time() - s_t))
     
-def worker(outroot: str, key, filedata : str, filelabels : [str], vx_res, n_threads=1):
+def worker(outroot: str, filedata : str, vx_res, n_threads=1):
     try:
+        t,i = insert_into_pair(filedata)
+        prefix,item = os.path.split(filedata)
+
+        kinds = os.listdir(prefix+'_label')
         print('read data', filedata)
         t   = time.time()
         xyz = np.loadtxt(filedata[0],dtype=np.float32)
         print('\ttook %f[s]' % (time.time() - t))
         
         t = time.time()
-        print('read labels', filelabels)
+        print('read labels')
         ns = []
-        for fl in filelabels:
-            ns.append(np.loadtxt(fl,dtype=np.float32).reshape(-1,1))
+        os.listdir()
+        for k in kinds:
+            fp = os.path.join(prefix+'_label',k,i+'.seg')
+            if os.path.exists(fp):
+                ns.append(np.loadtxt(fp,dtype=np.float32).reshape(-1,1))
+            else:
+                ns.append(np.zeros((xyz.shape[0],1)))
         plabel = np.concatenate(ns,axis=1) 
         print('\ttook %f[s]' % (time.time() - t))
         
@@ -85,8 +82,8 @@ def worker(outroot: str, key, filedata : str, filelabels : [str], vx_res, n_thre
         print('\ttook %f[s]' % (time.time() - t))
         
         
-        oc_out_path = os.path.join(outroot, key[0], key[1] + '_' + "pts.oc")
-        lb_out_path = os.path.join(outroot, key[0], key[1] + '_' + "seg.oc")
+        oc_out_path = os.path.join(outroot, t, i + '_' + "pts.oc")
+        lb_out_path = os.path.join(outroot, t, i + '_' + "seg.oc")
         if not os.path.exists(os.path.split(oc_out_path)[0]):
             os.makedirs(os.path.split(oc_out_path)[0])
         t = time.time()
@@ -101,7 +98,7 @@ def worker(outroot: str, key, filedata : str, filelabels : [str], vx_res, n_thre
         return
         
         
-def insert_into_pair(pair,file:str):
+def insert_into_pair(file:str):
     dp = file.split('.')
     sp = "".join(dp[0:-1]).split(os.path.sep)
     t = None
@@ -110,10 +107,6 @@ def insert_into_pair(pair,file:str):
     else:
         t = sp[-3]
     i = sp[-1]
-    if not ((t,i) in pair):
-        pair[(t,i)] = {'pts' : [], 'seg' : []}
-        pair[(t,i)]['pts'].append(file)
-    elif dp[-1] == 'seg':
-        pair[(t,i)]['seg'].append(file)
+    return (t,i,)
 
 
