@@ -37,23 +37,25 @@ function PCLoader:getBatch()
     end
   end
 
-  local used_paths = {}
+  local used_dpaths = {}
+  local used_ppaths = {}
   for batch_idx = 1, bs do
     self.data_idx = self.data_idx + 1
-    local used_path = self.data_paths[self.data_idx]
-
-    table.insert(used_paths, used_path)
+    local used_dpath = self.data_paths[self.data_idx]
+    local used_ppath = self.label_paths[self.data_idx]
+    table.insert(used_dpaths, used_dpath)
+    table.insert(used_ppaths, used_ppath)
   end
 
   if self.ex_data_ext == 'cdhw' then
     self.data_cpu = torch.FloatTensor(bs, 1, self.vx_size, self.vx_size, self.vx_size)
-    oc.read_dense_from_bin_batch(used_paths, self.data_cpu)
+    oc.read_dense_from_bin_batch(used_dpaths, self.data_cpu)
     self.data_gpu = self.data_gpu or torch.CudaTensor()
     self.data_gpu:resize(self.data_cpu:size())
     self.data_gpu:copy(self.data_cpu)
   elseif self.ex_data_ext == 'oc' then 
     self.data_cpu = oc.FloatOctree()
-    self.data_cpu:read_from_bin_batch(used_paths)
+    self.data_cpu:read_from_bin_batch(used_dpaths)
     self.data_gpu = self.data_cpu:cuda(self.data_gpu)
   else
     error('unknown ex_data_ext: '..self.ex_data_ext)
@@ -61,13 +63,13 @@ function PCLoader:getBatch()
 
   if self.ex_data_ext == 'cdhw' then
     self.label_cpu = torch.FloatTensor(bs, self.parts, self.vx_size, self.vx_size, self.vx_size)
-    oc.read_dense_from_bin_batch(used_paths, self.label_cpu)
+    oc.read_dense_from_bin_batch(used_ppaths, self.label_cpu)
     self.label_gpu = self.label_gpu or torch.CudaTensor()
     self.label_gpu:resize(self.label_cpu:size())
     self.label_gpu:copy(self.label_cpu)
   elseif self.ex_data_ext == 'oc' then 
     self.label_cpu = oc.FloatOctree()
-    self.label_cpu:read_from_bin_batch(used_paths)
+    self.label_cpu:read_from_bin_batch(used_ppaths)
     self.label_gpu = self.label_cpu:cuda(self.label_gpu)
   else
     error('unknown ex_data_ext: '..self.ex_data_ext)
