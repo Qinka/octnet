@@ -1,5 +1,5 @@
 local common = require('common')
-local dataloader = require('dataloader')
+local pcloader = require('pcloader')
 
 function common.fname_train_test_split_pc(dps, pps)
   local dtrain = {}
@@ -7,7 +7,7 @@ function common.fname_train_test_split_pc(dps, pps)
   local ptrain = {}
   local ptest = {}
 
-  for i, _ in ipairs(ps) do
+  for i, _ in ipairs(dps) do
     if math.random() < 0.1 then
         table.insert(dtest, dps[i])
         table.insert(ptest, pps[i])
@@ -27,8 +27,8 @@ function common.seg_worker(opt)
   -- load data_paths
   print('[INFO] load data_paths')
   local t = torch.Timer()
-  local data_paths = common.walk_paths_cached(opt.ex_data_root, opt.ex_data_ext)
-  local label_paths = common.walk_paths_cached(opt.ex_data_root, opt.ex_data_ext)
+  local data_paths = common.walk_paths_cached(opt.ex_data_root, 'pts'..opt.ex_data_ext)
+  local label_paths = common.walk_paths_cached(opt.ex_data_root, 'seg'..opt.ex_data_ext)
   table.sort(data_paths)
   table.sort(label_paths)
   print('[INFO] load data_paths took '..t:time().real..'[s], '..(#data_paths)..', '..(#label_paths))
@@ -40,8 +40,8 @@ function common.seg_worker(opt)
 
   
   -- get data loaders
-  local train_data_loader = dataloader.DataLoader(opt.dtr, opt.ptr, opt.batch_size, opt.parts, opt.vx_size, opt.ex_data_ext, true)
-  local test_data_loader = dataloader.DataLoader(opt.dtt, opt.ptt, opt.batch_size, opt.parts, opt.vx_size, opt.ex_data_ext, false)
+  local train_data_loader = pcloader.PCLoader(opt.dtr, opt.ptr, opt.batch_size, opt.parts, opt.vx_size, opt.ex_data_ext, true)
+  local test_data_loader = pcloader.PCLoader(opt.dtt, opt.ptt, opt.batch_size, opt.parts, opt.vx_size, opt.ex_data_ext, false)
 
   -- train
   common.worker(opt, train_data_loader, test_data_loader)

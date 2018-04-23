@@ -1,19 +1,18 @@
 pcloader = {}
 
-local PCLoader = torch.class('dataloader.DataLoader')
+local PCLoader = torch.class('pcloader.PCLoader')
 
 function PCLoader:__init(data_paths, label_paths, batch_size, parts, vx_size, ex_data_ext, full_batches)
   self.data_paths = data_paths or error('')
   self.label_paths= label_paths or error('')
-  self.labels = labels or error('')
   self.batch_size = batch_size or error('')
   self.vx_size = vx_size or error('')
   self.ex_data_ext = ex_data_ext or error('')
   self.full_batches = full_batches or false
   self.parts = parts or error('')
 
-  assert(#self.data_paths == self.labels:size(1))
-  self.n_samples = self.labels:size(1)
+  assert(#self.data_paths == #self.label_paths)
+  self.n_samples = #self.data_paths
 
   self.data_idx = 0
 end
