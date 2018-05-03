@@ -80,22 +80,22 @@ def worker(inroot:str, outroot: str, item, vx_res, n_threads=1):
         plabel = np.concatenate(ns,axis=1) 
         print('\ttook %f[s]' % (time.time() - t), plabel.shape)
         
-        print('create octree')
+        print('create octree %d' % vx_res)
         # object
-        grid  = pyoctnet.Octree.create_from_pc_simple(xyz,1,vx_res,vx_res,vx_res,False,n_threads=n_threads)
+        grid  = pyoctnet.Octree.create_from_pc_simple(xyz,1,    vx_res,vx_res,vx_res,False,n_threads=n_threads)
         # part seg
-        label = pyoctnet.Octree.create_from_pc(xyz,plabel,  vx_res,vx_res,vx_res,False,n_threads=n_threads)
+        label = pyoctnet.Octree.create_from_pc(xyz,plabel,vx_res,vx_res,vx_res,False,n_threads=n_threads)
         print('\ttook %f[s]' % (time.time() - t))
         
         
         oc_out_path = os.path.join(outroot, k, i + '_' + "pts.oc")
-        lb_out_path = os.path.join(outroot, k, i + '_' + "seg.oc")
+        lb_out_path = os.path.join(outroot, k, i + '_' + "seg.cdwh")
         if not os.path.exists(os.path.split(oc_out_path)[0]):
             os.makedirs(os.path.split(oc_out_path)[0])
         t = time.time()
         print('write bin', oc_out_path, lb_out_path, grid)
         grid.write_bin(oc_out_path.encode())
-        label.write_bin(lb_out_path.encode())
+        label.write_to_cdhw(lb_out_path.encode())
         print('\ttook %f[s]' % (time.time() - t))
     except KeyboardInterrupt as e:
         raise e
