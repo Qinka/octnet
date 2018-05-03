@@ -9,16 +9,17 @@ require('oc')
 
 local on2_mn10_r256 = {}
 
-function on2_mn10_r256.train(batch_size)
+function on2_mn10_r256.train(batch_size,skipped,ll)
   local opt = {}
-
+  local ll = ll or ''
+  opt.vis_skipped = skipped
   opt.vx_size = 256
   opt.n_classes = 10
   opt.batch_size = batch_size
 
-  opt.ex_data_root = string.format('preprocessed/r%s',opt.vx_size)
+  opt.ex_data_root = string.format('preprocessed/mn%s/r%s',opt.n_classes,opt.vx_size)
   opt.ex_data_ext = 'oc'
-  opt.out_root = string.format('results/on2/r%s/b%s/%s',opt.vx_size,opt.batch_size,os.time())
+  opt.out_root = string.format('results/on2/mn%s/r%s/b%s/%s',opt.n_classes,opt.vx_size,opt.batch_size,ll)
 
   opt.weightDecay = 0.0001
   opt.learningRate = 1e-3
@@ -29,32 +30,48 @@ function on2_mn10_r256.train(batch_size)
 
   local n_grids = 4096
   opt.net = nn.Sequential()
+    :add( oc.VisualOC('l0') )
+
     -- conv(1,8)
     :add( oc.OctreeConvolutionMM(1,8, n_grids) )
     :add( oc.OctreeReLU(true) )
     :add( oc.OctreeGridPool2x2x2('max') )
+    
+    :add( oc.VisualOC('l1') )
 
     :add( oc.OctreeConvolutionMM(8,16, n_grids) )
     :add( oc.OctreeReLU(true) )
     :add( oc.OctreeGridPool2x2x2('max') )
+    
+    :add( oc.VisualOC('l2') )
 
     :add( oc.OctreeConvolutionMM(16,24, n_grids) )
     :add( oc.OctreeReLU(true) )
     :add( oc.OctreeGridPool2x2x2('max') )
     
+    :add( oc.VisualOC('l3') )
+    
     :add( oc.OctreeConvolutionMM(24,32, n_grids) )
     :add( oc.OctreeReLU(true) )
     :add( oc.OctreeGridPool2x2x2('max') )
+    
+    :add( oc.VisualOC('l4') )
 
     :add( oc.OctreeConvolutionMM(32,40, n_grids) )
     :add( oc.OctreeReLU(true) )
     :add( oc.OctreeGridPool2x2x2('max') )
+    
+    :add( oc.VisualOC('l5') )
 
     :add( oc.OctreeConvolutionMM(40,48, n_grids) )
     :add( oc.OctreeReLU(true) )
+    
+    :add( oc.VisualOC('l6') )
 
     :add( oc.OctreeConvolutionMM(48,48, n_grids) )
     :add( oc.OctreeReLU(true) )
+    
+    :add( oc.VisualOC('l7') )
 
     :add( oc.OctreeToCDHW() )
     :add( nn.View(48*8*8*8) )
