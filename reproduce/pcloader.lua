@@ -61,6 +61,7 @@ function PCLoader:getBatch()
     error('unknown ex_data_ext: '..self.ex_data_ext)
   end 
 
+  require('mobdebug').start()
   if self.ex_data_ext == 'cdhw' then
     self.label_cpu = torch.FloatTensor(bs, self.parts, self.vx_size, self.vx_size, self.vx_size)
     oc.read_dense_from_bin_batch(used_ppaths, self.label_cpu)
@@ -70,7 +71,10 @@ function PCLoader:getBatch()
   elseif self.ex_data_ext == 'oc' then 
     self.label_cpu = oc.FloatOctree()
     self.label_cpu:read_from_bin_batch(used_ppaths)
-    self.label_gpu = self.label_cpu:cuda(self.label_gpu)
+    self.label_gpu = self.label_gpu or torch.CudaTensor()
+    self.label_gpu:resize(self.label_cpu:dense_depth(),self.label_cpu:dense_height(),self.label_cpu:dense_width())
+    oc.gpu.octree_to_cdhw_gpu(self.label_cpu:cuda().grid,self.label_cpu:dense_depth(),self.label_cpu:dense_height(),self.label_cpu:dense_width(),self.label_gpu:data())
+    print('asd')
   else
     error('unknown ex_data_ext: '..self.ex_data_ext)
   end 

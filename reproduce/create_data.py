@@ -19,13 +19,16 @@ def create_data_with_model(cla=10, vx_res = 64,mn10_path = 'mn10.zip', pad=2, n_
   random.seed(seed_num)
   np.random.seed(seed_num)
 
+  
   # get MN10 data
   if not os.path.exists(mn10_path):
     print('pleas downloading ModelNet10 from "http://vision.princeton.edu/projects/2014/3DShapeNets/ModelNet10.zip"')
     exit()
 
   in_root = '.ignore'
-  if not os.path.isdir(in_root):
+  if os.path.isdir(mn10_path):
+    in_root = mn10_path
+  elif not os.path.isdir(in_root):
     print('unzipping ModelNet10')
     mn10 = zipfile.ZipFile(mn10_path, 'r')
     mn10.extractall(in_root)
@@ -37,7 +40,7 @@ def create_data_with_model(cla=10, vx_res = 64,mn10_path = 'mn10.zip', pad=2, n_
 
   # list all off files
   off_paths = []
-  for root, dirs, files in os.walk(in_root):
+  for root, dirs, files in os.walk(in_root, followlinks=True):
     off_paths.extend(glob(os.path.join(root, '*.off')))
   off_paths.sort()
 

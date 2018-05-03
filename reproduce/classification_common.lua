@@ -22,6 +22,7 @@ function common.fname_to_labels(ps, name2label, err_on_new_label)
       if err_on_new_label then 
         error('new label: '..name)
       else
+        print(name)
         name2label[name] = max_label
         max_label = max_label + 1
       end

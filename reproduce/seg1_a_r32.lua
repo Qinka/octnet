@@ -20,6 +20,7 @@ function seg1_a_r32.train(vis_files,ll)
 
   opt.ex_data_root = string.format('.preprocessed/partseg/%s/02691156',opt.vx_size)
   opt.ex_data_ext = 'oc'
+  opt.ex_label_ext = 'cdwh'
   opt.out_root = string.format('results/seg1/02691156/%s/%s',opt.vx_size,ll)
 
   opt.weightDecay = 0.0001
@@ -87,7 +88,7 @@ function seg1_a_r32.train(vis_files,ll)
     -- conv(8,t)
     :add( oc.OctreeConvolutionMM(8,opt.parts, n_grids) )
     :add( oc.OctreeReLU(true) )
-
+    :add( oc.OctreeToCDHW())
 
   common.net_he_init(opt.net)
   opt.net:cuda()
