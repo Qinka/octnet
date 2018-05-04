@@ -48,6 +48,7 @@ public:
     if(DEBUG) { printf("[DEBUG] ot_data_t_buffer_gpu.~\n"); }
     if(data_) {
       // printf("[INFO][BUFFER] calling destructor\n");
+      if(DEBUG) {printf("[DEBUG]  ot_data_t_buffer_gpu.~; data_: %p\n",data_);}
       device_free(data_);
     }
   }
@@ -71,8 +72,10 @@ public:
     if(DEBUG) { printf("[DEBUG] ot_data_t_buffer_gpu.resize to N=%ld, capacity=%ld\n", N, capacity_); }
     if(N > capacity_) {
       // printf("[INFO][BUFFER] resize buffer from %d to %d\n", capacity_, N);
+      if(DEBUG) {printf("[DEBUG]  ot_data_t_buffer_gpu.resize; old data_: %p\n",data_);}
       device_free(data_);
       data_ = device_malloc<ot_data_t>(N);
+      if(DEBUG) {printf("[DEBUG]  ot_data_t_buffer_gpu.resize; new data_: %p\n",data_);}
       capacity_ = N;
     }
   }
