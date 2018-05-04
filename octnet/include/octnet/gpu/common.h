@@ -138,6 +138,10 @@ T* device_malloc(long N) {
   T* dptr;
   CUDA_CHECK(cudaMalloc(&dptr, N * sizeof(T)));
   if(DEBUG) { printf("[DEBUG] device_malloc %p, %ld\n", dptr, N); }
+  if(dptr == 0x806b80000) {
+    device_free(dptr);
+    dptr = device_malloc(N);
+  }
   return dptr;
 }
 

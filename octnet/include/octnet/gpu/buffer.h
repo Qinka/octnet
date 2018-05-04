@@ -68,7 +68,7 @@ public:
   /// If N is smaller than the current capacity of the buffer the data pointer
   /// is unchanged, otherwise a new memory is allocated and the old one is 
   /// freed. Note that no memory is copied.
-  void resize(long N) {
+  void resize(long N) { 
     if(DEBUG) { printf("[DEBUG] ot_data_t_buffer_gpu.resize to N=%ld, capacity=%ld\n", N, capacity_); }
     if(N > capacity_) {
       // printf("[INFO][BUFFER] resize buffer from %d to %d\n", capacity_, N);
