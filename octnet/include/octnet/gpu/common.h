@@ -129,7 +129,8 @@ inline int GET_BLOCKS(const int N) {
 
 
 
-
+template<typename T>
+void device_free(T* dptr);
 /// Allocate memory on the current GPU device.
 /// @param N lenght of the array.
 /// @return pointer to device array.
