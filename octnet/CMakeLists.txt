@@ -39,6 +39,9 @@ set(CMAKE_MACOSX_RPATH 1)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_C_STANDARD   11)
 
+## Debug/Release
+SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -DDEBUG=1 ")
+
 ## SSE arch
 if(MSVC)
   set(CMAKE_C_FLAGS   "${CMAKE_C_FLAG}   /arch:SSE /arch:SSE2 /arch:SSE3 /arch:SSE4.2 ")

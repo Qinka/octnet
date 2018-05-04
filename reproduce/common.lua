@@ -179,7 +179,6 @@ function common.train_epoch(opt, data_loader)
     local feval = function(x)
       if x ~= parameters then parameters:copy(x) end
       grad_parameters:zero()
-
       local input, target = data_loader:getBatch()
 
       local output = net:forward(input)

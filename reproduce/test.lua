@@ -1,6 +1,6 @@
 #!/usr/bin/env th
 
-local on1_mn10_r8 = dofile('on1_mn10_r8.lua')
 
-
-on1_mn10_r8.train(16,true)
+print('asd')
+dofile('seg1_a_r32.lua').train()
+-- dofile('on1_mn2_r16.lua').train(5,nil,vis)

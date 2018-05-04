@@ -41,6 +41,8 @@ function OctreeReLU:updateOutput(input)
   elseif input._type == 'oc_cuda' then
     oc.gpu.octree_relu_gpu(input.grid, self.inplace, self.output.grid)
   end
+  
+  print('relu')
 
   return self.output 
 end 
