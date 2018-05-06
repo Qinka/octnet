@@ -13,7 +13,7 @@ function on1_mn10_r8.train(cla,batch_size,vis_files,ll)
   local opt = {}
   local ll = ll or ''
   opt.vx_size = 8
-  opt.n_classes = 10
+  opt.n_classes = cla or 10
   opt.batch_size = batch_size
   opt.vis_files = vis_files
 
