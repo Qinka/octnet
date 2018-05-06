@@ -9,11 +9,7 @@ require('oc')
 
 local on1_mn10_r8 = {}
 
-function on1_mn10_r8.create_net(batch_size,ll)
-  return opt
-end
-
-function on1_mn10_r8.train(batch_size,vis_files,ll)
+function on1_mn10_r8.train(cla,batch_size,vis_files,ll)
   local opt = {}
   local ll = ll or ''
   opt.vx_size = 8
@@ -35,7 +31,7 @@ function on1_mn10_r8.train(batch_size,vis_files,ll)
   local n_grids = 4096
   opt.net = nn.Sequential()
     -- conv(1,8)
-    :add( oc.VisualOC('Origin') )
+    :add( oc.VisualOC('origin') )
     :add( oc.OctreeConvolutionMM(1,8, n_grids) )
     :add( oc.OctreeReLU(true) )
     :add( oc.VisualOC('conv1') )

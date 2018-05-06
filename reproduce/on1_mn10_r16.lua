@@ -9,11 +9,11 @@ require('oc')
 
 local on1_mn10_r16 = {}
 
-function on1_mn10_r16.train(batch_size,vis_files,ll)
+function on1_mn10_r16.train(cla,batch_size,vis_files,ll)
   local opt = {}
   local ll = ll or ''
   opt.vx_size = 16
-  opt.n_classes = 10
+  opt.n_classes = cla or 10
   opt.batch_size = batch_size
   opt.vis_files = vis_files
 
@@ -31,14 +31,15 @@ function on1_mn10_r16.train(batch_size,vis_files,ll)
   local n_grids = 4096
   opt.net = nn.Sequential()
     -- conv(1,8)
+    :add( oc.VisualOC('1') )
     :add( oc.OctreeConvolutionMM(1,8, n_grids) )
     :add( oc.OctreeReLU(true) )
-    :add( oc.VisualOC(skipped) )
+    :add( oc.VisualOC('2') )
     :add( oc.OctreeGridPool2x2x2('max') )
 
     :add( oc.OctreeConvolutionMM(8,16, n_grids) )
     :add( oc.OctreeReLU(true) )
-    :add( oc.VisualOC(skipped) )
+    :add( oc.VisualOC('3') )
 
     :add( oc.OctreeToCDHW() )
     :add( nn.View(16*8*8*8) )

@@ -9,10 +9,10 @@ require('oc')
 
 local on1_mn10_r8 = {}
 
-function on1_mn10_r8.train(batch_size,skipped,ll)
+function on1_mn10_r8.train(batch_size,vis_files,ll)
   local opt = {}
   local ll = ll or ''
-  opt.vis_skipped = skipped
+  opt.vis_files = vis_files
   opt.vx_size = 8
   opt.n_classes = 10
   opt.batch_size = batch_size
@@ -31,10 +31,11 @@ function on1_mn10_r8.train(batch_size,skipped,ll)
   local n_grids = 4096
   opt.net = nn.Sequential()
     -- conv(1,8)
-    :add( oc.VisualOC(skipped) )
+    :add( oc.VisualOC('l1') )
     :add( oc.OctreeConvolutionMM(1,8, n_grids) )
     :add( oc.OctreeReLU(true) )
-    :add( oc.VisualOC(skipped) )
+    
+    :add( oc.VisualOC('l1') )
     :add( oc.OctreeToCDHW() )
     :add( nn.View(8*8*8*8) )
     -- dropout(0.5)
