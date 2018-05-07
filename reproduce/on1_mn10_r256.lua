@@ -17,7 +17,7 @@ function on1_mn10_r256.train(cla,batch_size,vis_files,ll)
   opt.batch_size = batch_size
   opt.vis_files = vis_files
 
-  opt.ex_data_root = string.format('preprocessed/mn%s/r%s',opt.n_classes,opt.vx_size)
+  opt.ex_data_root = string.format('preprocessed/%s/mn%s/r%s',opt.ll,opt.n_classes,opt.vx_size)
   opt.ex_data_ext = 'oc'
   opt.out_root = string.format('results/on1/mn%s/r%s/b%s/%s',opt.n_classes,opt.vx_size,opt.batch_size,ll)
 
