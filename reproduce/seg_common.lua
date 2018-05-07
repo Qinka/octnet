@@ -27,10 +27,11 @@ function common.seg_worker(opt)
   -- load data_paths
   print('[INFO] load data_paths')
   local t = torch.Timer()
-  local data_paths = common.walk_paths_cached(opt.ex_data_root, 'pts'..opt.ex_data_ext)
-  local label_paths = common.walk_paths_cached(opt.ex_data_root, 'seg'..opt.ex_label_ext)
+  local data_paths = common.walk_paths_cached(opt.ex_data_root, opt.ex_data_ext)
+  local label_paths = common.walk_paths_cached(opt.ex_data_root, opt.ex_label_ext)
   table.sort(data_paths)
   table.sort(label_paths)
+--  print(data_paths,label_paths)
   print('[INFO] load data_paths took '..t:time().real..'[s], '..(#data_paths)..', '..(#label_paths))
 
   print('[INFO] train test split')

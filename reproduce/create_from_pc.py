@@ -88,14 +88,14 @@ def worker(inroot:str, outroot: str, item, vx_res, n_threads=1):
         print('\ttook %f[s]' % (time.time() - t))
         
         
-        oc_out_path = os.path.join(outroot, k, i + '_' + "pts.oc")
-        lb_out_path = os.path.join(outroot, k, i + '_' + "seg.cdwh")
+        oc_out_path = os.path.join(outroot, k, i + '_' + ".pts.oc")
+        lb_out_path = os.path.join(outroot, k, i + '_' + ".seg.oc")
         if not os.path.exists(os.path.split(oc_out_path)[0]):
             os.makedirs(os.path.split(oc_out_path)[0])
         t = time.time()
         print('write bin', oc_out_path, lb_out_path, grid)
         grid.write_bin(oc_out_path.encode())
-        label.write_to_cdhw(lb_out_path.encode())
+        label.write_to_bin(lb_out_path.encode())
         print('\ttook %f[s]' % (time.time() - t))
     except KeyboardInterrupt as e:
         raise e

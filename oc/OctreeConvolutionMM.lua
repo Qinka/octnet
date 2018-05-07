@@ -77,10 +77,13 @@ function OctreeConvolutionMM:updateOutput(input)
     error('not implemented')
   elseif input._type == 'oc_cuda' then
     local cublas_handle = get_cublas_handle()
+    if n_grids == -1 then
+          require('mobdebug').start('localhost')
+    end
     oc.gpu.octree_conv_mm_gpu(cublas_handle, input.grid, self.weight:data(), self.bias:data(), self.nOutputPlane, n_grids, self.output.grid)
   end
 
-  -- print(string.format('[OctreeConvolutionMM] DONE update output %d -> %d', self.nInputPlane, self.nOutputPlane))
+  print(string.format('[OctreeConvolutionMM] DONE update output %d -> %d', self.nInputPlane, self.nOutputPlane))
 
   return self.output
 end 

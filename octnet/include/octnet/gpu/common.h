@@ -129,8 +129,6 @@ inline int GET_BLOCKS(const int N) {
 
 
 
-template<typename T>
-void device_free(T* dptr);
 /// Allocate memory on the current GPU device.
 /// @param N lenght of the array.
 /// @return pointer to device array.
@@ -139,10 +137,6 @@ T* device_malloc(long N) {
   T* dptr;
   CUDA_CHECK(cudaMalloc(&dptr, N * sizeof(T)));
   if(DEBUG) { printf("[DEBUG] device_malloc %p, %ld\n", dptr, N); }
-  if(dptr == 0x806b80000) {
-    device_free<T>(dptr);
-    dptr = device_malloc<T>(N);
-  }
   return dptr;
 }
 
