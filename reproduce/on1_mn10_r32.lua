@@ -11,7 +11,7 @@ local on1_mn10_r32 = {}
 
 function on1_mn10_r32.train(cla,batch_size,vis_files,ll)
   local opt = {}
-  local ll = ll or ''
+  opt.ll = ll or ''
   opt.vx_size = 32
   opt.n_classes = cla or 10
   opt.batch_size = batch_size
@@ -19,7 +19,7 @@ function on1_mn10_r32.train(cla,batch_size,vis_files,ll)
 
   opt.ex_data_root = string.format('preprocessed/%s/mn%s/r%s',opt.ll,opt.n_classes,opt.vx_size)
   opt.ex_data_ext = 'oc'
-  opt.out_root = string.format('results/on1/mn%s/r%s/b%s/%s',opt.n_classes,opt.vx_size,opt.batch_size,ll)
+  opt.out_root = string.format('results/on1/mn%s/r%s/b%s/%s',opt.n_classes,opt.vx_size,opt.batch_size,opt.ll)
 
   opt.weightDecay = 0.0001
   opt.learningRate = 1e-3
